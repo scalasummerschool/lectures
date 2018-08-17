@@ -1,0 +1,31 @@
+.reveal section pre {
+    background: none;
+    border:     none;
+    box-shadow: none;
+    margin-left: 20%;
+}
+
+.reveal section img {
+    background: none;
+    border:     none;
+    box-shadow: none;
+}
+
+.slide-header {
+    position: fixed;
+    background-color: #3e3e3b;
+    top: -3%;
+    left: -5%;
+    width: 110%;
+}
+
+.slide-header p {
+    position: relative;
+    float: left;
+    margin: 0;
+    padding-top: 15px;
+    padding-bottom: 11px;
+    padding-left: 5%;
+    color: #e6e6e6;
+    font-size: 70%;
+}
