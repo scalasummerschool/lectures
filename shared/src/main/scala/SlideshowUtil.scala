@@ -15,6 +15,10 @@ object SlideshowUtil {
   def header(text: String): TagOf[HTMLElement] = 
     <.div(
       ^.cls := "slide-header",
+      <.img(
+        ^.src  := "./../reveal/img/logo.svg",
+        ^.alt  := "Scala Summer School logo"
+      ),
       <.p(text)
     )
 

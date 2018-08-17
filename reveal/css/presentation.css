@@ -1,14 +1,14 @@
-.reveal section pre {
+
+.reveal section pre,
+.reveal section img,
+.slide-header img {
     background: none;
     border:     none;
     box-shadow: none;
-    margin-left: 20%;
 }
 
-.reveal section img {
-    background: none;
-    border:     none;
-    box-shadow: none;
+.reveal section pre {
+    margin-left: 20%;
 }
 
 .slide-header {
@@ -25,7 +25,14 @@
     margin: 0;
     padding-top: 15px;
     padding-bottom: 11px;
-    padding-left: 5%;
+    padding-left: 15px;
     color: #e6e6e6;
     font-size: 70%;
+}
+
+.slide-header img {
+    position: relative;
+    float: left;
+    width: 33px;
+    padding-left: 5%;
 }
