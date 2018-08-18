@@ -444,6 +444,39 @@ object Lecture extends JSApp {
     )
   )
 
+  val functions = chapter(
+    chapterSlide(
+      <.h1("Functions")
+    ),
+
+    slide(
+      "Functions",
+      <.p("Special type of expressions which has a name, takes input and returns, as always, a result.")
+    ),
+
+    slide(
+      "Functions",
+      code("""
+        val plus: Int => Int => Int = a => b => a + b
+      """),
+      codeFragment("""
+        // declaration
+        val plus: Int => Int => Int
+        //   ^     ^      ^      ^
+        //   |     '------|      |
+        // identifier   input  result 
+      """),
+      codeFragment("""
+        // body expression
+           a => b => a + b
+        // ^    ^
+        // '----'
+        //   |
+        // input values
+      """)
+    )
+  )
+
   val Show = ScalaComponent
     .builder[Unit]("Slideshow")
     .renderStatic(
@@ -454,7 +487,8 @@ object Lecture extends JSApp {
           overview,
           introduction,
           expressions,
-          types
+          types,
+          functions
         )
       )
     )
