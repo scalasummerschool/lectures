@@ -112,14 +112,9 @@ object Lecture extends JSApp {
       "Values as Expressions",
       code("""
         // already in reduced form
-        // literals
         1
         'a'
         "Hello"
-
-        // values
-        val a = "world"
-        a
       """)
     ),
 
@@ -137,7 +132,17 @@ object Lecture extends JSApp {
         "Hello " + a + "!"
       """),
       codeFragment("""
-        ==> "Hello !"
+        ==> "Hello world!"
+      """)
+    ),
+
+    slide(
+      "Assignment of results",
+      code("""
+        val firstName = "John"
+        val lastName  = "Doe"
+
+        val name = a + b
       """)
     ),
 
@@ -151,20 +156,157 @@ object Lecture extends JSApp {
         }
       """),
       codeFragment("""
-        {
+        > {
           val a = 3
       
           a * 5
         }
       """),
       codeFragment("""
-        {
+        > {
           3 * 5
         }
       """),
       codeFragment("""
          ==> 15
       """)      
+    ),
+
+    slide(
+      "Scoping",
+      code("""
+        val a = 1 + 2
+        {
+           val b = 2 + 3
+           val c = {
+             val a = 3 + 4
+             a + b
+           }
+           a + c
+        }
+      """),
+      codeFragment("""
+        > val a = 3
+        {
+           val b = 5
+           val c = {
+             val a = 7
+             7 + 5
+           }
+           3 + (7 + 5)
+        }
+      """),
+      codeFragment("""
+        ==> 15
+      """)
+    ),
+
+    exerciseSlide(
+      "Does this work?",
+      code("""
+        val a = 5
+        {
+          val b = 3
+          a + b
+        }
+      """),
+      codeFragment("""
+        ==> 8
+      """)
+    ),
+
+    exerciseSlide(
+      "Does this work?",
+      code("""
+        val a = {
+          val b = 6
+          10
+        }
+        a + b
+      """),
+      codeFragment("""
+        // no, `b` doesn't exist in the outer scope
+      """)
+    ),
+
+    exerciseSlide(
+      "Does this work?",
+      code("""
+        val a = 5
+        {
+          val a = {
+            a * 10
+          }
+          a
+        }
+      """),
+      codeFragment("""
+        // no, you try to define `a` by using itself
+      """)
+    ),
+
+    slide(
+      "Precedence",
+      code("""
+        0 - (all letters)
+        1 - |
+        2 - ^
+        3 - &
+        4 - = !
+        5 - < >
+        6 - :
+        7 - + -
+        8 - * / %
+        // (all other special characters)
+      """)
+    ),
+
+    exerciseSlide(
+      "What's the result?",
+      code("""
+        2 * 3 + 10
+      """),
+      codeFragment("""
+        // prec('*') > prec('+')
+        > (2 * 3) + 10
+      """),
+      codeFragment("""
+        > 6 + 10
+      """),
+      codeFragment("""
+        ==> 16
+      """)
+    ),
+
+    exerciseSlide(
+      "What's the result?",
+      code("""
+        2.0 * 3.0 / 3.0
+      """),
+      codeFragment("""
+        // '*' left most operation
+        > (2.0 * 3.0) / 3.0
+      """),
+      codeFragment("""
+        > 6.0 / 3.0
+      """),
+      codeFragment("""
+        ==> 2.0
+      """)
+    ),
+
+    exerciseSlide(
+      "What's the result?",
+      code("""
+        2 * 5 == 10 && 24 / 6 < 4 | ! false
+      """),
+      codeFragment("""
+        > (((2 * 5) == 10) && ((24 / 6) < 4)) | (! false)
+      """),
+      codeFragment("""
+        // use brackets
+        ==> true
+      """)
     ),
 
     noHeaderSlide(
@@ -187,6 +329,118 @@ object Lecture extends JSApp {
     chapterSlide(
       <.h1("Types"),
       <.h3("Make your code more strict")
+    ),
+
+    slide(
+      "Definition",
+      <.h3("Types put constraints on term.")
+    ),
+
+    slide(
+      "State of a Value",
+      code("""
+        a: Int = 0
+
+        // `a` is of type `Int`
+        // is an Integer number
+        // -2147483648 <= a <= 2147483647
+
+        b: String = a // forbidden 
+      """)
+    ),
+
+    slide(
+      "Primitive Types",
+      code("""
+        Boolean - true false
+        Byte    - Integer from -128 to 127
+        Short   - Integer from -32,768 to 32,767
+        Int     - Integer from -2,147,483,648 to 2,147,483,647
+        Long    - Integer from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807
+        Float   - +- 1.40129846432481707e-45 to 3.40282346638528860e+38
+        Double  - +- 4.94065645841246544e-324 to 1.79769313486231570e+308
+        Char    - signs encoded with Integers from 0 to 65,535
+        String  - sequence of Chars
+      """),
+      <.br,
+      codeFragment("""
+        // And many more complex types. Some of them we will learn
+        // in the course of this workshop.
+      """)
+    ),
+
+    slide(
+      "Operation restriction",
+      code("""
+          1 + 2
+        """),
+      codeFragment("""
+        // numbers, Char and String a
+        1 + 2.0       ==> 3.0: Double
+        1 + 'a'       ==> 98: Int
+        1 + " banana" ==> "1 banana": String
+      """),
+      codeFragment("""
+        1 + true // forbidden
+      """)
+    ),
+
+    exerciseSlide(
+      "What is the Type?",
+      code("""
+        1 + 2
+      """),
+      codeFragment("""
+        ==> 3: Int
+      """),
+      code("""
+        1.0 + 2
+      """),
+      codeFragment("""
+        ==> 3.0: Double
+      """),
+      code("""
+        "Hello " + true
+      """),
+      codeFragment("""
+        ==> "Hello true": String
+      """)
+    ),
+
+    exerciseSlide(
+      "What is the Type?",
+      code("""
+        1 / 2
+      """),
+      codeFragment("""
+        ==> 0: Int
+      """),
+      code("""
+        1 / 2.0
+      """),
+      codeFragment("""
+        ==> 0.5: Double
+      """),
+      code("""
+        1 / 0.0
+      """),
+      codeFragment("""
+        // this throws an error (Exception)
+      """)
+    ),
+    
+    slide(
+      "Types are important",
+      Enumeration(
+        Item.stable(<.p("give guarantees about state of values / application of operators")),
+        Item.fadeIn(<.p("proofen during compile time")),
+        Item.fadeIn(<.p("no extra tests necessary"))
+      )
+    ),
+
+    noHeaderSlide(
+      <.p("We now know what Expressions are and how to use them."),
+      <.p("But how do we make them reusable?")
     )
   )
 

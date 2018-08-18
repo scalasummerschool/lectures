@@ -12,9 +12,9 @@ object SlideshowUtil {
 
   def chapter(slides: TagOf[HTMLElement]*): TagOf[HTMLElement] = <.section(slides: _*)
 
-  def header(text: String): TagOf[HTMLElement] = 
+  def header(text: String, cls: String): TagOf[HTMLElement] = 
     <.div(
-      ^.cls := "slide-header",
+      ^.cls := cls,
       <.img(
         ^.src  := "./../reveal/img/logo.svg",
         ^.alt  := "Scala Summer School logo"
@@ -50,10 +50,16 @@ object SlideshowUtil {
       content: _*
     )
   )
+  
+  def exerciseSlide(headerStr: String, content: TagOf[HTMLElement]*): TagOf[HTMLElement] = cleanSlide(
+    <.section(
+      (header(headerStr, "exercise-header") +: content): _*
+    )
+  )
 
   def slide(headerStr: String, content: TagOf[HTMLElement]*): TagOf[HTMLElement] = cleanSlide(
     <.section(
-      (header(headerStr) +: content): _*
+      (header(headerStr, "slide-header") +: content): _*
     )
   )
 
