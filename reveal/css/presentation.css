@@ -53,3 +53,13 @@
     width: 33px;
     padding-left: 5%;
 }
+
+.reveal section p {
+    text-align: left;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.reveal section .formular {
+    text-align: center;
+}

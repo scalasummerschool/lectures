@@ -30,10 +30,15 @@
 
            transition: 'none',
 
+           math: {
+               config: 'TeX-AMS_HTML-full'
+           },
+
            dependencies: [
                { src: './../reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
                { src: './../reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-               { src: './../reveal/plugin/zoom-js/zoom.js', async: true }
+               { src: './../reveal/plugin/zoom-js/zoom.js', async: true },
+               { src: './../reveal/plugin/math/mathjax.js', async: true }
            ]
        });
     </script>

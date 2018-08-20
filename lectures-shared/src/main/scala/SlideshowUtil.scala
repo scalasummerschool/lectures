@@ -63,24 +63,22 @@ object SlideshowUtil {
     )
   )
 
-  def code(codeStr: String): TagOf[HTMLElement] =
-    <.pre(
-      <.code(
-        ^.cls := "Scala",
-        dataTrim,
-        codeStr
-      )
+  private def rawCode(language: String, codeStr: String): TagOf[HTMLElement] =
+    <.code(
+      ^.cls := language,
+      dataTrim,
+      codeStr
     )
+
+  def code(codeStr: String): TagOf[HTMLElement] = <.pre(rawCode("Scala", codeStr))
 
   def codeFragment(codeStr: String): TagOf[HTMLElement] =
     <.pre(
       ^.cls := "fragment fade-in",
-      <.code(
-        ^.cls := "Scala",
-        dataTrim,
-        codeStr
-      )
+      rawCode("Scala", codeStr)
     )
+
+  def bashCode(codeStr: String): TagOf[HTMLElement] = <.pre(rawCode("Bash", codeStr))
 
   object Enumeration {
    

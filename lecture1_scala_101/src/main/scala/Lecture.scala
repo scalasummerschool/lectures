@@ -474,6 +474,101 @@ object Lecture extends JSApp {
         //   |
         // input values
       """)
+    ),
+
+    slide(
+      "Functions",
+      Enumeration(
+        Item.stable(<.p("have a unique identifier (name)")),
+        Item.fadeIn(<.p("declare a number of parameters as input (arity)")),
+        Item.fadeIn(<.p("and a single result type")),
+        Item.fadeIn(<.p("body expression fulfills the declaration"))
+      )
+    ),
+
+    slide(
+      "Function Application",
+      code("""
+        val plus1: Int => Int = plus(1)
+      """),
+      codeFragment("""
+        // 1 assigne to `a` and every appearance of `a` was replaced with 1
+        > val plus1: Int => Int = b => 1 + b
+      """),
+      codeFragment("""
+        val result = plus1(2)
+
+        > val result: Int = 1 + 2
+      """),
+      codeFragment("""
+        // in one step
+        val result = plus(1)(2)
+      """)
+    ),
+
+    slide(
+      "Function Application",
+      Enumeration(
+        Item.stable(<.p("this technique is called Currying")),
+        Item.fadeIn(<.p("apply a single parameter at a time (left to right)")),
+        Item.fadeIn(<.p("every application returns a new function of arity $n - 1$"))
+      )
+    ),
+
+    slide(
+      "Uncurried Function",
+      code("""
+        // you can also write
+        val plusUn: (Int, Int) => Int = (a, b) => a + b
+
+        // or more concise - underscore syntax
+        // first `_` first paremeter, ...
+        val plusUn: (Int, Int) => Int = _ + _
+      """)
+    ),
+
+    slide(
+      "Mix Curried and Uncurried",
+      code("""
+        val plusPair: (Int, Int) => (Int, Int) => Int = { (a, b) => (c, d) =>
+          plus(a, c) + plus(b, d)
+        }
+      """)
+    ),
+
+    exerciseSlide(
+      "First Code Exercise: exercise1.Area",
+      bashCode("""
+        # start sbt (keep it running)
+        $> sbt
+        # switch into exercise project
+        sbt> project scala101-exercise
+        # to compile your code
+        sbt> compile
+        # or let SBT compile on every file change
+        sbt> ~compile
+        # to test your implementation
+        sbt> test
+      """)
+    ),
+
+    exerciseSlide(
+      "First Code Exercise: exercise1.Area",
+      code("""
+        // package/path definition
+        // <package>.<object-name> must be unique
+        package exercise1
+
+        // object containing functions, values, other objects and more
+        // like a namespace
+        object Area {
+          // here live our function implementations
+
+          val circle: Double => Double = ???
+          
+          // ...
+        }
+      """)
     )
   )
 

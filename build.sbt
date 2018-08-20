@@ -1,10 +1,12 @@
 
+val common = Seq(
+  version      := "DEVELOP",
+  scalaVersion := "2.12.6"
+)
+
 val reactV = "16.2.0"
 
-lazy val common = Seq(
-  version      := "DEVELOP",
-  scalaVersion := "2.12.6",
-
+lazy val lectureCommon = Seq(
   libraryDependencies ++= Seq(
     "com.github.japgolly.scalajs-react" %%% "core" % "1.2.3",
     "org.scala-js" %%% "scalajs-dom" % "0.9.2"
@@ -19,18 +21,42 @@ lazy val common = Seq(
 
 lazy val root = project
   .in(file("."))
-  .aggregate(shared, `scala-101`)
+  .aggregate(
+    `lectures-shared`, `exercises-shared`, 
+    `scala-101-lecture`, `scala-101-exercises`
+  )
 
-lazy val shared = project
-  .in(file("shared"))
+lazy val `lectures-shared` = project
+  .in(file("lectures-shared"))
   .enablePlugins(ScalaJSPlugin)
-  .settings(common)
+  .settings(
+    common,
+    lectureCommon
+  )
 
-lazy val `scala-101` = project
-  .in(file("lecture1_scala_101"))
-  .enablePlugins(ScalaJSPlugin)
+lazy val `exercises-shared` = project
+  .in(file("exercises-shared"))
   .settings(common)
   .settings(
-    name := "scala101"
+    libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.14.0" % "test"
   )
-  .dependsOn(shared)
+
+lazy val `scala-101-lecture` = project
+  .in(file("lecture1_scala_101"))
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    common,
+    lectureCommon
+  )
+  .settings(
+    name := "scala101-lecture"
+  )
+  .dependsOn(`lectures-shared`)
+
+lazy val `scala-101-exercises` = project
+  .in(file("exercise1_scala_101"))
+  .settings(common)
+  .settings(
+    name := "scala101-exercises"    
+  )
+  .dependsOn(`exercises-shared` % "compile->compile;test->test")
