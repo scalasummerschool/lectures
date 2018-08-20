@@ -3,13 +3,21 @@ package exercise1
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
-object AreaSpecification extends Properties("area") {
+object AreaSpec extends Properties("area") {
 
   property("circle") = forAll { r: Double =>
-    r * r * Math.PI == Area.circle(r)
+    r * r * Math.PI == Area.testCircle(r)
   }
 
   property("rectangle") = forAll { (a: Double, b: Double) =>
-    a * b == Area.rectangle(a)(b)
+    a * b == Area.testRectangle(a, b)
+  }
+
+  property("rectangle uncurried") = forAll { (a: Double, b: Double) =>
+    a * b == Area.testRectangleUc(a, b)
+  }
+
+  property("rectangle unscore") = forAll { (a: Double, b: Double) =>
+    a * b == Area.testRectangleUs(a, b)
   }
 }

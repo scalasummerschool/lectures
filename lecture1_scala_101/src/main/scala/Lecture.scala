@@ -477,6 +477,20 @@ object Lecture extends JSApp {
     ),
 
     slide(
+      "Functions: def syntax",
+      code("""
+        // or a more prominent syntax
+        // is mainly used when declaring or defining functions
+
+        // this becomes
+        val plus: Int => Int => Int = a => b => a + b
+
+        // that; a bit more concise
+        def plus(a: Int)(b: Int): Int = a + b
+      """)
+    ),
+
+    slide(
       "Functions",
       Enumeration(
         Item.stable(<.p("have a unique identifier (name)")),
@@ -519,9 +533,12 @@ object Lecture extends JSApp {
       "Uncurried Function",
       code("""
         // you can also write
-        val plusUn: (Int, Int) => Int = (a, b) => a + b
+        def plusUn: (a: Int, b: Int): Int = a + b
 
-        // or more concise - underscore syntax
+        // or when using `val` syntax 
+        val plusUn: (Int, Int) => Int = (a, b) => a + b
+ 
+        // more concise - underscore syntax
         // first `_` first paremeter, ...
         val plusUn: (Int, Int) => Int = _ + _
       """)
@@ -530,7 +547,7 @@ object Lecture extends JSApp {
     slide(
       "Mix Curried and Uncurried",
       code("""
-        val plusPair: (Int, Int) => (Int, Int) => Int = { (a, b) => (c, d) =>
+        def plusPair(a: Int, b: Int)(c: Int, d: Int): Int = {
           plus(a, c) + plus(b, d)
         }
       """)
@@ -542,13 +559,13 @@ object Lecture extends JSApp {
         # start sbt (keep it running)
         $> sbt
         # switch into exercise project
-        sbt> project scala101-exercise
+        sbt> project scala101-exercises
         # to compile your code
         sbt> compile
         # or let SBT compile on every file change
         sbt> ~compile
         # to test your implementation
-        sbt> test
+        sbt> test:testOnly exercise1.AreaSpec
       """)
     ),
 
@@ -562,12 +579,96 @@ object Lecture extends JSApp {
         // object containing functions, values, other objects and more
         // like a namespace
         object Area {
-          // here live our function implementations
-
-          val circle: Double => Double = ???
+          // our functions live here
           
-          // ...
+          ...
         }
+      """)
+    ),
+
+    slide(
+      "Parametricity",
+      <.p("All our declarations are bound to fixed types for parameters and result."),
+      <.p("But what if we need something more generic?")
+    ),
+
+    slide(
+      "Parametricity: id over and over",
+      code("""
+        // id returns the given value `a`
+        def id(a: Int): Int = a
+        def id(a: Double): Double = a
+
+        // we have to do that for every type
+        ...
+      """)
+    ),
+
+    slide(
+      "Parametricity: type parameters",
+      code("""
+           def id[A](a: A): A = a
+        //        ^
+        //        |
+        // a type as parameter
+      """),
+      codeFragment("""
+        id(5)   // A ~ Int
+        id(5.0) // A ~ Double
+        ...
+      """),
+      codeFragment("""
+        // or
+        id[Int](5)
+      """)
+    ),
+
+    slide(
+      "Parametricity",
+      Enumeration(
+        Item.stable(<.p("fixing a types during application")),
+        Item.fadeIn(<.p("allows us to write generic functions")),
+        Item.fadeIn(<.p("increases reusability")),
+        Item.fadeIn(<.p("useful for higher-order functions"))
+      )
+    ),
+
+    slide(
+      "Higher-Order Functions",
+      code("""
+        // functions are first-class citizens > can be used like values
+        def plus(a: Int, b: Int): Int = ???
+
+        // therefore, we can treat it pass as parameter
+        def resultMsg(f: (Int, Int) => Int)(a: Int, b: Int): String = {
+          "The result for " + a + " and " + b + " is " op(a, b)
+        }
+
+        resultMsg(plus)(1, 2) // The result for 1 and 2 is 3
+      """),
+      codeFragment("""
+        def multiply(a: Int, b: Int): Int = ???
+
+        resultMsg(multiply)(1, 2) // The result for 1 and 2 is 2
+      """)
+    ),
+
+    slide(
+      "Parameterized Higher-Order functions",
+      code("""
+        resultMsg[A](f: (A, A) => A)(a: A, b: A): A = {
+          "The result for " + a + " and " + b + " is " op(a, b)
+        }
+
+        resultMsg(plus)(1, 2) // A ~ Int
+      """)
+    ),
+
+    exerciseSlide(
+      "Code Exercise: exercise1.HigherOrder",
+      bashCode("""
+        sbt> project scala101-exercises
+        sbt> test:testOnly exercise1.HigherOrderSpec
       """)
     )
   )
