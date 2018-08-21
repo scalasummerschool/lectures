@@ -670,6 +670,167 @@ object Lecture extends JSApp {
         sbt> project scala101-exercises
         sbt> test:testOnly exercise1.HigherOrderSpec
       """)
+    ),
+
+    noHeaderSlide(
+      <.h2("Enough about functions for now"),
+      <.h3("Let's do something new. Let's create some Data Types")
+    )
+  )
+
+  val traitsAndCaseClasses = chapter(
+    chapterSlide(
+      <.h1("Traits and Case Classes")
+    ),
+
+    slide(
+      "Case Classes",
+      <.p("Scala's data types bring us just so far."),
+      <.p("We want to be able to create our own.")
+    ),
+
+    slide(
+      "Case Classes",
+      code("""
+        case class User(name: String, age: Int)
+        //          ^    ^             ^
+        //          |    '-------------'
+        //       identifier     |
+        //                      |
+        //                 public fields
+
+        val user = User("John", 42)
+
+        // read only, no mutations
+        user.name
+        user.age
+      """)
+    ),
+
+    slide(
+      "Case Classes: How to mutate them?",
+      code("""
+        // comes with a copy method
+        val user = User("John", 42)
+
+        // creates copy of `user`
+        val newUser = user.copy("Jim", 27)
+      """)
+    ),
+
+    slide(
+      "Case Classes: How to mutate them?",
+      code("""
+        val user = User("John", 42)
+
+        // change just a supset of fields
+        val newUser = user.copy(name = "Jim")
+      """)
+    ),
+
+    slide(
+      "Functions: default parameter",
+      code("""
+        def newUser(name: String = "Joe", age: Int = 42): User = User(name, age)
+
+        newUser()          // User(Joe, 42)
+        newUser("Jim", 27) // User(Jim, 27)
+        newUser("Jim")     // User(Jim, 42)
+        newUser(age = 27)  // User(Joe, 27)
+      """)
+    ),
+
+    slide(
+      "Methods: functions for classes",
+      code("""
+        case class User(name: String, age: Int) {
+          
+          def birthYear(year: Int): Int = year - age
+      """),
+      codeFragment("""
+          // which is equal to
+          def birthYear(year: Int): Int = year - this.age
+        }
+      """),
+      codeFragment("""
+        // as function
+        def birthYear(user: User)(year: Int): Int = year - user.age
+      """)
+    ),
+
+    slide(
+      "Methods: functions for classes",
+      code("""
+        // methods give us infix notation like `+`
+        case class Euro(value: Int) {
+
+          def +(other: Euro): Euro = Euro(value + other.value)
+        }
+
+        Euro(10).+(Euro(5)) // Euro(15)
+      """),
+      codeFragment("""
+        // or without dots and brackets
+        Euro(10) + Euro(5)
+      """)
+    ),
+
+    exerciseSlide(
+      "exercise1.Person",
+      bashCode("""
+        sbt> project scala-101-exercises
+        sbt> test:testOnly exercise1.PersonSpec
+      """)
+    ),
+
+    slide(
+      "Traits",
+      <.p("But what if we have multiple data types which share a relation?")
+    ),
+
+    slide(
+      "Traits",
+      code("""
+        // all persons but different types
+        case class Man(firstName: String, lastName: String)
+        case class Woman(firstName: String, lastName: String)
+        case class Child(firstName: String, lastName: String)
+      """)
+    ),
+
+    slide(
+      "Traits",
+      code("""
+          sealed trait Person
+        //  ^            ^
+        //  '            '-------------------
+        // only allow sub classes           '
+        // in this file (optional)       identifier
+
+        case class Man(firstName: String, lastName: String)   extends Person
+        case class Woman(firstName: String, lastName: String) extends Person
+        case class Child(firstName: String, lastName: String) extends Person
+      """)
+    ),
+
+    slide(
+      "Traits: common properties and behaviour",
+      code("""
+        // all subclasses share this properties
+        sealed trait Person {
+
+          val firstName: String
+          val lastName: String
+
+          def fullName: String
+        }
+      """),
+      codeFragment("""
+        case class Man(firstName: String, lastName: String) extends Person {
+
+          def fullName: String = firstName + " " + lastName
+        }
+      """)
     )
   )
 
@@ -684,7 +845,8 @@ object Lecture extends JSApp {
           introduction,
           expressions,
           types,
-          functions
+          functions,
+          traitsAndCaseClasses
         )
       )
     )
