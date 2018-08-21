@@ -16,12 +16,4 @@ object HigherOrder {
   //         nTimes(a => b => ???)
 
 
-
-  // c) make `nTimes` generic of its parameter/result type (type parameter)
-
-
-  
-  // d) use generic `nTimes` with different types using anonymous functions
-
-
 }

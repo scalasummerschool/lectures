@@ -553,6 +553,26 @@ object Lecture extends JSApp {
       """)
     ),
 
+    slide(
+      "Higher-Order Functions",
+      code("""
+        // functions are first-class citizens > can be used like values
+        def plus(a: Int, b: Int): Int = ???
+
+        // therefore, we can treat it pass as parameter
+        def resultMsg(f: (Int, Int) => Int)(a: Int, b: Int): String = {
+          "The result for " + a + " and " + b + " is " op(a, b)
+        }
+
+        resultMsg(plus)(1, 2) // The result for 1 and 2 is 3
+      """),
+      codeFragment("""
+        def multiply(a: Int, b: Int): Int = ???
+
+        resultMsg(multiply)(1, 2) // The result for 1 and 2 is 2
+      """)
+    ),
+
     exerciseSlide(
       "First Code Exercise: exercise1.Area",
       bashCode("""
@@ -583,84 +603,6 @@ object Lecture extends JSApp {
           
           ...
         }
-      """)
-    ),
-
-    slide(
-      "Parametricity",
-      <.p("All our declarations are bound to fixed types for parameters and result."),
-      <.p("But what if we need something more generic?")
-    ),
-
-    slide(
-      "Parametricity: id over and over",
-      code("""
-        // id returns the given value `a`
-        def id(a: Int): Int = a
-        def id(a: Double): Double = a
-
-        // we have to do that for every type
-        ...
-      """)
-    ),
-
-    slide(
-      "Parametricity: type parameters",
-      code("""
-           def id[A](a: A): A = a
-        //        ^
-        //        |
-        // a type as parameter
-      """),
-      codeFragment("""
-        id(5)   // A ~ Int
-        id(5.0) // A ~ Double
-        ...
-      """),
-      codeFragment("""
-        // or
-        id[Int](5)
-      """)
-    ),
-
-    slide(
-      "Parametricity",
-      Enumeration(
-        Item.stable(<.p("fixing a types during application")),
-        Item.fadeIn(<.p("allows us to write generic functions")),
-        Item.fadeIn(<.p("increases reusability")),
-        Item.fadeIn(<.p("useful for higher-order functions"))
-      )
-    ),
-
-    slide(
-      "Higher-Order Functions",
-      code("""
-        // functions are first-class citizens > can be used like values
-        def plus(a: Int, b: Int): Int = ???
-
-        // therefore, we can treat it pass as parameter
-        def resultMsg(f: (Int, Int) => Int)(a: Int, b: Int): String = {
-          "The result for " + a + " and " + b + " is " op(a, b)
-        }
-
-        resultMsg(plus)(1, 2) // The result for 1 and 2 is 3
-      """),
-      codeFragment("""
-        def multiply(a: Int, b: Int): Int = ???
-
-        resultMsg(multiply)(1, 2) // The result for 1 and 2 is 2
-      """)
-    ),
-
-    slide(
-      "Parameterized Higher-Order functions",
-      code("""
-        resultMsg[A](f: (A, A) => A)(a: A, b: A): A = {
-          "The result for " + a + " and " + b + " is " op(a, b)
-        }
-
-        resultMsg(plus)(1, 2) // A ~ Int
       """)
     ),
 
@@ -775,14 +717,6 @@ object Lecture extends JSApp {
       """)
     ),
 
-    exerciseSlide(
-      "exercise1.Person",
-      bashCode("""
-        sbt> project scala-101-exercises
-        sbt> test:testOnly exercise1.PersonSpec
-      """)
-    ),
-
     slide(
       "Traits",
       <.p("But what if we have multiple data types which share a relation?")
@@ -822,14 +756,20 @@ object Lecture extends JSApp {
           val firstName: String
           val lastName: String
 
-          def fullName: String
+          // default implementation
+          def fullName: String = firstName + " " + lastName
         }
       """),
       codeFragment("""
-        case class Man(firstName: String, lastName: String) extends Person {
+        case class Man(firstName: String, lastName: String) extends Person
+      """)
+    ),
 
-          def fullName: String = firstName + " " + lastName
-        }
+    exerciseSlide(
+      "exercise1.CaseClasses",
+      bashCode("""
+        sbt> project scala-101-exercises
+        sbt> test:testOnly exercise1.PersonSpec
       """)
     )
   )
