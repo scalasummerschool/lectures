@@ -34,16 +34,16 @@
     margin: 0;
     padding-top: 15px;
     padding-bottom: 11px;
-    padding-left: 15px;
+    padding-left: 20px;
     font-size: 70%;
 }
 
 .slide-header p {
-    color: #e6e6e6;
+    color: #ffffff;
 }
 
 .exercise-header p {
-    color: #e6e6e6;
+    color: #ffffff;
 }
 
 .slide-header img,
@@ -51,13 +51,7 @@
     position: relative;
     float: left;
     width: 33px;
-    padding-left: 5%;
-}
-
-.reveal section p {
-    text-align: left;
-    margin-left: 5%;
-    margin-right: 5%;
+    padding-left: 55px;
 }
 
 .reveal section ul li p {

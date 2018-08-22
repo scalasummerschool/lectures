@@ -912,6 +912,71 @@ object Lecture extends JSApp {
     )
   )
 
+  val summary = chapter(
+    chapterSlide(
+      <.h1("Summary")
+    ),
+
+    slide(
+      "Expressions",
+      code("""
+        {
+          val a = 1 + 2
+      
+          a * 5
+        }
+
+        ==> 15
+      """)
+    ),
+
+    slide(
+      "Types",
+      code("""
+        val a: String = "Hello"
+
+        val b: Int = a // no no
+      """)
+    ),
+
+    slide(
+      "Functions",
+      code("""
+        def plus(a: Int, b: Int): Int = a + b
+
+        plus(1, 2)
+      """)
+    ),
+
+    slide(
+      "Case Classes and Traits",
+      code("""
+        sealed trait Currency
+
+        case class Euro(value: Int) extends Currency
+        case class Dollar(value: Int) extends Currency
+      """)
+    ),
+
+    slide(
+      "Pattern Matching",
+      code("""
+        val curr: Currency = ???
+
+        curr match {
+          case Euro(value)   => value
+          case Dollar(value) => value
+        }
+      """)
+    ),
+
+    noHeaderSlide(
+      <.h2("Next Topic"),
+      <.br,
+      <.h3("Next Topic: Functional Programming 101")
+    )
+  )
+
   val Show = ScalaComponent
     .builder[Unit]("Slideshow")
     .renderStatic(
@@ -925,7 +990,8 @@ object Lecture extends JSApp {
           types,
           functions,
           traitsAndCaseClasses,
-          patternMatching
+          patternMatching,
+          summary
         )
       )
     )

@@ -7,8 +7,10 @@ import dom.raw.HTMLElement
 
 object SlideshowUtil {  
 
-  val dataBackground = VdomAttr("data-background")
-  val dataTrim       = VdomAttr("data-trim") := ""
+  val dataBackground      = VdomAttr("data-background")
+  val dataBackgroundColor = VdomAttr("data-background-color")
+  val dataBackgroundSize  = VdomAttr("data-background-size")
+  val dataTrim            = VdomAttr("data-trim") := ""
 
   def chapter(slides: TagOf[HTMLElement]*): TagOf[HTMLElement] = <.section(slides: _*)
 
@@ -39,9 +41,15 @@ object SlideshowUtil {
     content
   }
 
+  private val ChapterSlideProps = Seq(
+    (dataBackground      := "./../reveal/img/dark-logo.svg"),
+    (dataBackgroundColor := "#363633"),
+    (dataBackgroundSize  := "30%")
+  )
+
   def chapterSlide(content: TagOf[HTMLElement]*): TagOf[HTMLElement] = cleanSlide(
     <.section(
-      ((dataBackground := "#363633") +: content): _*
+      (ChapterSlideProps ++: content): _*
     )
   )
 
