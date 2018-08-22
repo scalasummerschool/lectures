@@ -60,6 +60,11 @@
     margin-right: 5%;
 }
 
+.reveal section ul li p {
+    margin-left: 0;
+    margin-right: 0;
+}
+
 .reveal section .formular {
     text-align: center;
 }

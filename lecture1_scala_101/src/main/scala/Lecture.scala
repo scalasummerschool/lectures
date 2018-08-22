@@ -574,7 +574,7 @@ object Lecture extends JSApp {
     ),
 
     exerciseSlide(
-      "First Code Exercise: exercise1.Area",
+      "Let's Code",
       bashCode("""
         # start sbt (keep it running)
         $> sbt
@@ -590,7 +590,7 @@ object Lecture extends JSApp {
     ),
 
     exerciseSlide(
-      "First Code Exercise: exercise1.Area",
+      "Let's Code",
       code("""
         // package/path definition
         // <package>.<object-name> must be unique
@@ -607,7 +607,7 @@ object Lecture extends JSApp {
     ),
 
     exerciseSlide(
-      "Code Exercise: exercise1.HigherOrder",
+      "Let's Code",
       bashCode("""
         sbt> project scala101-exercises
         sbt> test:testOnly exercise1.HigherOrderSpec
@@ -718,6 +718,20 @@ object Lecture extends JSApp {
     ),
 
     slide(
+      "Static Case Classes",
+      <.p("What if you want to represent colors?"),
+      code("""
+        // this is static; will not change
+        // why create a new instance every time?
+        case class Green()
+      """),
+      codeFragment("""
+        // use case object s instead
+        case object Green
+      """)
+    ),
+
+    slide(
       "Traits",
       <.p("But what if we have multiple data types which share a relation?")
     ),
@@ -762,14 +776,122 @@ object Lecture extends JSApp {
       """),
       codeFragment("""
         case class Man(firstName: String, lastName: String) extends Person
+
+        val man = Man("John", "Doe")
+        man.fullName
       """)
     ),
 
+    slide(
+      "Traits: OOP in FP",
+      <.p("Looks like OOP inheritence to you?"),
+      <.p(
+        ^.cls := "fragment fade-in",
+        "That's because it is. Again Scala is the fusion of OOP and FP."
+      )
+    ),
+
     exerciseSlide(
-      "exercise1.CaseClasses",
+      "Let's Code",
       bashCode("""
         sbt> project scala-101-exercises
         sbt> test:testOnly exercise1.PersonSpec
+      """)
+    ),
+
+    noHeaderSlide(
+      <.h3("So far, We learned stuff about ..."),
+      Enumeration(
+        Item.fadeIn(<.p("epxressions and declarations")),
+        Item.fadeIn(<.p("functions and types")),
+        Item.fadeIn(<.p("case class and trait")),
+      ),
+      <.h4(
+        ^.cls := "fragment fade-in",
+        "We are ready for the FP part, right?"
+      )
+    )
+  )
+
+  val patternMatching = chapter(
+    chapterSlide(
+      <.h1("Pattern Matching")
+    ),
+
+    slide(
+      "Pattern Matching",
+      Enumeration(
+        Item.stable(<.p("match values against pattern")),
+        Item.fadeIn(<.p("extract information")),
+        Item.fadeIn(<.p("decide program control flow"))
+      )
+    ),
+
+    slide(
+      "Pattern Matching",
+      code("""
+        val person: Person = ???
+
+        person match {
+          case Woman(first, last) => first
+          case Man(first, last)   => first
+          case Child(first, last) => first
+        }
+      """)
+    ),
+
+    slide(
+      "Ommit values you don't need",
+      code("""
+        val person: Person = ???
+
+        person match {
+          case Woman(first, _) => first
+          ...
+        }
+      """)
+    ),
+
+    slide(
+      "Conditional cases",
+      code("""
+        val person: Person = ???
+
+        person match {
+          // you can also use `&` and `|`
+          case Woman(first, last) if last == "Smith" => first
+          ...
+        }
+      """)
+    ),
+
+    slide(
+      "Get whole value",
+      code("""
+        val person: Person = ???
+
+        person match {
+          // you can also use `&` and `|`
+          case w@Woman(_, last) if last == "Smith" => w
+          ...
+        }
+      """)
+    ),
+
+    slide(
+      "Pattern Matching",
+      Enumeration(
+        Item.stable(<.p("Make it exhaustive. Don't miss a case.")),
+        Item.fadeIn(<.p("Only declare fields you use.")),
+        Item.fadeIn(<.p("Works also with primitives."))
+      )
+    ),
+
+    exerciseSlide(
+      "Let's Code",
+      bashCode("""
+        sbt> project scala101-exercises
+        sbt> test:testOnly exercise1.PatternMatchingSpec
       """)
     )
   )
@@ -786,7 +908,8 @@ object Lecture extends JSApp {
           expressions,
           types,
           functions,
-          traitsAndCaseClasses
+          traitsAndCaseClasses,
+          patternMatching
         )
       )
     )
