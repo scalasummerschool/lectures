@@ -20,8 +20,11 @@ object Lecture extends JSApp {
       "What we will learn in this lecture",
       Enumeration(
         Item.stable(<.p("Scala background")),
-        Item.fadeIn(<.p("SBT: manage your projects")),
-        Item.fadeIn(<.p("introduction into Scala (our first code yeah)"))
+        Item.fadeIn(<.p("Expressions and Declarations")),
+        Item.fadeIn(<.p("Types")),
+        Item.fadeIn(<.p("Functions")),
+        Item.fadeIn(<.p("Case Classes and Traits")),
+        Item.fadeIn(<.p("Pattern Matching"))
       )
     ),
 
@@ -47,10 +50,15 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Why Scala: JVM",
+      "Why Scala: Java Ecosystem",
+      <.img(^.alt := "Java Ecosystem", ^.src := "./img/java-logo.svg")
+    ),
+
+    slide(
+      "Why Scala: Java Ecosystem",
       Enumeration(
         Item.stable(<.p("access to Java ecosystem")),
-        Item.fadeIn(<.p("or any ecosystem compiling to ByteCode)")),
+        Item.fadeIn(<.p("or any ecosystem compiling to ByteCode")),
         Item.fadeIn(<.p("JVM performance (JIT, GC)")),
         Item.fadeIn(<.p("... and tooling (metrics, debugging, etc.)")),
       )
@@ -58,10 +66,7 @@ object Lecture extends JSApp {
 
     slide(
       "Why Scala: brings its own Ecosysten",
-      Enumeration(
-        Item.stable(<.p("large projects like Spark or Akka")),
-        Item.fadeIn(<.p("strong library support for HTTP, FP, OOP, JDBC, ..."))
-      )
+      <.img(^.alt := "Scala Ecosystem", ^.src := "./img/scala-ecosystem.svg")
     ),
 
     slide(
@@ -94,7 +99,7 @@ object Lecture extends JSApp {
 
   val expressions = chapter(
     chapterSlide(
-      <.h1("Expressions"),
+      <.h1("Expressions & Declarations"),
       <.h3("Basic building blocks")
     ),
 
@@ -105,7 +110,7 @@ object Lecture extends JSApp {
 
     slide(
       "Expressions",
-      <.p("Expression can be values, combination of values or functions applied to values. And they get reduced to results.")
+      <.h4("Expression can be values, combination of values or functions applied to values. And they get reduced to results.")
     ),
 
     slide(
@@ -439,8 +444,9 @@ object Lecture extends JSApp {
     ),
 
     noHeaderSlide(
-      <.p("We now know what Expressions are and how to use them."),
-      <.p("But how do we make them reusable?")
+      <.h4("We now know what Expressions are and how to use them."),
+      <.br,
+      <.h5("But how do we make them reusable?")
     )
   )
 
@@ -451,7 +457,12 @@ object Lecture extends JSApp {
 
     slide(
       "Functions",
-      <.p("Special type of expressions which has a name, takes input and returns, as always, a result.")
+      <.h4("Special type of expressions which has a name, takes input and returns, as always, a result.")
+    ),
+
+    slide(
+      "Functions",
+      <.h4("They are expression with a declaration.")
     ),
 
     slide(
@@ -615,8 +626,9 @@ object Lecture extends JSApp {
     ),
 
     noHeaderSlide(
-      <.h2("Enough about functions for now"),
-      <.h3("Let's do something new. Let's create some Data Types")
+      <.h3("Enough about functions for now"),
+      <.br,
+      <.h4("Let's do something new. Let's create some Data Types")
     )
   )
 
@@ -627,8 +639,8 @@ object Lecture extends JSApp {
 
     slide(
       "Case Classes",
-      <.p("Scala's data types bring us just so far."),
-      <.p("We want to be able to create our own.")
+      <.h3("Scala's data types bring us just so far."),
+      <.h3("We want to be able to create our own.")
     ),
 
     slide(
@@ -719,7 +731,8 @@ object Lecture extends JSApp {
 
     slide(
       "Static Case Classes",
-      <.p("What if you want to represent colors?"),
+      <.h4("What if you want to represent colors?"),
+      <.br,
       code("""
         // this is static; will not change
         // why create a new instance every time?
@@ -733,7 +746,7 @@ object Lecture extends JSApp {
 
     slide(
       "Traits",
-      <.p("But what if we have multiple data types which share a relation?")
+      <.h4("But what if we have multiple data types which share a relation?")
     ),
 
     slide(
@@ -784,8 +797,9 @@ object Lecture extends JSApp {
 
     slide(
       "Traits: OOP in FP",
-      <.p("Looks like OOP inheritence to you?"),
-      <.p(
+      <.h4("Looks like OOP inheritence to you?"),
+      <.br,
+      <.h4(
         ^.cls := "fragment fade-in",
         "That's because it is. Again Scala is the fusion of OOP and FP."
       )
@@ -801,11 +815,13 @@ object Lecture extends JSApp {
 
     noHeaderSlide(
       <.h3("So far, We learned stuff about ..."),
+      <.br,
       Enumeration(
         Item.fadeIn(<.p("epxressions and declarations")),
         Item.fadeIn(<.p("functions and types")),
         Item.fadeIn(<.p("case class and trait")),
       ),
+      <.br,
       <.h4(
         ^.cls := "fragment fade-in",
         "We are ready for the FP part, right?"
