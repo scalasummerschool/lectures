@@ -62,3 +62,9 @@
 .reveal section .formular {
     text-align: center;
 }
+
+.reveal section > p {
+  text-align: left;
+  margin-left: 40px;
+  margin-right: 40px;
+}
