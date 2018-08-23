@@ -302,6 +302,46 @@ object Lecture extends JSApp {
       """)
     ),
 
+    slide(
+      "Conditional expression",
+      code("""
+        val a = 5
+
+        if (a > 0) {
+          "positive number"
+        }
+      """),
+      codeFragment("""
+        else if (a == 0) {
+          "is zero"
+        }
+      """),
+      codeFragment("""
+        else {
+          "negative number"
+        }
+      """)
+    ),
+
+    slide(
+      "Boolean operators",
+      code("""
+        !a     // negation
+
+        a & b  // AND, always evaluates `b`
+        a && b // AND, evaluates `b` only if `a` is true
+        
+        a | b  // OR, always evaluates b
+        a || b // OR, evaluates `b` only if `a` is true
+        
+        a > b  // greater than
+        a < b  // smaller than
+        a == b // equal
+
+        // some more, but not relevant yet
+      """)
+    ),
+
     exerciseSlide(
       "What's the result?",
       code("""

@@ -6,18 +6,18 @@ import org.scalacheck.Prop.forAll
 object FunctionsSpec extends Properties("functions") {
 
   property("circle") = forAll { r: Double =>
-    r * r * Math.PI == Area.testCircle(r)
+    r * r * Math.PI == Functions.testCircle(r)
   }
 
   property("rectangle") = forAll { (a: Double, b: Double) =>
-    a * b == Area.testRectangle(a, b)
+    a * b == Functions.testRectangle(a, b)
   }
 
   property("rectangle uncurried") = forAll { (a: Double, b: Double) =>
-    a * b == Area.testRectangleUc(a, b)
+    a * b == Functions.testRectangleUc(a, b)
   }
 
   property("rectangle unscore") = forAll { (a: Double, b: Double) =>
-    a * b == Area.testRectangleUs(a, b)
+    a * b == Functions.testRectangleUs(a, b)
   }
 }

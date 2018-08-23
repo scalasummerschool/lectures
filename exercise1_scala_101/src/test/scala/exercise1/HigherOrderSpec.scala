@@ -9,4 +9,8 @@ object HigherOrderSpec extends Properties("higher-order") {
     n * HigherOrder.plus(a)(b) == HigherOrder.testNTimes(HigherOrder.plus, a, b, n) &&
     n * HigherOrder.multiply(a)(b) == HigherOrder.testNTimes(HigherOrder.multiply, a, b, n)
   }
+
+  property("anonymous function") = forAll { (n: Int, a: Int, b: Int) =>
+     (if (a > b) a else b) * n == HigherOrder.testAnonymousNTimes(a, b, n)
+  }
 }

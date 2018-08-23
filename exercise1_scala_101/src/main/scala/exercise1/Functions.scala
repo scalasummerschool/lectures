@@ -2,15 +2,17 @@ package exercise1
 
 object Functions {
 
-  // a) write a function which calculates the area of a
-  //    circle r^2 * Math.PI
+  /* a) write a function which calculates the area of a
+   *    circle r^2 * Math.PI
+   */
 
 
 
   def testCircle(r: Double): Double = r
   
-  // b) write a function which calculates the area of a
-  //    rectangle a * b
+  /* b) write a function which calculates the area of a
+   *    rectangle a * b
+   */
 
 
 
