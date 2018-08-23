@@ -23,7 +23,8 @@ lazy val root = project
   .in(file("."))
   .aggregate(
     `lectures-shared`, `exercises-shared`, 
-    `scala-101-lecture`, `scala-101-exercises`
+    `scala101-lecture`, `scala101-exercises`,
+    `fp101-lecture`, `fp101-exercises`
   )
 
 lazy val `lectures-shared` = project
@@ -41,7 +42,7 @@ lazy val `exercises-shared` = project
     libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.14.0" % "test"
   )
 
-lazy val `scala-101-lecture` = project
+lazy val `scala101-lecture` = project
   .in(file("lecture1_scala_101"))
   .enablePlugins(ScalaJSPlugin)
   .settings(
@@ -53,10 +54,30 @@ lazy val `scala-101-lecture` = project
   )
   .dependsOn(`lectures-shared`)
 
-lazy val `scala-101-exercises` = project
+lazy val `scala101-exercises` = project
   .in(file("exercise1_scala_101"))
   .settings(common)
   .settings(
     name := "scala101-exercises"    
+  )
+  .dependsOn(`exercises-shared` % "compile->compile;test->test")
+
+lazy val `fp101-lecture` = project
+  .in(file("lecture2_fp_101"))
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    common,
+    lectureCommon
+  )
+  .settings(
+    name := "fp101-lecture"
+  )
+  .dependsOn(`lectures-shared`)
+
+lazy val `fp101-exercises` = project
+  .in(file("exercise2_fp_101"))
+  .settings(common)
+  .settings(
+    name := "fp101-exercises"    
   )
   .dependsOn(`exercises-shared` % "compile->compile;test->test")
