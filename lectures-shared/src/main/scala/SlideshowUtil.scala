@@ -7,10 +7,13 @@ import dom.raw.HTMLElement
 
 object SlideshowUtil {  
 
+  val font = HtmlTag("font")
+
   val dataBackground      = VdomAttr("data-background")
   val dataBackgroundColor = VdomAttr("data-background-color")
   val dataBackgroundSize  = VdomAttr("data-background-size")
   val dataTrim            = VdomAttr("data-trim") := ""
+  val dataNoEscape        = VdomAttr("data-noescape") := ""
 
   def chapter(slides: TagOf[HTMLElement]*): TagOf[HTMLElement] = <.section(slides: _*)
 
@@ -75,6 +78,7 @@ object SlideshowUtil {
     <.code(
       ^.cls := language,
       dataTrim,
+      dataNoEscape,
       codeStr
     )
 

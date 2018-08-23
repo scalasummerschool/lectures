@@ -1,6 +1,6 @@
 package exercise1
 
-object Area {
+object Functions {
 
   // a) write a function which calculates the area of a
   //    circle r^2 * Math.PI

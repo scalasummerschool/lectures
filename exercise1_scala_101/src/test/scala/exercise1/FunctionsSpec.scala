@@ -3,7 +3,7 @@ package exercise1
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
-object AreaSpec extends Properties("area") {
+object FunctionsSpec extends Properties("functions") {
 
   property("circle") = forAll { r: Double =>
     r * r * Math.PI == Area.testCircle(r)

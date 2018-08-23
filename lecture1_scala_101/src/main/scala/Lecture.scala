@@ -36,26 +36,58 @@ object Lecture extends JSApp {
 
   val introduction = chapter(
     chapterSlide(
-      <.h1("What is Scala? And why?")
+      <.h2("What is Scala? And why?")
     ),
 
     slide(
-      "In a nutshell",
-      Enumeration(
-        Item.stable(<.p("strict and statically typed programming language")),
-        Item.fadeIn(<.p(<.b("Sca"), "lable ", <.b("La"), "nguage")),
-        Item.fadeIn(<.p("support for JVM, native and JavaScript")),
-        Item.fadeIn(<.p("Martin Orderky et all in 2005"))
+      "The Name",
+      <.h3(
+        font(^.color := "#ce1d25", "Sca"), "lable ", 
+        font(^.color := "#ce1d25", "La"), "nguage"
+      ),
+      <.br,
+      <.h4(
+        ^.cls := "fragment fade-in",
+        font(^.color := "#ce1d25", "S"), "low ", 
+        font(^.color := "#ce1d25", "C"), "ompiling ", 
+        font(^.color := "#ce1d25", "A"), "cademic ", 
+        font(^.color := "#ce1d25", "La"), "nguage"
       )
     ),
 
     slide(
-      "Why Scala: Java Ecosystem",
+      "Creation: Martin Odersky et al around 2004",
+      <.img(
+        ^.alt := "Scala Paper",
+        ^.src := "./img/scala-paper.png"
+      )
+    ),
+
+    slide(
+      "Scala's Principles",
+      <.img(
+        ^.alt   := "Scala's Prinicples",
+        ^.width := "50%",
+        ^.src   := "./img/principles.svg"
+      )
+    ),
+
+    slide(
+      "Target-Systems",
+      <.img(
+        ^.alt   := "Scala's Targets",
+        ^.width := "50%",
+        ^.src   := "./img/targets.svg"
+      )
+    ),
+
+    slide(
+      "Why Scala: Java ecosystem",
       <.img(^.alt := "Java Ecosystem", ^.src := "./img/java-logo.svg")
     ),
 
     slide(
-      "Why Scala: Java Ecosystem",
+      "Why Scala: Java ecosystem",
       Enumeration(
         Item.stable(<.p("access to Java ecosystem")),
         Item.fadeIn(<.p("or any ecosystem compiling to ByteCode")),
@@ -65,12 +97,12 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Why Scala: brings its own Ecosysten",
+      "Why Scala: brings its own ecosysten",
       <.img(^.alt := "Scala Ecosystem", ^.src := "./img/scala-ecosystem.svg")
     ),
 
     slide(
-      "Why Scala: Fusion of FP and OOP",
+      "Why Scala: fusion of FP and OOP",
       Enumeration(
         Item.stable(<.p("with additional Type-Level programming on top")),
         Item.fadeIn(<.p("choose paradigm which solve your problem best ...")),
@@ -79,17 +111,18 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Why Scala: Industry & Academia combined",
+      "Why Scala: industry & academia combined",
       Enumeration(
         Item.stable(<.p("big players use it: Twitter, Stripe to name a few")),
-        Item.fadeIn(<.p("backed by Lightbend")),
+        Item.fadeIn(<.p("backed by Lightbend Inc.")),
         Item.fadeIn(<.p("backed by EPFL")),
         Item.fadeIn(<.p("... and of course by an Open Source community"))
       )
     ),
 
     noHeaderSlide(
-      <.h2("Are you convinced?"),
+      <.h3("Are you convinced?"),
+      <.br,
       <.h4(
         ^.cls := "fragment fade-in",
         "Great, then let's move on and learn how to use it."
@@ -99,22 +132,22 @@ object Lecture extends JSApp {
 
   val expressions = chapter(
     chapterSlide(
-      <.h1("Expressions & Declarations"),
+      <.h2("Expressions & Declarations"),
       <.h3("Basic building blocks")
     ),
 
     slide(
       "Expressions",
-      <.p("Scala programs are made up from expressions and declarations.")
+      <.h3("Scala programs are made up from expressions and declarations.")
     ),
 
     slide(
       "Expressions",
-      <.h4("Expression can be values, combination of values or functions applied to values. And they get reduced to results.")
+      <.p("Expression can be values, combination of values or functions applied to values. And they get reduced to results.")
     ),
 
     slide(
-      "Values as Expressions",
+      "Values as expressions",
       code("""
         // already in reduced form
         1
@@ -124,7 +157,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Operations as Expressions",
+      "Operations as expressions",
       code("""
         1 + 2
       """),
@@ -144,6 +177,8 @@ object Lecture extends JSApp {
     slide(
       "Assignment of results",
       code("""
+        // identifier references value
+        // value does not change
         val firstName = "John"
         val lastName  = "Doe"
 
@@ -152,7 +187,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Block Expressions",
+      "Block expressions",
       code("""
         {
           val a = 1 + 2
@@ -207,7 +242,7 @@ object Lecture extends JSApp {
     ),
 
     exerciseSlide(
-      "Does this work?",
+      "Does it work?",
       code("""
         val a = 5
         {
@@ -221,7 +256,7 @@ object Lecture extends JSApp {
     ),
 
     exerciseSlide(
-      "Does this work?",
+      "Does it work?",
       code("""
         val a = {
           val b = 6
@@ -235,7 +270,7 @@ object Lecture extends JSApp {
     ),
 
     exerciseSlide(
-      "Does this work?",
+      "Does it work?",
       code("""
         val a = 5
         {
@@ -262,6 +297,7 @@ object Lecture extends JSApp {
         6 - :
         7 - + -
         8 - * / %
+
         // (all other special characters)
       """)
     ),
@@ -315,7 +351,7 @@ object Lecture extends JSApp {
     ),
 
     noHeaderSlide(
-      <.h2("Expressions return typed results"),
+      <.h3("Expressions return typed results"),
       <.br,
       codeFragment("""
         1       // Int
@@ -332,7 +368,7 @@ object Lecture extends JSApp {
 
   val types = chapter(
     chapterSlide(
-      <.h1("Types"),
+      <.h2("Types"),
       <.h3("Make your code more strict")
     ),
 
@@ -342,7 +378,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "State of a Value",
+      "State of a value",
       code("""
         a: Int = 0
 
@@ -355,7 +391,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Primitive Types",
+      "Primitive Data Types",
       code("""
         Boolean - true false
         Byte    - Integer from -128 to 127
@@ -380,7 +416,7 @@ object Lecture extends JSApp {
           1 + 2
         """),
       codeFragment("""
-        // numbers, Char and String a
+        // numbers, Chars and Strings
         1 + 2.0       ==> 3.0: Double
         1 + 'a'       ==> 98: Int
         1 + " banana" ==> "1 banana": String
@@ -391,7 +427,7 @@ object Lecture extends JSApp {
     ),
 
     exerciseSlide(
-      "What is the Type?",
+      "What is the type?",
       code("""
         1 + 2
       """),
@@ -413,7 +449,7 @@ object Lecture extends JSApp {
     ),
 
     exerciseSlide(
-      "What is the Type?",
+      "What is the type?",
       code("""
         1 / 2
       """),
@@ -452,7 +488,7 @@ object Lecture extends JSApp {
 
   val functions = chapter(
     chapterSlide(
-      <.h1("Functions")
+      <.h2("Functions")
     ),
 
     slide(
@@ -468,36 +504,35 @@ object Lecture extends JSApp {
     slide(
       "Functions",
       code("""
-        val plus: Int => Int => Int = a => b => a + b
+        def plus(a: Int)(b: Int): Int = a + b
       """),
       codeFragment("""
         // declaration
-        val plus: Int => Int => Int
-        //   ^     ^      ^      ^
-        //   |     '------|      |
-        // identifier   input  result 
+        def plus(a: Int)(b: Int): Int
+        //   ^     ^       ^       ^
+        //   |     '-------|       |
+        // identifier    input   result 
       """),
       codeFragment("""
         // body expression
-           a => b => a + b
-        // ^    ^
-        // '----'
+           a + b
+        // ^   ^
+        // '---'
         //   |
         // input values
       """)
     ),
 
     slide(
-      "Functions: def syntax",
+      "Functions: val syntax",
       code("""
-        // or a more prominent syntax
-        // is mainly used when declaring or defining functions
+        // less used syntax
 
         // this becomes
-        val plus: Int => Int => Int = a => b => a + b
-
-        // that; a bit more concise
         def plus(a: Int)(b: Int): Int = a + b
+
+        // that
+        val plus: Int => Int => Int = a => b => a + b
       """)
     ),
 
@@ -512,7 +547,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Function Application",
+      "Function application",
       code("""
         val plus1: Int => Int = plus(1)
       """),
@@ -527,12 +562,12 @@ object Lecture extends JSApp {
       """),
       codeFragment("""
         // in one step
-        val result = plus(1)(2)
+        plus(1)(2) == 3
       """)
     ),
 
     slide(
-      "Function Application",
+      "Function application",
       Enumeration(
         Item.stable(<.p("this technique is called Currying")),
         Item.fadeIn(<.p("apply a single parameter at a time (left to right)")),
@@ -541,7 +576,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Uncurried Function",
+      "Uncurried function",
       code("""
         // you can also write
         def plusUn: (a: Int, b: Int): Int = a + b
@@ -556,7 +591,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Mix Curried and Uncurried",
+      "Mix curried and uncurried",
       code("""
         def plusPair(a: Int, b: Int)(c: Int, d: Int): Int = {
           plus(a, c) + plus(b, d)
@@ -565,27 +600,28 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Higher-Order Functions",
+      "Higher-Order functions",
       code("""
         // functions are first-class citizens > can be used like values
         def plus(a: Int, b: Int): Int = ???
 
-        // therefore, we can treat it pass as parameter
+        // therefore, we can pass them as parameter
         def resultMsg(f: (Int, Int) => Int)(a: Int, b: Int): String = {
           "The result for " + a + " and " + b + " is " op(a, b)
         }
 
-        resultMsg(plus)(1, 2) // The result for 1 and 2 is 3
+        resultMsg(plus)(1, 2) == "The result for 1 and 2 is 3"
       """),
+      <.br,
       codeFragment("""
         def multiply(a: Int, b: Int): Int = ???
 
-        resultMsg(multiply)(1, 2) // The result for 1 and 2 is 2
+        resultMsg(multiply)(1, 2) == "The result for 1 and 2 is 2"
       """)
     ),
 
     exerciseSlide(
-      "Let's Code",
+      "Let's code",
       bashCode("""
         # start sbt (keep it running)
         $> sbt
@@ -596,12 +632,12 @@ object Lecture extends JSApp {
         # or let SBT compile on every file change
         sbt> ~compile
         # to test your implementation
-        sbt> test:testOnly exercise1.AreaSpec
+        sbt> test:testOnly exercise1.FunctionsSpec
       """)
     ),
 
     exerciseSlide(
-      "Let's Code",
+      "Let's code",
       code("""
         // package/path definition
         // <package>.<object-name> must be unique
@@ -609,7 +645,7 @@ object Lecture extends JSApp {
 
         // object containing functions, values, other objects and more
         // like a namespace
-        object Area {
+        object Functions {
           // our functions live here
           
           ...
@@ -618,7 +654,7 @@ object Lecture extends JSApp {
     ),
 
     exerciseSlide(
-      "Let's Code",
+      "Let's code",
       bashCode("""
         sbt> project scala101-exercises
         sbt> test:testOnly exercise1.HigherOrderSpec
@@ -632,9 +668,9 @@ object Lecture extends JSApp {
     )
   )
 
-  val traitsAndCaseClasses = chapter(
+  val caseClassesAndTraits = chapter(
     chapterSlide(
-      <.h1("Traits and Case Classes")
+      <.h2("Case Classes & Traits")
     ),
 
     slide(
@@ -656,8 +692,8 @@ object Lecture extends JSApp {
         val user = User("John", 42)
 
         // read only, no mutations
-        user.name
-        user.age
+        user.name == "John"
+        user.age  == 42
       """)
     ),
 
@@ -668,7 +704,7 @@ object Lecture extends JSApp {
         val user = User("John", 42)
 
         // creates copy of `user`
-        val newUser = user.copy("Jim", 27)
+        user.copy("Jim", 27) == User("Jim", 27)
       """)
     ),
 
@@ -678,7 +714,7 @@ object Lecture extends JSApp {
         val user = User("John", 42)
 
         // change just a supset of fields
-        val newUser = user.copy(name = "Jim")
+        user.copy(name = "Jim") == User("Jim", 42)
       """)
     ),
 
@@ -687,10 +723,10 @@ object Lecture extends JSApp {
       code("""
         def newUser(name: String = "Joe", age: Int = 42): User = User(name, age)
 
-        newUser()          // User(Joe, 42)
-        newUser("Jim", 27) // User(Jim, 27)
-        newUser("Jim")     // User(Jim, 42)
-        newUser(age = 27)  // User(Joe, 27)
+        newUser()          == User(Joe, 42)
+        newUser("Jim", 27) == User(Jim, 27)
+        newUser("Jim")     == User(Jim, 42)
+        newUser(age = 27)  == User(Joe, 27)
       """)
     ),
 
@@ -721,7 +757,7 @@ object Lecture extends JSApp {
           def +(other: Euro): Euro = Euro(value + other.value)
         }
 
-        Euro(10).+(Euro(5)) // Euro(15)
+        Euro(10).+(Euro(5)) == Euro(15)
       """),
       codeFragment("""
         // or without dots and brackets
@@ -791,7 +827,8 @@ object Lecture extends JSApp {
         case class Man(firstName: String, lastName: String) extends Person
 
         val man = Man("John", "Doe")
-        man.fullName
+
+        man.fullName == "John Doe"
       """)
     ),
 
@@ -806,7 +843,7 @@ object Lecture extends JSApp {
     ),
 
     exerciseSlide(
-      "Let's Code",
+      "Let's code",
       bashCode("""
         sbt> project scala-101-exercises
         sbt> test:testOnly exercise1.PersonSpec
@@ -831,7 +868,7 @@ object Lecture extends JSApp {
 
   val patternMatching = chapter(
     chapterSlide(
-      <.h1("Pattern Matching")
+      <.h2("Pattern Matching")
     ),
 
     slide(
@@ -882,7 +919,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Get whole value",
+      "Get the whole value",
       code("""
         val person: Person = ???
 
@@ -904,7 +941,7 @@ object Lecture extends JSApp {
     ),
 
     exerciseSlide(
-      "Let's Code",
+      "Let's code",
       bashCode("""
         sbt> project scala101-exercises
         sbt> test:testOnly exercise1.PatternMatchingSpec
@@ -914,7 +951,7 @@ object Lecture extends JSApp {
 
   val summary = chapter(
     chapterSlide(
-      <.h1("Summary")
+      <.h2("Summary")
     ),
 
     slide(
@@ -944,7 +981,7 @@ object Lecture extends JSApp {
       code("""
         def plus(a: Int, b: Int): Int = a + b
 
-        plus(1, 2)
+        plus(1, 2) == 3
       """)
     ),
 
@@ -989,7 +1026,7 @@ object Lecture extends JSApp {
           expressions,
           types,
           functions,
-          traitsAndCaseClasses,
+          caseClassesAndTraits,
           patternMatching,
           summary
         )
