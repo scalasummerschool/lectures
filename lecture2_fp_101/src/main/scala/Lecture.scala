@@ -218,12 +218,12 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion: data types",
-      <.p("Definition of the data types depends on itself.")
+      "Recursion: data structures",
+      <.p("Definition of the data structures depends on itself.")
     ),
 
     slide(
-      "Recursion: data types",
+      "Recursion: data structures",
       code("""
         // linked list of Ints
         sealed trait IntList
@@ -239,7 +239,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion: data types",
+      "Recursion: data structures",
       <.img(
         ^.alt := "Linked List",
         ^.src := "./img/list.svg"
@@ -256,7 +256,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Type Parameter in data structures",
+      "Type Parameter: data structures",
       code("""
         sealed trait List[A]
         //                ^
@@ -272,21 +272,24 @@ object Lecture extends JSApp {
         //                                                      '
         //                                    fixes type of remaing/whole list 
 
-        // small trick relying on OOP and `Nothing` as the bottom type
-        case object Nil extends List[Nothing]
+        case class Nil[A]() extends List[A]
       """)
     ),
 
     slide(
-      "Type Parameter in data structures",
+      "Type Parameter: data structures",
       code("""
-        val intList  = Cons[Int](0, Cons(1, Cons(2, Nil)))
-        val charList = Cons[Char]('a', Cons('b', Nil))
+        val intList  = Cons[Int](0, Cons[Int](1, Cons[Int](2, Nil[Int]())))
+        val charList = Cons[Char]('a', Cons[Char]('b', Nil[Char]()))
       """),
       codeFragment("""
         // Scala can infer `A` by looking at the values
-        val intList  = Cons(0, Cons(1, Cons(2, Nil)))
-        val charList = Cons('a', Cons('b', Nil))
+
+        val intList  = Cons(0, Cons(1, Cons(2, Nil())))
+        // Scala knows that `0: Int`
+        //   '- List[A] ~ List[Int]
+
+        val charList = Cons('a', Cons('b', Nil()))
       """)
     ),
 
@@ -296,13 +299,13 @@ object Lecture extends JSApp {
         // you can use pattern matching
         intList match {
           case Cons(head, tail) => ???
-          case Nil              => ???
+          case Nil()            => ???
         }
       """)
     ),
 
     slide(
-      "Type Parameter in data structures",
+      "Type Parameter: data structures",
       Enumeration(
         Item.stable(<.p("also called generics")),
         Item.fadeIn(<.p("think of it like as missing (type) information")),
@@ -316,6 +319,195 @@ object Lecture extends JSApp {
       bashCode("""
         sbt> project fp101-exercises
         sbt> test:testOnly RecursiveDataSpec
+      """)
+    ),
+
+    noHeaderSlide(
+      <.h3("Now we have recursive data structures."),
+      <.br,
+      <.h4("But how do we process them?")
+    ),
+
+    slide(
+      "Recursion: functions",
+      <.p("Functions definitions which call itself.")
+    ),
+
+    slide(
+      "Recursion: functions",
+      code("""
+        // length of list
+        def length(list: List[Int]): Int = list match {
+      """),
+      codeFragment("""
+        // final state
+          case Nil() => 0
+      """),
+      codeFragment("""
+        // recusive step
+          case Cons(_, tail) => 1 + length(tail)
+        }
+      """),
+    ),
+
+    slide(
+      "Recursion: functions",
+      code("""
+        length(Cons(0, Cons(1, Nil())))
+        // '- 1 + length(Cons(1, Nil()))
+        //           '- 1 + length(Nil())
+        //                     '- 0
+      """),
+      codeFragment("""
+        length(Cons(0, Cons(1, Nil()))) == 1 + 1 + 0 == 2
+      """)
+    ),
+
+    slide(
+      "Type Parameter: functions",
+      <.h3("Again, do we need to write a function for every `A`?"),
+      <.br,
+      <.h4("No! type parameters to the rescue.")
+    ),
+
+    slide(
+      "Type Parameters: functions",
+      code("""
+        def length[A](list: List[A]): Int = ???
+        //         ^             ^
+        //         '             '---------
+        //    type parameter              '
+        //                         fixes list type `A`
+      """)
+    ),
+
+    slide(
+      "Type Parameters: functions",
+      code("""
+        length[Int](Cons(1, Cons(2, Nil()))) == 2
+
+        // or we use inference again
+
+        length(Cons(1, Cons(2, Nil()))) == 2
+        // Scala knows that `1: Int`
+        //   '- List[A] ~ List[Int]
+        //        '- length[A] ~ length[Int] 
+      """)
+    ),
+
+    slide(
+      "Recursion: functions",
+      code("""
+        length(Cons(0, Cons(1, Nil())))
+        // '- 1 + length(Cons(1, Nil()))
+        //           '- 1 + length(Nil())
+        //                     '- 0
+      """)
+    ),
+
+    slide(
+      "Recursion: programm stack",
+      <.img(
+        ^.alt   := "Programm Stack",
+        ^.width := "50%",
+        ^.src   := "./img/stack.svg"
+      )
+    ),
+
+    slide(
+      "Recursion: programm stack",
+      <.h3("But what happens if the list is reaaaaally long?"),
+      <.br,
+      <.h3("Your programm will run out of memory (stack overflow).")
+    ),
+
+    slide(
+      "Recursion: tail recursion",
+      <.p("One way to solve that is to make the function tail-recursive. The last expression must be the recursive call.")
+    ),
+
+    slide(
+      "Recursion: tail recursion",
+      code("""
+        def lengthSafe[A](list: List[A]): Int = list {
+          def loop(remaining: List[A], agg: Int): Int = remaining match {
+            case Nil()         => agg
+            case Cons(_, tail) => loop(tail, agg + 1)
+            //                      ^
+            //                      '
+            //                 last expression
+          }
+
+          loop(list, 0)
+        }
+
+        lengthSafe(Cons(0, Cons(1, Nil()))) == 2
+      """)
+    ),
+
+    slide(
+      "Recursion: tail recursion",
+      <.p("Scala optimizes this function in a way that it reuses its initial stack frame. Therefore, the stack does not grow.")
+    ),
+
+    slide(
+      "Recursion: tail recursion",
+      code("""
+        def lengthSafe[A](list: List[A]): Int = list {
+
+          // Scala now checks of this function is tail recursive
+          @tailrec
+          def loop(remaining: List[A], agg: Int): Int = ???
+
+          loop(list, 0)
+        }
+      """)
+    ),
+
+    exerciseSlide(
+      "Is this function stack-safe?",
+      code("""
+        def fib(n: Int): Int = n match {
+          case 1 | 2 => 1
+          case _     => fib(n - 1) + fib(n - 2)
+        }
+      """),
+      codeFragment("""
+        // no, last expression is the `+` operator
+      """)
+    ),
+
+    exerciseSlide(
+      "Is this function stack-safe?",
+      code("""
+        def last[A](list: List[A]): List[A] = list match {
+          case el@ Cons(_, Nil()) => el
+          case Cons(_, tail)      => last(tail)
+        }
+      """),
+      codeFragment("""
+        // yes, last expression is `last`
+      """)
+    ),
+
+    exerciseSlide(
+      "Is this function stack-safe?",
+      code("""
+        def size[A](tree: Tree[A]): Int = tree match {
+          case Leaf(_)           => 1
+          case Node(left, right) => size(left) + size(right)
+        }
+      """),
+      codeFragment("""
+        // no, again the last expression is the `+` operator
+      """)
+    ),
+
+    exerciseSlide(
+      "Let's Code",
+      bashCode("""
+        sbt> project fp101-exercises
+        sbt> test:testOnly RecursiveFunctionsSpec
       """)
     )
   )

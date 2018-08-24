@@ -16,21 +16,21 @@ object RecursiveDataSpec extends Properties("recursive data") {
       } yield list
     }
 
-    generateList(Nil, length)
+    generateList(Nil(), length)
   }
 
   property("List[Int] head") = forAll(listGen) {
-    case Nil                => RecursiveData.testListIntHead(Nil) == -1
+    case Nil()              => RecursiveData.testListIntHead(Nil()) == -1
     case list@Cons(head, _) => RecursiveData.testListIntHead(list) == head
   }
 
   property("List[Int] tail") = forAll(listGen) {
-    case Nil                => RecursiveData.testListIntTail(Nil) == Nil
+    case Nil()              => RecursiveData.testListIntTail(Nil()) == Nil()
     case list@Cons(_, tail) => RecursiveData.testListIntTail(list) == tail
   }
 
   property("List[Int] is empty") = forAll(listGen) {
-    case Nil                => RecursiveData.testListIntEmpty(Nil)
+    case Nil()              => RecursiveData.testListIntEmpty(Nil())
     case list@Cons(_, tail) => !RecursiveData.testListIntEmpty(list)
   }
 }
