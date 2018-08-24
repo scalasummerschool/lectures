@@ -291,6 +291,17 @@ object Lecture extends JSApp {
     ),
 
     slide(
+      "Recursion: data structures",
+      code("""
+        // you can use pattern matching
+        intList match {
+          case Cons(head, tail) => ???
+          case Nil              => ???
+        }
+      """)
+    ),
+
+    slide(
       "Type Parameter in data structures",
       Enumeration(
         Item.stable(<.p("also called generics")),
