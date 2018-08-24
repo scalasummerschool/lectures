@@ -215,6 +215,97 @@ object Lecture extends JSApp {
     slide(
       "Recursion",
       <.p("Solving a problem where the solution depends on solutions to smaller instances of the same problem.")
+    ),
+
+    slide(
+      "Recursion: data types",
+      <.p("Definition of the data types depends on itself.")
+    ),
+
+    slide(
+      "Recursion: data types",
+      code("""
+        // linked list of Ints
+        sealed trait IntList
+
+        // a single list element with its Int value and the remaining list
+        case class Cons(head: Int, tail: IntList) extends IntList
+        // end of the list
+        case object Nil extends IntList
+      """),
+      codeFragment("""
+        val list = Cons(0, Cons(1, Cons(2, Nil)))
+      """)
+    ),
+
+    slide(
+      "Recursion: data types",
+      <.img(
+        ^.alt := "Linked List",
+        ^.src := "./img/list.svg"
+      )
+    ),
+
+    noHeaderSlide(
+      <.h3("We have to write list types for every data structure?"),
+      <.br,
+      <.h4(
+        ^.cls := "fragment fade-in",
+        "Fortunately no, we can use type parameters!"
+      )
+    ),
+
+    slide(
+      "Type Parameter in data structures",
+      code("""
+        sealed trait List[A]
+        //                ^
+        //                '
+        //           type parameter
+      """),
+      codeFragment("""
+        case class Cons[A](head: A, tail: List[A]) extends List[A]
+        //              ^        ^             ^                ^
+        //              '        '----         '----------------|
+        //         type parameter    '                          |
+        //                          fixes type of our value     |
+        //                                                      '
+        //                                    fixes type of remaing/whole list 
+
+        // small trick relying on OOP and `Nothing` as the bottom type
+        case object Nil extends List[Nothing]
+      """)
+    ),
+
+    slide(
+      "Type Parameter in data structures",
+      code("""
+        val intList  = Cons[Int](0, Cons(1, Cons(2, Nil)))
+        val charList = Cons[Char]('a', Cons('b', Nil))
+      """),
+      codeFragment("""
+        // Scala can infer `A` by looking at the values
+        val intList  = Cons(0, Cons(1, Cons(2, Nil)))
+        val charList = Cons('a', Cons('b', Nil))
+      """)
+    ),
+
+    slide(
+      "Type Parameter in data structures",
+      Enumeration(
+        Item.stable(<.p("also called generics")),
+        Item.fadeIn(<.p("think of it like as missing (type) information")),
+        Item.fadeIn(<.p("can be fixed by hand ", <.code("Cons[Int](0, Nil): List[Int]"))),
+        Item.fadeIn(<.p("or inferred by Scala ", <.code("Cons(0, Nil): List[Int]")))
+      )
+    ),
+
+    exerciseSlide(
+      "Let's Code",
+      bashCode("""
+        sbt> project fp101-exercises
+        sbt> test:testOnly RecursiveDataSpec
+      """)
     )
   )
 
@@ -227,7 +318,8 @@ object Lecture extends JSApp {
           ^.cls := "slides",
           overview,
           immutability,
-          pureFunctions
+          pureFunctions,
+          recursion
         )
       )
     )
