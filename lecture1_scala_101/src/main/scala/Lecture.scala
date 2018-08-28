@@ -913,6 +913,14 @@ object Lecture extends JSApp {
       <.p("All fields are `val`. Therefore, they cannot change after assignment. To change them you have to create a new object.")
     ),
 
+    exerciseSlide(
+      "Let's code",
+      bashCode("""
+        sbt> project scala-101-exercises
+        sbt> test:testOnly exercise1.ClassesSpec
+      """)
+    ),
+
     slide(
       "Case Classes",
       code("""
@@ -997,6 +1005,14 @@ object Lecture extends JSApp {
       """)
     ),
 
+    exerciseSlide(
+      "Let's code",
+      bashCode("""
+        sbt> project scala-101-exercises
+        sbt> test:testOnly exercise1.CaseClassesSpec
+      """)
+    ),
+
     slide(
       "Traits",
       <.h4("But what if we have multiple data types which share a relation?")
@@ -1063,7 +1079,7 @@ object Lecture extends JSApp {
       "Let's code",
       bashCode("""
         sbt> project scala-101-exercises
-        sbt> test:testOnly exercise1.PersonSpec
+        sbt> test:testOnly exercise1.TraitsSpec
       """)
     ),
 
