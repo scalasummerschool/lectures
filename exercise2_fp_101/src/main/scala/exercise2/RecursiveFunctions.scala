@@ -5,7 +5,7 @@ import scala.annotation.tailrec
 // REMARK: try to make all functions tail recursive; use the annotation to proof it
 object RecursiveFunctions {
 
-  /* a) write a function that replicates a value n-times to create a list
+  /* a) write a function that replicates a value n-times to create a list:
    *        def replicate[A](n: Int, a: A): List[A]
    */
 

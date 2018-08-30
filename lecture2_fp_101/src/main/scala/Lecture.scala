@@ -48,9 +48,11 @@ object Lecture extends JSApp {
 
 
         // you cannot mutate fields in a clase class instance
-        case class User(name: String, age: Int)
+        case class Person(name: String, age: Int)
 
-        val user = User("Joe", 42)
+        val gandalf = Person("Gandalf", 2019)
+    
+        gandalf.name = "Gandolf" // not allowed
       """)
     ),
 
@@ -63,7 +65,7 @@ object Lecture extends JSApp {
       "What's the benefit?",
       Enumeration(
         Item.stable(<.p("state of your values known at all times")),
-        Item.fadeIn(<.p("no \"bad effects\" in a concurrent scenario ")),
+        Item.fadeIn(<.p("no race-conditions in a concurrent scenario ")),
         Item.fadeIn(<.p("simplifies reasoning about values in your code"))
       )
     )
@@ -150,16 +152,16 @@ object Lecture extends JSApp {
       code("""
         def log(msg: String): Unit = println(msg)
 
-        // write to the console -> changes its context
+        // writes to the console -> changes its context
         log("hello world")
       """)
     ),
 
     slide(
       "Impure Functions: Effecting the context",
-      <.p("Application Input/Output (IO) is not allowed. How to write useful programs then?"),
+      <.h3("Application Input/Output (IO) is not allowed. How to write useful programs then?"),
       <.br,
-      <.p("We will discuss that later!")
+      <.h4("We will discuss that later!")
     ),
 
     exerciseSlide(
@@ -308,9 +310,8 @@ object Lecture extends JSApp {
       "Type Parameter: data structures",
       Enumeration(
         Item.stable(<.p("also called generics")),
-        Item.fadeIn(<.p("think of it like as missing (type) information")),
-        Item.fadeIn(<.p("can be fixed by hand ", <.code("Cons[Int](0, Nil): List[Int]"))),
-        Item.fadeIn(<.p("or inferred by Scala ", <.code("Cons(0, Nil): List[Int]")))
+        Item.fadeIn(<.p("can be fixed by hand: ", <.code("Cons[Int](0, Nil[Int]): List[Int]"))),
+        Item.fadeIn(<.p("or inferred by Scala: ", <.code("Cons(0, Nil): List[Int]")))
       )
     ),
 
@@ -330,7 +331,7 @@ object Lecture extends JSApp {
 
     slide(
       "Recursion: functions",
-      <.p("Functions definitions which call itself.")
+      <.p("Functions which call themselves.")
     ),
 
     slide(
@@ -341,7 +342,7 @@ object Lecture extends JSApp {
       """),
       codeFragment("""
         // final state
-          case Nil() => 0
+          case Nil()         => 0
       """),
       codeFragment("""
         // recusive step
@@ -373,11 +374,15 @@ object Lecture extends JSApp {
     slide(
       "Type Parameters: functions",
       code("""
-        def length[A](list: List[A]): Int = ???
+        def length[A](list: List[A]): Int = list match {
         //         ^             ^
         //         '             '---------
         //    type parameter              '
         //                         fixes list type `A`
+       
+          case Nil()         => 0
+          case Cons(_, tail) => 1 + length[A](list)
+        }
       """)
     ),
 
@@ -409,7 +414,7 @@ object Lecture extends JSApp {
       "Recursion: programm stack",
       <.img(
         ^.alt   := "Programm Stack",
-        ^.width := "50%",
+        ^.width := "45%",
         ^.src   := "./img/stack.svg"
       )
     ),
@@ -423,7 +428,7 @@ object Lecture extends JSApp {
 
     slide(
       "Recursion: tail recursion",
-      <.p("One way to solve that is to make the function tail-recursive. The last expression must be the recursive call.")
+      <.p("One way to solve that is to make the function tail-recursive. This means, the last expression must be the recursive call.")
     ),
 
     slide(
@@ -473,7 +478,7 @@ object Lecture extends JSApp {
         }
       """),
       codeFragment("""
-        // no, last expression is the `+` operator
+        // no, last expression is the `+` operator and we create two recursion branches
       """)
     ),
 
@@ -499,7 +504,7 @@ object Lecture extends JSApp {
         }
       """),
       codeFragment("""
-        // no, again the last expression is the `+` operator
+        // no, again the last expression is the `+` operator and we create two recursion branches
       """)
     ),
 
