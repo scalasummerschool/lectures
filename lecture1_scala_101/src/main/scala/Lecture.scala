@@ -20,10 +20,10 @@ object Lecture extends JSApp {
       "What we will learn in this lecture",
       Enumeration(
         Item.stable(<.p("Scala background")),
-        Item.fadeIn(<.p("Expressions and Declarations")),
+        Item.fadeIn(<.p("Expressions & Declarations & Objects")),
         Item.fadeIn(<.p("Types")),
         Item.fadeIn(<.p("Functions")),
-        Item.fadeIn(<.p("Case Classes and Traits")),
+        Item.fadeIn(<.p("Classes")),
         Item.fadeIn(<.p("Pattern Matching"))
       )
     ),
@@ -132,26 +132,46 @@ object Lecture extends JSApp {
 
   val expressions = chapter(
     chapterSlide(
-      <.h2("Expressions & Declarations"),
-      <.h3("Basic building blocks")
+      <.h2("Expressions & Declarations & Objects"),
+      <.h3("Scalas' basic building blocks")
+    ),
+
+    slide(
+      "Objects",
+      <.p("An object is a collection of values and a set of operations on that data."),
+      code("""
+        // example: literal object
+        1
+        // value: integer 1
+        // operations: +, -, *, /, etc.
+      """),
+      codeFragment("""
+        // example: literal object
+        "Hello"
+        // value: string Hello
+        // operations: +, split, take, etc.
+      """),
+      codeFragment("""
+        // example: tuple object
+        (1, "Hello")
+        // values: integer 1 and string Hello
+        // operations: _1, _2, swap, etc.
+      """)
     ),
 
     slide(
       "Expressions",
-      <.h3("Scala programs are made up from expressions and declarations.")
+      <.p("Expression can be objects, combination of objects or functions applied to objects. And they get evaluated/reduced to results.")
     ),
 
     slide(
-      "Expressions",
-      <.p("Expression can be values, combination of values or functions applied to values. And they get reduced to results.")
-    ),
-
-    slide(
-      "Values as expressions",
+      "Objects as expressions",
       code("""
         // already in reduced form
         1
+
         'a'
+
         "Hello"
       """)
     ),
@@ -162,27 +182,66 @@ object Lecture extends JSApp {
         1 + 2
       """),
       codeFragment("""
-        ==> 3
+        == 3
       """),
-      codeFragment("""
+      <.br,
+      code("""
         val w = "world"
 
         "Hello " + a + "!"
       """),
       codeFragment("""
-        ==> "Hello world!"
+        == "Hello world!"
+      """)
+    ),
+
+    slide(
+      "Assignment of results",
+      <.p("Often you use the result of an expression several times. But you don't want to compute over and over again."),
+      <.p("Therefore, you assign them a name."),
+      <.br,
+      code("""
+        // we have to repeat (1 + 2) everytime
+        3 * (1 + 2)
+
+        5 - (1 + 2)
       """)
     ),
 
     slide(
       "Assignment of results",
       code("""
-        // identifier references value
-        // value does not change
-        val firstName = "John"
-        val lastName  = "Doe"
+          val result = 1 + 2
+        // ^    ^    ^
+        // |    |    '
+        // |    |  assigns result to identifier
+        // |    '
+        // |   identifier
+        // '
+        // starts assignment
 
-        val name = a + b
+        3 * result
+
+        5 - result
+      """)
+    ),
+
+    slide(
+      "Assignment of results",
+      <.p("You cannot reassign a new object to a value. Once set, it keeps its reference forever.")
+    ),
+
+    slide(
+      "Block expressions",
+      <.p("When you want to combine multiple expressions you put them in blocks."),
+      <.br,
+      code("""
+        // start with '{' and end with '}'
+        {
+          val a = 1 + 2
+      
+          a * 5
+        }
       """)
     ),
 
@@ -196,48 +255,71 @@ object Lecture extends JSApp {
         }
       """),
       codeFragment("""
-        > {
-          val a = 3
+        {
+           val a = 3      <==
       
-          a * 5
+           a * 5
         }
       """),
       codeFragment("""
-        > {
-          3 * 5
+        {
+           val a = 3
+      
+           3 * 5          <==
         }
       """),
       codeFragment("""
-         ==> 15
+         == 8
       """)      
     ),
 
     slide(
-      "Scoping",
+      "Scoping: values in blocks",
+      <.p("Access objects in the same or an outer block."),
+      <.br,
       code("""
         val a = 1 + 2
+ 
+        // `a` in scope
         {
-           val b = 2 + 3
-           val c = {
-             val a = 3 + 4
-             a + b
-           }
-           a + c
+           val b = 3 + 4
+
+           a + b
+        }
+      """)
+    ),
+
+    slide(
+      "Scoping: values in blocks",
+      code("""
+        val a = 1 + 2
+ 
+        {
+           val b = 3 + 4
+
+           a + b
         }
       """),
       codeFragment("""
-        > val a = 3
+        val a = 3       <==
+ 
         {
-           val b = 5
-           val c = {
-             val a = 7
-             7 + 5
-           }
-           3 + (7 + 5)
+           val b = 7    <==
+
+           a + b
         }
       """),
       codeFragment("""
-        ==> 15
+        val a = 3
+ 
+        {
+           val b = 7
+
+           3 + 7        <==
+        }
+      """),
+      codeFragment("""
+        == 10
       """)
     ),
 
@@ -251,7 +333,7 @@ object Lecture extends JSApp {
         }
       """),
       codeFragment("""
-        ==> 8
+        == 8
       """)
     ),
 
@@ -285,20 +367,17 @@ object Lecture extends JSApp {
       """)
     ),
 
-    slide(
-      "Precedence",
+    exerciseSlide(
+      "Does it work?",
       code("""
-        0 - (all letters)
-        1 - |
-        2 - ^
-        3 - &
-        4 - = !
-        5 - < >
-        6 - :
-        7 - + -
-        8 - * / %
-
-        // (all other special characters)
+        val a = 5
+        {
+          val a = 10
+          a
+        }
+      """),
+      codeFragment("""
+        == 10
       """)
     ),
 
@@ -337,8 +416,26 @@ object Lecture extends JSApp {
         a > b  // greater than
         a < b  // smaller than
         a == b // equal
+        a != b // equal
 
         // some more, but not relevant yet
+      """)
+    ),
+
+    slide(
+      "Precedence",
+      code("""
+        0 - (all letters)
+        1 - |
+        2 - ^
+        3 - &
+        4 - = !
+        5 - < >
+        6 - :
+        7 - + -
+        8 - * / %
+
+        // (all other special characters)
       """)
     ),
 
@@ -349,13 +446,13 @@ object Lecture extends JSApp {
       """),
       codeFragment("""
         // prec('*') > prec('+')
-        > (2 * 3) + 10
+        == (2 * 3) + 10
       """),
       codeFragment("""
-        > 6 + 10
+        == 6 + 10
       """),
       codeFragment("""
-        ==> 16
+        == 16
       """)
     ),
 
@@ -366,13 +463,13 @@ object Lecture extends JSApp {
       """),
       codeFragment("""
         // '*' left most operation
-        > (2.0 * 3.0) / 3.0
+        == (2.0 * 3.0) / 3.0
       """),
       codeFragment("""
-        > 6.0 / 3.0
+        == 6.0 / 3.0
       """),
       codeFragment("""
-        ==> 2.0
+        == 2.0
       """)
     ),
 
@@ -382,11 +479,11 @@ object Lecture extends JSApp {
         2 * 5 == 10 && 24 / 6 < 4 | ! false
       """),
       codeFragment("""
-        > (((2 * 5) == 10) && ((24 / 6) < 4)) | (! false)
+        == (((2 * 5) == 10) && ((24 / 6) < 4)) | (! false)
       """),
       codeFragment("""
         // use brackets
-        ==> true
+        == true
       """)
     ),
 
@@ -457,9 +554,9 @@ object Lecture extends JSApp {
         """),
       codeFragment("""
         // numbers, Chars and Strings
-        1 + 2.0       ==> 3.0: Double
-        1 + 'a'       ==> 98: Int
-        1 + " banana" ==> "1 banana": String
+        1 + 2.0       == 3.0: Double
+        1 + 'a'       == 98: Int
+        1 + " banana" == "1 banana": String
       """),
       codeFragment("""
         1 + true // forbidden
@@ -472,19 +569,21 @@ object Lecture extends JSApp {
         1 + 2
       """),
       codeFragment("""
-        ==> 3: Int
+        == 3: Int
       """),
+      <.br,
       code("""
         1.0 + 2
       """),
       codeFragment("""
-        ==> 3.0: Double
+        == 3.0: Double
       """),
+      <.br,
       code("""
         "Hello " + true
       """),
       codeFragment("""
-        ==> "Hello true": String
+        == "Hello true": String
       """)
     ),
 
@@ -494,14 +593,16 @@ object Lecture extends JSApp {
         1 / 2
       """),
       codeFragment("""
-        ==> 0: Int
+        == 0: Int
       """),
+      <.br,
       code("""
         1 / 2.0
       """),
       codeFragment("""
-        ==> 0.5: Double
+        == 0.5: Double
       """),
+      <.br,
       code("""
         1 / 0.0
       """),
@@ -592,13 +693,13 @@ object Lecture extends JSApp {
         val plus1: Int => Int = plus(1)
       """),
       codeFragment("""
-        // 1 assigne to `a` and every appearance of `a` was replaced with 1
-        > val plus1: Int => Int = b => 1 + b
+        // `1` assigned to `a` and every appearance of `a` was replaced with `1`
+        == val plus1: Int => Int = b => 1 + b
       """),
       codeFragment("""
         val result = plus1(2)
 
-        > val result: Int = 1 + 2
+        == val result: Int = 1 + 2
       """),
       codeFragment("""
         // in one step
@@ -679,14 +780,11 @@ object Lecture extends JSApp {
     exerciseSlide(
       "Let's code",
       code("""
-        // package/path definition
-        // <package>.<object-name> must be unique
+        // package/path definition: <package>.<object-name> must be unique
         package exercise1
 
-        // object containing functions, values, other objects and more
-        // like a namespace
         object Functions {
-          // our functions live here
+          // your functions go here
           
           ...
         }
@@ -708,32 +806,133 @@ object Lecture extends JSApp {
     )
   )
 
-  val caseClassesAndTraits = chapter(
+  val classes = chapter(
     chapterSlide(
-      <.h2("Case Classes & Traits")
+      <.h2("Classes")
     ),
 
     slide(
-      "Case Classes",
-      <.h3("Scala's data types bring us just so far."),
-      <.h3("We want to be able to create our own.")
+      "Create a new type",
+      <.h3("Scala's objects bring us just so far."),
+      <.h4("We want to be able to create our own.")
+    ),
+
+    slide(
+      "Create a new type",
+      <.p("You create new types in Scala by defining Classes. Here, a class is a way to define a set of objects which have same fields and functions."),
+      <.br,
+      Enumeration(
+        Item.fadeIn(<.p("class")),
+        Item.fadeIn(<.p("case class")),
+        Item.fadeIn(<.p("object")),
+        Item.fadeIn(<.p("abstract Class")),
+        Item.fadeIn(<.p("trait"))
+      )
+    ),
+
+    slide(
+      "Classes",
+      code("""
+        class Person(val name: String, val age: Int)
+        //     ^        ^                 ^
+        //     '        '-----------------'
+        // identifier            '
+        //              constructor with public fields
+      """),
+      codeFragment("""
+        val user = new Person("Gandalf", 2019)
+        //          ^
+        //          '
+        //   call constructor / create new object
+
+        user.name == "Gandalf"
+        user.age  == 2019
+      """)
+    ),
+
+    slide(
+      "Classes: private fields",
+      code("""
+        class Person(val name: String, age: Int)
+        //                            ^
+        //                            '
+        //                       private field
+      """),
+      codeFragment("""
+        val user = new Person("Gandalf", 2019)
+
+        user.name == "Gandalf"
+        user.age // not allowed
+      """)
+    ),
+
+    slide(
+      "Classes: inner fields",
+      code("""
+        class Person(val name: String, val age: Int) {
+          private val ageString = age.toString
+
+          val show = "person: " + name + ", " + ageStr
+        }
+
+        new Person("Gandalf", 2019).show == "person: Gandalf, 2019"
+      """)
+    ),
+
+    slide(
+      "Classes: methods",
+      code("""
+        class Person(val name: String, val age: Int) {
+
+          // functions refering to there object are called methods          
+          def isOlder(other: Person): Boolean = age > other.age
+      """),
+      codeFragment("""
+        // equal to
+          def isOlder(other: Person): Boolean = this.age > other.age
+        }
+      """),
+      codeFragment("""
+        // or
+        def isOlder(user: Person)(other: Person): Boolean = user.age > other.age
+      """),
+      codeFragment("""
+        val gandalf = new Person("Gandalf", 2019)
+
+        gandalf.isOlder(new Person("Frodo", 33)) == isOlder(gandalf)(new Person("Frodo", 33))
+      """)
+    ),
+
+    slide(
+      "Classes: methods",
+      <.p("Methods are functions which have their surrounding object in scope and belong to the class. They also provide a means to get infix notation.")
+    ),
+
+    slide(
+      "Classes: immutable fields",
+      <.p("All fields are `val`. Therefore, they cannot change after assignment. To change them you have to create a new object.")
+    ),
+
+    exerciseSlide(
+      "Let's code",
+      bashCode("""
+        sbt> project scala-101-exercises
+        sbt> test:testOnly exercise1.ClassesSpec
+      """)
     ),
 
     slide(
       "Case Classes",
       code("""
-        case class User(name: String, age: Int)
+        case class Person(name: String, age: Int)
         //          ^    ^             ^
         //          |    '-------------'
         //       identifier     |
         //                      |
         //                 public fields
 
-        val user = User("John", 42)
-
-        // read only, no mutations
-        user.name == "John"
-        user.age  == 42
+        // no `new` keyword any longer
+        val gandalf = Person("Gandalf", 2019)
       """)
     ),
 
@@ -741,82 +940,84 @@ object Lecture extends JSApp {
       "Case Classes: How to mutate them?",
       code("""
         // comes with a copy method
-        val user = User("John", 42)
+        val gandalf = Person("Gandalf", 2019)
 
-        // creates copy of `user`
-        user.copy("Jim", 27) == User("Jim", 27)
+        // creates copy of `gandalf`
+        gandalf.copy("Gandolf", 2000) == Person("Gandolf", 2000)
       """)
     ),
 
     slide(
       "Case Classes: How to mutate them?",
       code("""
-        val user = User("John", 42)
+        val gandalf = Person("Gandalf", 2019)
 
         // change just a supset of fields
-        user.copy(name = "Jim") == User("Jim", 42)
+        gandalf.copy(name = "Gandolf") == Person("Gandolf", 2019)
       """)
     ),
 
     slide(
       "Functions: default parameter",
       code("""
-        def newUser(name: String = "Joe", age: Int = 42): User = User(name, age)
+        def newPerson(name: String = "Gandalf", age: Int = 2019): Person = Person(name, age)
 
-        newUser()          == User(Joe, 42)
-        newUser("Jim", 27) == User(Jim, 27)
-        newUser("Jim")     == User(Jim, 42)
-        newUser(age = 27)  == User(Joe, 27)
+        newPerson()                == Person("Gandalf", 2019)
+        newPerson("Gandolf", 2000) == Person("Gandolf", 2000)
+        newPerson("Gandolf")       == Person("Gandolf", 2019)
+        newPerson(age = 2000)      == Person("Gandalf", 2000)
       """)
     ),
 
     slide(
-      "Methods: functions for classes",
-      code("""
-        case class User(name: String, age: Int) {
-          
-          def birthYear(year: Int): Int = year - age
-      """),
-      codeFragment("""
-          // which is equal to
-          def birthYear(year: Int): Int = year - this.age
-        }
-      """),
-      codeFragment("""
-        // as function
-        def birthYear(user: User)(year: Int): Int = year - user.age
-      """)
-    ),
-
-    slide(
-      "Methods: functions for classes",
-      code("""
-        // methods give us infix notation like `+`
-        case class Euro(value: Int) {
-
-          def +(other: Euro): Euro = Euro(value + other.value)
-        }
-
-        Euro(10).+(Euro(5)) == Euro(15)
-      """),
-      codeFragment("""
-        // or without dots and brackets
-        Euro(10) + Euro(5)
-      """)
-    ),
-
-    slide(
-      "Static Case Classes",
-      <.h4("What if you want to represent colors?"),
+      "Case Objects",
+      <.p("What if you want to represent some class with known and static fields?"),
       <.br,
       code("""
         // this is static; will not change
         // why create a new instance every time?
-        case class Green()
+        case class TheOneRing() {
+        
+          val material = "gold"
+          val ownedBy  = "Sauron"
+        }
       """),
       codeFragment("""
-        // use case object s instead
-        case object Green
+        // use `case objects` instead
+        case object TheOneRing {
+
+          val material = "gold"
+          val ownedBy  = "Sauron"
+        }
+      """)
+    ),
+
+    slide(
+      "Objects",
+      <.p("Objects are classes with a single instance. You use them to provide static fields and functions.")
+    ),
+
+    slide(
+      "Objects",
+      code("""
+        object Predef {
+        
+          // constant fields start with a uppercase letter
+          val Gandalf = Person("Gandalf", 2019)
+
+          def older(a: Person, b: Person): Person = if (a.age > b.age) a else b
+        }
+      """),
+      codeFragment("""
+        Predef.older(Person("Frodo", 33), Predef.Gandalf) == Predef.Gandalf
+      """)
+    ),
+
+    exerciseSlide(
+      "Let's code",
+      bashCode("""
+        sbt> project scala-101-exercises
+        sbt> test:testOnly exercise1.CaseClassesSpec
       """)
     ),
 
@@ -828,10 +1029,10 @@ object Lecture extends JSApp {
     slide(
       "Traits",
       code("""
-        // all persons but different types
-        case class Man(firstName: String, lastName: String)
-        case class Woman(firstName: String, lastName: String)
-        case class Child(firstName: String, lastName: String)
+        // all persons (of some magic realm) but of different type
+        case class Wizard(name: String, power: String) extends People
+        case class Elf(name: String, age: Int)         extends People
+        case class Dwarf(name: String, height: Int)    extends People
       """)
     ),
 
@@ -844,9 +1045,9 @@ object Lecture extends JSApp {
         // only allow sub classes           '
         // in this file (optional)       identifier
 
-        case class Man(firstName: String, lastName: String)   extends Person
-        case class Woman(firstName: String, lastName: String) extends Person
-        case class Child(firstName: String, lastName: String) extends Person
+        case class Wizard(name: String, power: String) extends Person
+        case class Elf(name: String, age: Int)         extends Person
+        case class Dwarf(name: String, height: Int)    extends Person
       """)
     ),
 
@@ -856,27 +1057,40 @@ object Lecture extends JSApp {
         // all subclasses share this properties
         sealed trait Person {
 
-          val firstName: String
-          val lastName: String
+          // expected field
+          val name: String
+
+          // expected function
+          def likesPlace(place: String): Boolen
 
           // default implementation
-          def fullName: String = firstName + " " + lastName
+          def sameName(other: Person): Boolen = name == other.name
         }
       """),
       codeFragment("""
-        case class Man(firstName: String, lastName: String) extends Person
+        case class Wizard(name: String, power: String) extends Person {
+          def likesPlace(place: String): Boolean = true
+        }
 
-        val man = Man("John", "Doe")
+        case class Elf(name: String, age: Int) extends Person {
+          def likesPlace(place: String): Boolean = place == "woods"
+        }
 
-        man.fullName == "John Doe"
+        case class Darf(name: String, height: Int) extends Person {
+          def likesPlace(place: String): Boolean = place == "mountain"
+        }
+
+        val gandalf = Wizard("Gandalf", "magic")
+
+        gandalf.likesPlace("The Shire") == true
       """)
     ),
 
     slide(
-      "Traits: OOP in FP",
-      <.h4("Looks like OOP inheritence to you?"),
+      "OOP",
+      <.h4("This all looks like OOP to you?"),
       <.br,
-      <.h4(
+      <.p(
         ^.cls := "fragment fade-in",
         "That's because it is. Again Scala is the fusion of OOP and FP."
       )
@@ -886,7 +1100,7 @@ object Lecture extends JSApp {
       "Let's code",
       bashCode("""
         sbt> project scala-101-exercises
-        sbt> test:testOnly exercise1.PersonSpec
+        sbt> test:testOnly exercise1.TraitsSpec
       """)
     ),
 
@@ -894,9 +1108,9 @@ object Lecture extends JSApp {
       <.h3("So far, We learned stuff about ..."),
       <.br,
       Enumeration(
-        Item.fadeIn(<.p("epxressions and declarations")),
+        Item.fadeIn(<.p("expressions and declarations")),
         Item.fadeIn(<.p("functions and types")),
-        Item.fadeIn(<.p("case class and trait")),
+        Item.fadeIn(<.p("classes")),
       ),
       <.br,
       <.h4(
@@ -926,9 +1140,58 @@ object Lecture extends JSApp {
         val person: Person = ???
 
         person match {
-          case Woman(first, last) => first
-          case Man(first, last)   => first
-          case Child(first, last) => first
+          case Wizard(name, power) => name
+          case Elf(name, age)      => name
+          case Dwarf(name, height) => name
+        }
+      """)
+    ),
+
+    slide(
+      "Pattern Matching",
+      code("""
+        val person = Wizard("Gandalf", "magic")
+      """),
+      codeFragment("""
+        person match {
+          case Wizard(name, power) => name  <= check
+          case Elf(name, age)      => name
+          case Dwarf(name, height) => name
+        }
+      """),
+      codeFragment("""
+        person match {
+          case Wizard(name = "Gandalf", power) => name  <= fits
+          // case Elf(name, age)      => name
+          // case Dwarf(name, height) => name
+        }
+      """)
+    ),
+
+    slide(
+      "Pattern Matching",
+      code("""
+        val person = Dwarf("Gimli", 107 /*cm*/)
+      """),
+      codeFragment("""
+        person match {
+          case Wizard(name, power) => name  <= check
+          case Elf(name, age)      => name
+          case Dwarf(name, height) => name
+        }
+      """),
+      codeFragment("""
+        person match {
+          // case Wizard(name, power) => name
+          case Elf(name, age)      => name  <= check
+          case Dwarf(name, height) => name
+        }
+      """),
+      codeFragment("""
+        person match {
+          // case Wizard(name, power) => name
+          // case Elf(name, age)      => name
+          case Dwarf(name = "Gimli", height) => name  <= fits
         }
       """)
     ),
@@ -939,7 +1202,7 @@ object Lecture extends JSApp {
         val person: Person = ???
 
         person match {
-          case Woman(first, _) => first
+          case Wizard(name, _) => name
           ...
         }
       """)
@@ -952,7 +1215,7 @@ object Lecture extends JSApp {
 
         person match {
           // you can also use `&` and `|`
-          case Woman(first, last) if last == "Smith" => first
+          case Wizard(name, _) if name == "Gandalf" => "a wizard is never late"
           ...
         }
       """)
@@ -965,8 +1228,46 @@ object Lecture extends JSApp {
 
         person match {
           // you can also use `&` and `|`
-          case w@Woman(_, last) if last == "Smith" => w
+          case w@Wizard(_, power) if power == "magic" => w
           ...
+        }
+      """)
+    ),
+
+    slide(
+      "Match on everything",
+      code("""
+        val person: Person = ???
+
+        person match {
+          case person => person.name
+        }
+      """)
+    ),
+
+    slide(
+      "Match on everything",
+      code("""
+        val person: Person = ???
+
+        person match {
+          case Wizard(name, _) => "The mighty " + name
+          case person          => person.name
+
+          // can't reach this -> previous case captures everything
+          case Darf(_, _) => "you will never now"
+        }
+      """)
+    ),
+
+    slide(
+      "Ignore match",
+      code("""
+        val person: Person = ???
+
+        person match {
+          case Wizard(name, _) => "The mighty " + name
+          case _               => "I don't care"
         }
       """)
     ),
@@ -978,6 +1279,17 @@ object Lecture extends JSApp {
         Item.fadeIn(<.p("Only declare fields you use.")),
         Item.fadeIn(<.p("Works also with primitives."))
       )
+    ),
+
+    slide(
+      "Match primitives",
+      code("""
+        0 match {
+          case 5 => "yeah five"
+          case 0 => "nay zero"
+          case _ => "don't care"
+        }
+      """)
     ),
 
     exerciseSlide(
@@ -1003,7 +1315,7 @@ object Lecture extends JSApp {
           a * 5
         }
 
-        ==> 15
+        == 15
       """)
     ),
 
@@ -1026,23 +1338,25 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Case Classes and Traits",
+      "Classes",
       code("""
-        sealed trait Currency
+        sealed trait Persons {
+          val name: String
+        }
 
-        case class Euro(value: Int) extends Currency
-        case class Dollar(value: Int) extends Currency
+        case class Wizard(name: String, power: String) extends Person
+        case class Elf(name: String, age: Int)         extends Person
       """)
     ),
 
     slide(
       "Pattern Matching",
       code("""
-        val curr: Currency = ???
+        val person: Person = ???
 
-        curr match {
-          case Euro(value)   => value
-          case Dollar(value) => value
+        person match {
+          case Wizard(name, _) => name
+          case Elf(name, _)    => name
         }
       """)
     ),
@@ -1066,7 +1380,7 @@ object Lecture extends JSApp {
           expressions,
           types,
           functions,
-          caseClassesAndTraits,
+          classes,
           patternMatching,
           summary
         )

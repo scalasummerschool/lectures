@@ -8,18 +8,21 @@ object PatternMatching {
   // b) if `value` is even return true else false
   def testIsEven(value: Int): Boolean = false
 
-  // c) return the expected usage for the furniture
-  sealed trait Furniture
+  sealed trait Weapon
 
-  // sleep
-  case class Bed(numOfPeople: Int) extends Furniture
-  // sit
-  case object Chair extends Furniture
-  // stand
-  case class Ladder(height: Int) extends Furniture
+  case class Sword(length: Int) extends Weapon
 
-  def testFurniture(furn: Furniture): String = "???"
+  case object Staff extends Weapon
 
-  // d) return the number of people for a bed else -1
-  def testNumPeopleInBed(furn: Furniture): Int = -2
+  case class Bow(arrows: Int) extends Weapon
+
+  /* c) rock paper scissors ... with weapons:
+   *    1. staff beats sword
+   *    2. bow beats staff
+   *    3. sword beats bow
+   */
+  def testWinsLeft(a: Weapon, b: Weapon): Weapon = Staff
+
+  // d) return the number of arrows or -1 of it is not a bow
+  def testNumOfArrows(weapon: Weapon): Int = -2
 }
