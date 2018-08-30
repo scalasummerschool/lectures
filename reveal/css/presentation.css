@@ -64,7 +64,11 @@
 }
 
 .reveal section > p {
-  text-align: left;
-  margin-left: 40px;
-  margin-right: 40px;
+    text-align: left;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.reveal section .function-math {
+    text-align: center
 }

@@ -12,7 +12,7 @@ object Lecture extends JSApp {
 
   val overview = chapter(
     chapterSlide(
-      <.h1("Function Programming 101")
+      <.h1("Functional Programming 101")
     ),
 
     slide(
@@ -81,6 +81,14 @@ object Lecture extends JSApp {
       <.p(
         "A function which, for any given input, returns an output and returns the same output for the same input at any time. " +
         "Furthermore, it doesn't effect its context."
+      )
+    ),
+
+    slide(
+      "Pure Functions: math",
+      <.p(
+        ^.cls := "function-math",
+        "$f: a -> b$"
       )
     ),
 
@@ -217,6 +225,14 @@ object Lecture extends JSApp {
     slide(
       "Recursion",
       <.p("Solving a problem where the solution depends on solutions to smaller instances of the same problem.")
+    ),
+
+    slide(
+      "Recursion",
+      <.img(
+        ^.alt := "Recursion",
+        ^.src := "./img/recursion.svg"
+      )
     ),
 
     slide(
