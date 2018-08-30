@@ -833,35 +833,35 @@ object Lecture extends JSApp {
     slide(
       "Classes",
       code("""
-        class User(val name: String, val age: Int)
+        class Person(val name: String, val age: Int)
         //     ^        ^                 ^
         //     '        '-----------------'
         // identifier            '
         //              constructor with public fields
       """),
       codeFragment("""
-        val user = new User("Joe", 27)
+        val user = new Person("Gandalf", 2019)
         //          ^
         //          '
         //   call constructor / create new object
 
-        user.name == "Joe"
-        user.age == 27
+        user.name == "Gandalf"
+        user.age  == 2019
       """)
     ),
 
     slide(
       "Classes: private fields",
       code("""
-        class User(val name: String, age: Int)
+        class Person(val name: String, age: Int)
         //                            ^
         //                            '
         //                       private field
       """),
       codeFragment("""
-        val user = new User("Joe", 27)
+        val user = new Person("Gandalf", 2019)
 
-        user.name == "Joe"
+        user.name == "Gandalf"
         user.age // not allowed
       """)
     ),
@@ -869,37 +869,37 @@ object Lecture extends JSApp {
     slide(
       "Classes: inner fields",
       code("""
-        class User(val name: String, val age: Int) {
+        class Person(val name: String, val age: Int) {
           private val ageString = age.toString
 
-          val show = "user: " + name + ", " + ageStr
+          val show = "person: " + name + ", " + ageStr
         }
 
-        new User("Joe", 27).show == "user: Joe, 27"
+        new Person("Gandalf", 2019).show == "person: Gandalf, 2019"
       """)
     ),
 
     slide(
       "Classes: methods",
       code("""
-        class User(val name: String, val age: Int) {
+        class Person(val name: String, val age: Int) {
 
           // functions refering to there object are called methods          
-          def isOlder(other: User): Boolean = age > other.age
+          def isOlder(other: Person): Boolean = age > other.age
       """),
       codeFragment("""
         // equal to
-          def isOlder(other: User): Boolean = this.age > other.age
+          def isOlder(other: Person): Boolean = this.age > other.age
         }
       """),
       codeFragment("""
         // or
-        def isOlder(user: User)(other: User): Boolean = user.age > other.age
+        def isOlder(user: Person)(other: Person): Boolean = user.age > other.age
       """),
       codeFragment("""
-        val user = new User("Joe", 27)
+        val gandalf = new Person("Gandalf", 2019)
 
-        user.isOlder(new User("Jim", 21)) == isOlder(user)(new User("Jim", 21))
+        gandalf.isOlder(new Person("Frodo", 33)) == isOlder(gandalf)(new Person("Frodo", 33))
       """)
     ),
 
@@ -924,7 +924,7 @@ object Lecture extends JSApp {
     slide(
       "Case Classes",
       code("""
-        case class User(name: String, age: Int)
+        case class Person(name: String, age: Int)
         //          ^    ^             ^
         //          |    '-------------'
         //       identifier     |
@@ -932,7 +932,7 @@ object Lecture extends JSApp {
         //                 public fields
 
         // no `new` keyword any longer
-        val user = User("John", 42)
+        val gandalf = Person("Gandalf", 2019)
       """)
     ),
 
@@ -940,47 +940,55 @@ object Lecture extends JSApp {
       "Case Classes: How to mutate them?",
       code("""
         // comes with a copy method
-        val user = User("John", 42)
+        val gandalf = Person("Gandalf", 2019)
 
-        // creates copy of `user`
-        user.copy("Jim", 27) == User("Jim", 27)
+        // creates copy of `gandalf`
+        gandalf.copy("Gandolf", 2000) == Person("Gandolf", 2000)
       """)
     ),
 
     slide(
       "Case Classes: How to mutate them?",
       code("""
-        val user = User("John", 42)
+        val gandalf = Person("Gandalf", 2019)
 
         // change just a supset of fields
-        user.copy(name = "Jim") == User("Jim", 42)
+        gandalf.copy(name = "Gandolf") == Person("Gandolf", 2019)
       """)
     ),
 
     slide(
       "Functions: default parameter",
       code("""
-        def newUser(name: String = "Joe", age: Int = 42): User = User(name, age)
+        def newPerson(name: String = "Gandalf", age: Int = 2019): Person = Person(name, age)
 
-        newUser()          == User(Joe, 42)
-        newUser("Jim", 27) == User(Jim, 27)
-        newUser("Jim")     == User(Jim, 42)
-        newUser(age = 27)  == User(Joe, 27)
+        newPerson()                == Person("Gandalf", 2019)
+        newPerson("Gandolf", 2000) == Person("Gandolf", 2000)
+        newPerson("Gandolf")       == Person("Gandolf", 2019)
+        newPerson(age = 2000)      == Person("Gandalf", 2000)
       """)
     ),
 
     slide(
       "Case Objects",
-      <.p("What if you want to represent colors?"),
+      <.p("What if you want to represent some class with known and static fields?"),
       <.br,
       code("""
         // this is static; will not change
         // why create a new instance every time?
-        case class Green()
+        case class TheOneRing() {
+        
+          val material = "gold"
+          val ownedBy  = "Sauron"
+        }
       """),
       codeFragment("""
-        // use case objects instead
-        case object Green
+        // use `case objects` instead
+        case object TheOneRing {
+
+          val material = "gold"
+          val ownedBy  = "Sauron"
+        }
       """)
     ),
 
@@ -995,13 +1003,13 @@ object Lecture extends JSApp {
         object Predef {
         
           // constant fields start with a uppercase letter
-          val Joe = User("joe", 27)
+          val Gandalf = Person("Gandalf", 2019)
 
-          def older(a: User, b: User): User = if (a.age > b.age) a else b
+          def older(a: Person, b: Person): Person = if (a.age > b.age) a else b
         }
       """),
       codeFragment("""
-        Predef.older(User("Jim", 21), Predef.Joe) == Predef.Joe
+        Predef.older(Person("Frodo", 33), Predef.Gandalf) == Predef.Gandalf
       """)
     ),
 
@@ -1021,10 +1029,10 @@ object Lecture extends JSApp {
     slide(
       "Traits",
       code("""
-        // all persons but different types
-        case class Man(name: String, age: Int)
-        case class Woman(name: String, age: Int)
-        case class Child(name: String, age: Int)
+        // all persons (of some magic realm) but of different type
+        case class Wizard(name: String, power: String) extends People
+        case class Elf(name: String, age: Int)         extends People
+        case class Dwarf(name: String, height: Int)    extends People
       """)
     ),
 
@@ -1037,9 +1045,9 @@ object Lecture extends JSApp {
         // only allow sub classes           '
         // in this file (optional)       identifier
 
-        case class Man(name: String, age: Int)   extends Person
-        case class Woman(name: String, age: Int) extends Person
-        case class Child(name: String, age: Int) extends Person
+        case class Wizard(name: String, power: String) extends Person
+        case class Elf(name: String, age: Int)         extends Person
+        case class Dwarf(name: String, height: Int)    extends Person
       """)
     ),
 
@@ -1049,19 +1057,32 @@ object Lecture extends JSApp {
         // all subclasses share this properties
         sealed trait Person {
 
+          // expected field
           val name: String
-          val age: Int
+
+          // expected function
+          def likesPlace(place: String): Boolen
 
           // default implementation
-          def isOlder(other: Person): Boolen = age > other.age
+          def sameName(other: Person): Boolen = name == other.name
         }
       """),
       codeFragment("""
-        case class Man(name: String, age: Int) extends Person
+        case class Wizard(name: String, power: String) extends Person {
+          def likesPlace(place: String): Boolean = true
+        }
 
-        val man = Man("John", 27)
+        case class Elf(name: String, age: Int) extends Person {
+          def likesPlace(place: String): Boolean = place == "woods"
+        }
 
-        man.isOlder(User("Jim", 21) == true
+        case class Darf(name: String, height: Int) extends Person {
+          def likesPlace(place: String): Boolean = place == "mountain"
+        }
+
+        val gandalf = Wizard("Gandalf", "magic")
+
+        gandalf.likesPlace("The Shire") == true
       """)
     ),
 
@@ -1119,9 +1140,58 @@ object Lecture extends JSApp {
         val person: Person = ???
 
         person match {
-          case Woman(first, last) => first
-          case Man(first, last)   => first
-          case Child(first, last) => first
+          case Wizard(name, power) => name
+          case Elf(name, age)      => name
+          case Dwarf(name, height) => name
+        }
+      """)
+    ),
+
+    slide(
+      "Pattern Matching",
+      code("""
+        val person = Wizard("Gandalf", "magic")
+      """),
+      codeFragment("""
+        person match {
+          case Wizard(name, power) => name  <= check
+          case Elf(name, age)      => name
+          case Dwarf(name, height) => name
+        }
+      """),
+      codeFragment("""
+        person match {
+          case Wizard(name = "Gandalf", power) => name  <= fits
+          // case Elf(name, age)      => name
+          // case Dwarf(name, height) => name
+        }
+      """)
+    ),
+
+    slide(
+      "Pattern Matching",
+      code("""
+        val person = Dwarf("Gimli", 107 /*cm*/)
+      """),
+      codeFragment("""
+        person match {
+          case Wizard(name, power) => name  <= check
+          case Elf(name, age)      => name
+          case Dwarf(name, height) => name
+        }
+      """),
+      codeFragment("""
+        person match {
+          // case Wizard(name, power) => name
+          case Elf(name, age)      => name  <= check
+          case Dwarf(name, height) => name
+        }
+      """),
+      codeFragment("""
+        person match {
+          // case Wizard(name, power) => name
+          // case Elf(name, age)      => name
+          case Dwarf(name = "Gimli", height) => name  <= fits
         }
       """)
     ),
@@ -1132,7 +1202,7 @@ object Lecture extends JSApp {
         val person: Person = ???
 
         person match {
-          case Woman(first, _) => first
+          case Wizard(name, _) => name
           ...
         }
       """)
@@ -1145,7 +1215,7 @@ object Lecture extends JSApp {
 
         person match {
           // you can also use `&` and `|`
-          case Woman(first, last) if last == "Smith" => first
+          case Wizard(name, _) if name == "Gandalf" => "a wizard is never late"
           ...
         }
       """)
@@ -1158,8 +1228,46 @@ object Lecture extends JSApp {
 
         person match {
           // you can also use `&` and `|`
-          case w@Woman(_, last) if last == "Smith" => w
+          case w@Wizard(_, power) if power == "magic" => w
           ...
+        }
+      """)
+    ),
+
+    slide(
+      "Match on everything",
+      code("""
+        val person: Person = ???
+
+        person match {
+          case person => person.name
+        }
+      """)
+    ),
+
+    slide(
+      "Match on everything",
+      code("""
+        val person: Person = ???
+
+        person match {
+          case Wizard(name, _) => "The mighty " + name
+          case person          => person.name
+
+          // can't reach this -> previous case captures everything
+          case Darf(_, _) => "you will never now"
+        }
+      """)
+    ),
+
+    slide(
+      "Ignore match",
+      code("""
+        val person: Person = ???
+
+        person match {
+          case Wizard(name, _) => "The mighty " + name
+          case _               => "I don't care"
         }
       """)
     ),
@@ -1171,6 +1279,17 @@ object Lecture extends JSApp {
         Item.fadeIn(<.p("Only declare fields you use.")),
         Item.fadeIn(<.p("Works also with primitives."))
       )
+    ),
+
+    slide(
+      "Match primitives",
+      code("""
+        0 match {
+          case 5 => "yeah five"
+          case 0 => "nay zero"
+          case _ => "don't care"
+        }
+      """)
     ),
 
     exerciseSlide(
@@ -1219,23 +1338,25 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Case Classes and Traits",
+      "Classes",
       code("""
-        sealed trait Currency
+        sealed trait Persons {
+          val name: String
+        }
 
-        case class Euro(value: Int) extends Currency
-        case class Dollar(value: Int) extends Currency
+        case class Wizard(name: String, power: String) extends Person
+        case class Elf(name: String, age: Int)         extends Person
       """)
     ),
 
     slide(
       "Pattern Matching",
       code("""
-        val curr: Currency = ???
+        val person: Person = ???
 
-        curr match {
-          case Euro(value)   => value
-          case Dollar(value) => value
+        person match {
+          case Wizard(name, _) => name
+          case Elf(name, _)    => name
         }
       """)
     ),

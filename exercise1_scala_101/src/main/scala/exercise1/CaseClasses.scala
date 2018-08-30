@@ -1,11 +1,6 @@
 package exercise1
 
-/* a) Create a Person case class with a firstname, lastname, birthyear and address.
- *    The address itself concist of a street, city and country. Create an own case class for it.
- * b) Add `def age(year: Int): Int` which calculates the persons age.
- * c) Add `def fullname: String` which concatenates the first and last name.
- * d) Add `def move(address: Address): Person` which updates the address field.
- */
+/* a) repeat task `Classes.scala` but for case classes */
 
 object CaseClasses {
 

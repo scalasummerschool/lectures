@@ -9,7 +9,7 @@ package exercise1
 
 object Traits {
 
-  // f)
+  // f) create an Euro from the value and show its String
   def testShowEuro(value: Int): String = ""
 
 
