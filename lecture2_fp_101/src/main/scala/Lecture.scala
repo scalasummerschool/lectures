@@ -19,6 +19,7 @@ object Lecture extends JSApp {
       "What we will learn in this lecture",
       Enumeration(
         Item.stable(<.p("Immutability")),
+        Item.fadeIn(<.p("Algebraic Data Types")),
         Item.fadeIn(<.p("Pure Functions")),
         Item.fadeIn(<.p("Recursion")),
         Item.fadeIn(<.p("Composability")),
@@ -38,7 +39,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Data never change",
+      "Data never changes",
       <.h4("We already know it!"),
       <.br,
       code("""
@@ -61,13 +62,65 @@ object Lecture extends JSApp {
       <.h4("Once created your data stays the same until destruction.")
     ),
 
-    slide(
-      "What's the benefit?",
+    noHeaderSlide(
+      <.h4("What's the benefit?"),
+      <.br,
       Enumeration(
         Item.stable(<.p("state of your values known at all times")),
         Item.fadeIn(<.p("no race-conditions in a concurrent scenario ")),
         Item.fadeIn(<.p("simplifies reasoning about values in your code"))
       )
+    )
+  )
+
+  val adts = chapter(
+    chapterSlide(
+      <.h2("Algebraic Data Types")
+    ),
+
+    slide(
+      "ADT",
+      <.h3("Composition of types")
+    ),
+
+    slide(
+      "ADT: product types",
+      <.p("Types are grouped into specific classes."),
+      <.br,
+      code("""
+        // exists a value or not
+        sealed trait Option[A]
+        case class Some[A](a: A) extends Option[A]
+        case class None[A]()     extends Option[A]
+      """)
+    ),
+
+    slide(
+      "ADT: sum types",
+      <.p("A single class combining multiple types."),
+      <.br,
+      code("""
+        case class Pair[A, B](a: A, b: B)
+      """)
+    ),
+
+    slide(
+      "ADT: mix and match",
+      code("""
+        // already know this construct
+        // Person is a product type
+        sealed trait Person
+
+        // each class is a sum type
+        case class Wizard(name: String, power: String) extends Person
+        case class Elf(name: String, age: Int)         extends Person
+        case class Dwarf(name: String, height: Int)    extends Person
+      """)
+    ),
+
+    slide(
+      "ADT",
+      <.p("We already knew this constructs. Now we have a name for them.")
     )
   )
 
@@ -217,6 +270,15 @@ object Lecture extends JSApp {
       codeFragment("""
         // no -> result depends on the time we call the function
       """)
+    ),
+
+    noHeaderSlide(
+      <.h4("What's the benefit?"),
+      <.br,
+      Enumeration(
+        Item.stable(<.p("makes it easy to reason about code")),
+        Item.fadeIn(<.p("separates business logic from real world interaction"))
+      )
     )
   )
 
@@ -245,7 +307,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion: data structures",
+      "Recursion: ADT",
       code("""
         // linked list of Ints
         sealed trait IntList
@@ -261,7 +323,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion: data structures",
+      "Recursion: ADT",
       <.img(
         ^.alt := "Linked List",
         ^.src := "./img/list.svg"
@@ -278,7 +340,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Type Parameter: data structures",
+      "Type Parameter: ADT",
       code("""
         sealed trait List[A]
         //                ^
@@ -299,7 +361,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Type Parameter: data structures",
+      "Type Parameter: ADT",
       code("""
         val intList  = Cons[Int](0, Cons[Int](1, Cons[Int](2, Nil[Int]())))
         val charList = Cons[Char]('a', Cons[Char]('b', Nil[Char]()))
@@ -318,7 +380,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Type Parameter: data structures",
+      "Type Parameter: ADT",
       Enumeration(
         Item.stable(<.p("also called generics")),
         Item.fadeIn(<.p("can be fixed by hand: ", <.code("Cons[Int](0, Nil[Int]): List[Int]"))),
@@ -705,6 +767,15 @@ object Lecture extends JSApp {
         <.strong("Trampolining"),
         ". We won't discuss that in this course."
       )
+    ),
+
+    noHeaderSlide(
+      <.h4("What's the benefit?"),
+      <.br,
+      Enumeration(
+        Item.stable(<.p("represent collections")),
+        Item.fadeIn(<.p("solve complex problems with divide & conquer"))
+      )
     )
   )
 
@@ -876,6 +947,14 @@ object Lecture extends JSApp {
         sbt> project fp101-exercises
         sbt> test:testOnly CompositionsSpec
       """)
+    ),
+
+    noHeaderSlide(
+      <.h4("What's the benefit?"),
+      <.br,
+      Enumeration(
+        Item.stable(<.p("solve complex problems with divide & conquer"))
+      )
     )
   )
 
@@ -888,6 +967,7 @@ object Lecture extends JSApp {
           ^.cls := "slides",
           overview,
           immutability,
+          adts,
           pureFunctions,
           recursion,
           composition
