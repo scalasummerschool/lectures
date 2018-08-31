@@ -87,8 +87,8 @@ object Lecture extends JSApp {
     slide(
       "Pure Functions: math",
       <.p(
-        ^.cls := "function-math",
-        "$f: a -> b$"
+        ^.cls := "math",
+        "$f : a \\rightarrow b$"
       )
     ),
 
@@ -167,9 +167,12 @@ object Lecture extends JSApp {
 
     slide(
       "Impure Functions: Effecting the context",
-      <.h3("Application Input/Output (IO) is not allowed. How to write useful programs then?"),
+      <.h4("Application Input/Output (IO) is not allowed. How to write useful programs then?"),
       <.br,
-      <.h4("We will discuss that later!")
+      <.h5(
+        ^.cls := "fragment fade-in",
+        "We will discuss that later!"
+      )
     ),
 
     exerciseSlide(
@@ -229,11 +232,11 @@ object Lecture extends JSApp {
 
     slide(
       "Recursion",
-      <.img(
-        ^.alt := "Recursion",
-        ^.src := "./img/recursion.svg",
-        ^.width := "50%"
-      )
+//      <.img(
+ //       ^.alt := "Recursion",
+  //      ^.src := "./img/recursion.svg",
+    //    ^.width := "50%"
+     // )
     ),
 
     slide(
@@ -602,7 +605,8 @@ object Lecture extends JSApp {
 
     slide(
       "Recursion: tail recursion",
-      <.p("One way to solve that is to make the function tail-recursive. This means, the last expression must be the recursive call.")
+      <.p("One way to solve that is to make the function tail-recursive. This means, the function must have single, direct " + 
+          "recursion and the last expression is the recursive call.")
     ),
 
     slide(
@@ -692,6 +696,186 @@ object Lecture extends JSApp {
         sbt> project fp101-exercises
         sbt> test:testOnly RecursiveFunctionsSpec
       """)
+    ),
+
+    slide(
+      "But what with all the other recursion types?",
+      <.p(
+        "There is no tool Scala or the JVM can provide us here. We have to rely on a technique called ",
+        <.strong("Trampolining"),
+        ". We won't discuss that in this course."
+      )
+    )
+  )
+
+  val composition = chapter(
+    chapterSlide(
+      <.h2("Composition")
+    ),
+
+    slide(
+      "Composition",
+      <.h4("Build complex programs out of simple ones")
+    ),
+
+    slide(
+      "Composition: math",
+      <.p(
+        ^.cls := "math",
+       """
+         \[\begin{aligned}
+	   f : b \rightarrow c \\
+           g : a \rightarrow b \\
+           \newline
+           f . g : a \rightarrow c
+         \end{aligned} \]
+       """
+      )
+    ),
+
+    slide(
+      "Composition: code",
+      code("""
+        def compose[A, B, C](f: B => C)(g: A => B): A => C = 
+          a => f(g(a))
+      """),
+      codeFragment("""
+        def double(a: Int): Int = a * 2
+        def show(a: Int): String = a.toString
+
+        val complex = compose(show)(double)
+
+        complex(2) == "4"
+      """)
+    ),
+
+    slide(
+      "Composition: Scala",
+      code("""
+        // already built-in
+        (show _).compose(double)
+        //  ^
+        //  '- transforming method to a function object
+      """),
+      codeFragment("""
+        // or work directly with function objects
+        val show: Int => String = _.toString
+        val double: Int => Int  = _ * 2
+
+        show.compose(double)
+      """)
+    ),
+
+    slide(
+      "Composition: Scala",
+      code("""
+        double.andThen(show) == show.compose(double)
+      """)
+    ),
+
+    slide(
+      "Composition: data structures",
+      code("""
+        // consider the following
+        def replicate[A](n: Int, a: A): List[A] = 
+          if (n == 0) Nil() else Cons(a, replicate(n - 1, a))
+
+
+        def show[A](a: A): String = a.toString
+      """),
+      <.br,
+      <.h4(
+        ^.cls := "fragment fade-in",
+        "How to compose `replicate` and `show`?"
+      )
+    ),
+
+    slide(
+      "Composition: data structures",
+      code("""
+        // we already know map (exercises)
+        def map[A, B](as: List[A])(f: A => B): List[B]
+
+        map(as)(a => replicate(n, a)) // will not work        
+      """),
+      codeFragment("""
+        f: A => B != replicate: A => List[B]
+      """)
+    ),
+
+    slide(
+      "Composition: data structures",
+      code("""
+        // list[list[a]] -> list[a]
+        def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] = as match {
+      """),
+      codeFragment("""
+        // empty case
+          case Nil()         => Nil()
+      """),
+      codeFragment("""
+        // recursive step
+          case Cons(a, tail) => 
+            val bs = f(a)
+            
+            combine(bs, flatMap(tail)(f))
+        }
+      """)
+    ),
+
+    slide(
+      "Composition: data structures",
+      code("""
+        val complex: List[A] => List[A] = 
+          as => map(flatMap(as)(replicate(_, a)))(show)
+
+
+        val list = Cons(0, Cons(1, Nil()))
+        
+        complex(list)
+      """)
+    ),
+
+    slide(
+      "Composition: for-comprehension",
+      code("""
+        // make map and flatMap methods of List
+        sealed trait List[A] {
+          
+          def map[B](f: A => B): List[B]
+          def flatMap[B](f: A => List[B]): List[B]
+        }
+      """),
+      codeFragment("""
+        // Scala lets you use for-comprehension
+        val complexFor: List[Int] => List[Int] = as => 
+          for {
+            rep <- replicate(n, as)
+          } yield show(rep)
+
+        complexFor(list) == complex(list)
+      """)
+    ),
+
+    slide(
+      "Composition: for-comprehension",
+      code("""
+        // comes in handy later on
+        for {
+          a <- f(in)
+          b <- g(a)
+          ...
+          z <- h(???)
+        } yield doSomething(z)
+      """)
+    ),
+
+    exerciseSlide(
+      "Let's Code",
+      bashCode("""
+        sbt> project fp101-exercises
+        sbt> test:testOnly CompositionsSpec
+      """)
     )
   )
 
@@ -705,7 +889,8 @@ object Lecture extends JSApp {
           overview,
           immutability,
           pureFunctions,
-          recursion
+          recursion,
+          composition
         )
       )
     )
