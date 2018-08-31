@@ -80,7 +80,7 @@ object Lecture extends JSApp {
       "Pure Functions",
       <.p(
         "A function which, for any given input, returns an output and returns the same output for the same input at any time. " +
-        "Furthermore, it doesn't effect its context."
+        "Furthermore, it doesn't effect the \"real world\"."
       )
     ),
 
@@ -231,7 +231,8 @@ object Lecture extends JSApp {
       "Recursion",
       <.img(
         ^.alt := "Recursion",
-        ^.src := "./img/recursion.svg"
+        ^.src := "./img/recursion.svg",
+        ^.width := "50%"
       )
     ),
 
@@ -308,17 +309,8 @@ object Lecture extends JSApp {
         //   '- List[A] ~ List[Int]
 
         val charList = Cons('a', Cons('b', Nil()))
-      """)
-    ),
-
-    slide(
-      "Recursion: data structures",
-      code("""
-        // you can use pattern matching
-        intList match {
-          case Cons(head, tail) => ???
-          case Nil()            => ???
-        }
+        // Scala knows that `'a': Char`
+        //   '- List[A] ~ List[Char]
       """)
     ),
 
@@ -351,9 +343,40 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion: functions",
+      "Recursion: example",
       code("""
-        // length of list
+        //factorial
+        def fact(n: Int): Int = n match {
+          case 1 => 1
+          case _ => n * fact(n - 1)
+        }
+      """),
+      codeFragment("""
+          fact(3)
+        //  '- 3 * fact(2)
+        //           '- 2 * fact(1)
+        //                    '- 1
+      """),
+      codeFragment("""
+        fact(3) == 3 * fact(2)
+                == 3 * 2 * fact(1)
+                == 3 * 2 * 1
+                == 6
+      """)
+    ),
+
+    slide(
+      "Recursion: types",
+      Enumeration(
+        Item.stable(<.p("single/multi recursion")),
+        Item.fadeIn(<.p("direct/indirect recursion")),
+        Item.fadeIn(<.p("structural/generative recursion"))
+      )
+    ),
+
+    slide(
+      "Direct Single Recursion",
+      code("""
         def length(list: List[Int]): Int = list match {
       """),
       codeFragment("""
@@ -361,30 +384,157 @@ object Lecture extends JSApp {
           case Nil()         => 0
       """),
       codeFragment("""
-        // recusive step
+        // single direct recusive step (length calls itself)
           case Cons(_, tail) => 1 + length(tail)
         }
-      """),
-    ),
-
-    slide(
-      "Recursion: functions",
-      code("""
-        length(Cons(0, Cons(1, Nil())))
-        // '- 1 + length(Cons(1, Nil()))
-        //           '- 1 + length(Nil())
-        //                     '- 0
-      """),
-      codeFragment("""
-        length(Cons(0, Cons(1, Nil()))) == 1 + 1 + 0 == 2
       """)
     ),
 
     slide(
+      "Direct Single Recursion",
+      code("""
+        val list = Cons(1, Cons(2, Nil()))
+
+        length(list) == 1 + length(Cons(2, Nil()))
+                     == 1 + 1 + length(Nil())
+                     == 1 + 1 + 0
+                     == 2
+      """)
+    ),
+
+    slide(
+      "Mutli Direct Recursion",
+      code("""
+        /* Tree: either a leaf with a value or a node consisting of a 
+         *        left and right tree 
+         */
+
+        def size(tree: Tree[Int]): Int = tree match {
+      """),
+      codeFragment("""
+        // final state
+          case Leaf(_)           => 1
+      """),
+      codeFragment("""
+        // multiple direct recusive steps (branches into two recursice calls)
+          case Node(left, right) => size(left) + size(right)
+        }
+      """)
+    ),
+
+    slide(
+      "Mutli Direct Recursion",
+      code("""
+        val tree = Node(Node(Leaf(1), Leaf(2)), Leaf(3))
+
+        size(tree) == size(Node(Leaf(1), Leaf(2))) + size(Leaf(3))
+                   == size(Leaf(1)) + size(Leaf(2)) + 1
+                   == 1 + 1 + 1
+                   == 3
+      """)
+    ),
+
+    slide(
+      "Indirect Recursion",
+      code("""
+        def even(n: Int): Boolean = 
+          if (n == 0) true
+          else        !odd(n - 1)
+
+        def odd(n: Int): Boolean =
+          if (n == 0) true
+          else        !even(n - 1)
+      """)
+    ),
+
+    slide(
+      "Indirect Recursion",
+      code("""
+        even(5) == !odd(4)
+                == even(3)
+                == !odd(2)
+                == even(1)
+                == !odd(0)
+                == false
+      """)
+    ),
+ 
+    slide(
+      "Structural Recursion",
+      <.p("When you consume a (recursive) data structure which gets smaller with every step, " + 
+          "e.g. length of a list. This kind of recursion is guaranteed$^1$ terminate.")
+    ),
+
+    slide(
+      "Generative Recursion",
+      <.p("Generates a new data structure from its input and continues to work on it. This kind of recursion isn't guaranteed to terminate. " + 
+          "Examples are sorting algorithm like quicksort.")
+    ),
+
+    exerciseSlide(
+      "What kind of recursion is it?",
+      code("""
+        def plus(n: Int, m: Int): Int = n match {
+          case 0 => m
+          case _ => 1 + plus(n - 1, m)
+        }
+      """),
+      codeFragment("""
+        // structural direct single
+      """)
+    ),
+
+    exerciseSlide(
+      "What kind of recursion is it?",
+      code("""
+        def produce(n: Int): List[Int] = n match {
+          case 0 => Nil()
+          case _ => Cons(n, produce(n))
+        }
+      """),
+      codeFragment("""
+        // generative direct single
+      """)
+    ),
+
+    exerciseSlide(
+      "What kind of recursion is it?",
+      code("""
+        def parseH(str: List[Char]): Boolean = str match {
+          case Cons('h', tail) => parseE(tail)
+          case _               => false
+        }
+        def parseE(str: List[Char]): Boolean = str match {
+          case Cons('e', tail) => parseY(tail)
+          case _               => false
+        }
+        def parseY(str: List[Char]): Boolean = str match {
+          case Cons('y', Nil()) => true
+          case Cons('y', tail)  => parseH(tail)
+          case _                => false
+        }
+      """),
+      codeFragment("""
+        // structural indirect multi
+      """)
+    ),
+
+    slide(
+      "What are possible problems",
+      Enumeration(
+        Item.stable(<.p("How to fix types of Generics?")),
+        Item.fadeIn(<.p("What is the impact of recursion on our hardware?"))
+      )
+    ),
+
+    slide(
       "Type Parameter: functions",
-      <.h3("Again, do we need to write a function for every `A`?"),
+      <.h4("Again, do we need to write a function for every `A` in a Generic?"),
       <.br,
-      <.h4("No! type parameters to the rescue.")
+      <.h5(
+        ^.cls := "fragment fade-in",
+        "No! type parameters to the rescue."
+      )
     ),
 
     slide(
@@ -407,7 +557,7 @@ object Lecture extends JSApp {
       code("""
         length[Int](Cons(1, Cons(2, Nil()))) == 2
 
-        // or we use inference again
+        // or we rely on inference again
 
         length(Cons(1, Cons(2, Nil()))) == 2
         // Scala knows that `1: Int`
@@ -417,7 +567,12 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion: functions",
+      "Recursion: hardware impact",
+      <.h4("How does multiple recursive calls reflect on the hardware?")
+    ),
+
+    slide(
+      "Recursion: call stack",
       code("""
         length(Cons(0, Cons(1, Nil())))
         // '- 1 + length(Cons(1, Nil()))
@@ -427,7 +582,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion: programm stack",
+      "Recursion: call stack",
       <.img(
         ^.alt   := "Programm Stack",
         ^.width := "45%",
@@ -436,10 +591,13 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion: programm stack",
-      <.h3("But what happens if the list is reaaaaally long?"),
+      "Recursion: call stack",
+      <.h4("But what happens if the list is reaaaaally long?"),
       <.br,
-      <.h3("Your programm will run out of memory (stack overflow).")
+      <.h5(
+        ^.cls := "fragment fade-in",
+        "Your programm will run out of memory (stack overflow)."
+      )
     ),
 
     slide(
@@ -468,7 +626,7 @@ object Lecture extends JSApp {
 
     slide(
       "Recursion: tail recursion",
-      <.p("Scala optimizes this function in a way that it reuses its initial stack frame. Therefore, the stack does not grow.")
+      <.p("Scala optimizes this function to an imperative loop. Therefore, the stack does not grow.")
     ),
 
     slide(
@@ -494,7 +652,9 @@ object Lecture extends JSApp {
         }
       """),
       codeFragment("""
-        // no, last expression is the `+` operator and we create two recursion branches
+        /* no, last expression is the `+` operator and we 
+         * create two recursion branches 
+         */
       """)
     ),
 
@@ -520,7 +680,9 @@ object Lecture extends JSApp {
         }
       """),
       codeFragment("""
-        // no, again the last expression is the `+` operator and we create two recursion branches
+        /* no, again the last expression is the `+` operator 
+         * and we create two recursion branches
+         */
       """)
     ),
 

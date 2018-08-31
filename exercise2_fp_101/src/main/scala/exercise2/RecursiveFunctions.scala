@@ -13,7 +13,7 @@ object RecursiveFunctions {
 
   def testReplicate[A](n: Int, a: A): List[A] = Nil()
 
-  /* c) write a function that reverses a list:
+  /* b) write a function that reverses a list:
    *        def reverse[A](list: List[A]): List[A]
    */
 
@@ -21,7 +21,7 @@ object RecursiveFunctions {
 
   def testReverse[A](list: List[A]): List[A] = list
 
-  /* b) write a function that applies a function to every value of a list:
+  /* c) write a function that applies a function to every value of a list:
    *        def map[A, B](list: List[A])(f: A => B): List[B]
    */
 
@@ -29,4 +29,11 @@ object RecursiveFunctions {
 
   def testMap[A, B](list: List[A], f: A => B): List[B] = Nil()
   
+  /* d) Is it possible to write a tail recursive map function for `Tree`s? If no, why? */
+
+  /* e) Is it possible to write a tail recursive function to calculate the Fibonacci numbers? If yes, how?
+   *    Fibonacci: n is Natural Number
+   *       if n == 1 or n == 2 then return 1
+   *       else return fibonacci for (n - 1) + fibunacci for (n - 2)
+   */
 }
