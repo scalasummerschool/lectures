@@ -21,9 +21,9 @@ object Lecture extends JSApp {
         Item.stable(<.p("Immutability")),
         Item.fadeIn(<.p("Algebraic Data Types")),
         Item.fadeIn(<.p("Pure Functions")),
+        Item.fadeIn(<.p("Referential Transparency")),
         Item.fadeIn(<.p("Recursion")),
-        Item.fadeIn(<.p("Composability")),
-        Item.fadeIn(<.p("Referential Transparency"))
+        Item.fadeIn(<.p("Composability"))
       )
     ),
 
@@ -36,6 +36,11 @@ object Lecture extends JSApp {
   val immutability = chapter(
     chapterSlide(
       <.h2("Immutability")
+    ),
+
+    slide(
+      "Immutability: definition",
+      <.p("Data never changes.")
     ),
 
     slide(
@@ -59,7 +64,7 @@ object Lecture extends JSApp {
 
     slide(
       "Data never change",
-      <.h4("Once created your data stays the same until destruction.")
+      <.h4("Once created your data stays the same until destruction")
     ),
 
     noHeaderSlide(
@@ -79,13 +84,13 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "ADT",
-      <.h3("Composition of types")
+      "ADT: definition",
+      <.p("The are compositions of types and resemble algebraic operations.")
     ),
 
     slide(
       "ADT: product types",
-      <.p("Types are grouped into specific classes."),
+      <.h4("Types are grouped into specific classes"),
       <.br,
       code("""
         // exists a value or not
@@ -97,7 +102,7 @@ object Lecture extends JSApp {
 
     slide(
       "ADT: sum types",
-      <.p("A single class combining multiple types."),
+      <.h4("A single class combining multiple types"),
       <.br,
       code("""
         case class Pair[A, B](a: A, b: B)
@@ -130,7 +135,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Pure Functions",
+      "Pure Functions: definition",
       <.p(
         "A function which, for any given input, returns an output and returns the same output for the same input at any time. " +
         "Furthermore, it doesn't effect the \"real world\"."
@@ -138,7 +143,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Pure Functions: math",
+      "Pure Functions: in a mathematical sense",
       <.p(
         ^.cls := "math",
         "$f : a \\rightarrow b$"
@@ -175,10 +180,10 @@ object Lecture extends JSApp {
     slide(
       "Impure Functions: exceptions",
       code("""
-        def divide(a: Double, b: Double): Double = a / b
+        def divide(a: Int, b: Int): Int = a / b
 
-        // throws an Exceptions which bypasses your call stack
-        divide(1.0, 0.0) == ???
+        // throws an ArithmeticExceptions which bypasses your call stack
+        divide(1, 0) == ???
       """)
     ),
 
@@ -196,30 +201,61 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Impure Functions: changing results",
+      "Impure Functions: non-determinism",
       code("""
         def question(q: String): Int = Random.nextInt()
 
-        val a1 = question("what is the answer to everything")
-        val a2 = question("what is the answer to everything")
-
-        // probably
-        a != a2
+        question("what is the answer to everything") == 42
+      """),
+      codeFragment("""
+        question("what is the answer to everything") == 136
+      """),
+      codeFragment("""
+        question("what is the answer to everything") == 5310
       """)
     ),
 
     slide(
-      "Impure Functions: Effecting the context",
+      "Impure Functions: depend on \"the real world\"",
       code("""
+        // reads file from disk
+        def readFile(path: String): Either[Exception, File] = ???
+      """),
+      codeFragment("""
+        // it might return a file handle
+        reaedFile("/usr/people.cvs") == Right(File(...))
+      """),
+      codeFragment("""
+        // or fail, e.g. file is missing, not enough rights, ...
+        reaedFile("/usr/people.cvs") == Left(FileNotFoundException)
+      """) 
+    ),
+
+    slide(
+      "Impure Functions: effect \"the real world\"",
+      code("""
+        // writes file to disk
+        def writeFile(file: File): Either[Exception, Unit] = ???
+      """),
+      codeFragment("""
+        // changes the state of your machine aka real world
+        val file = new File(...)
+        writeFile(file)
+      """)
+    ),
+
+    slide(
+      "Impure Functions: effect \"the real world\"",
+      code("""
+        // even logging is changing the world
         def log(msg: String): Unit = println(msg)
 
-        // writes to the console -> changes its context
         log("hello world")
       """)
     ),
 
     slide(
-      "Impure Functions: Effecting the context",
+      "Impure Functions: effect \"the real world\"",
       <.h4("Application Input/Output (IO) is not allowed. How to write useful programs then?"),
       <.br,
       <.h5(
@@ -282,13 +318,69 @@ object Lecture extends JSApp {
     )
   )
 
+  val referentialTransparency = chapter(
+    chapterSlide(
+      <.h2("Referential Transparency")
+    ),
+
+    slide(
+      "Referential Transparency: definition",
+      <.p("An expression is referential transparent if you can replace it by its evaluation result without changing the programs behavior. " + 
+          "Otherwise, it is referential opaque.")
+    ),
+
+    slide(
+      "Referential Transparency",
+      Enumeration(
+        Item.stable(<.p("no side-effects")),
+        Item.fadeIn(<.p("same output for the same input")),
+        Item.fadeIn(<.p("execution order doesn't matter"))
+      )
+    ),
+
+    slide(
+      "Referential Transparency: pure functions",
+      <.h4("All pure functions are referential transparent")
+    ),
+
+    slide(
+      "Referential Opaque",
+      <.h4("We already know what effectful and non-deterministic functions look like"),
+      <.br,
+      <.h4("But what is with the execution order?")
+    ),
+
+    slide(
+      "Reftrencial Opaque: variables and execution order",
+      code("""
+        // defines a variable - a mutable (imperative) reference
+        var a = 1
+
+        a = a + 1
+        a == 2
+
+        a = a + 1
+        a == 3
+      """)
+    ),
+
+    noHeaderSlide(
+      <.h4("What's the benefit?"),
+      <.br,
+      Enumeration(
+        Item.stable(<.p("makes it easy to reason about code")),
+        Item.fadeIn(<.p("separates business logic from real world interaction"))
+      )
+    )
+  )
+
   val recursion = chapter(
     chapterSlide(
       <.h2("Recursion")
     ),
 
     slide(
-      "Recursion",
+      "Recursion: definition",
       <.p("Solving a problem where the solution depends on solutions to smaller instances of the same problem.")
     ),
 
@@ -313,11 +405,14 @@ object Lecture extends JSApp {
         sealed trait IntList
 
         // a single list element with its Int value and the remaining list
+        // this class of IntList is defined by using IntList (tail)
         case class Cons(head: Int, tail: IntList) extends IntList
+
         // end of the list
         case object Nil extends IntList
       """),
       codeFragment("""
+
         val list = Cons(0, Cons(1, Cons(2, Nil)))
       """)
     ),
@@ -397,7 +492,7 @@ object Lecture extends JSApp {
     ),
 
     noHeaderSlide(
-      <.h3("Now we have recursive data structures."),
+      <.h3("Now we have recursive data structures"),
       <.br,
       <.h4("But how do we process them?")
     ),
@@ -661,7 +756,7 @@ object Lecture extends JSApp {
       <.br,
       <.h5(
         ^.cls := "fragment fade-in",
-        "Your programm will run out of memory (stack overflow)."
+        "Your programm will run out of memory (stack overflow)"
       )
     ),
 
@@ -785,8 +880,8 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Composition",
-      <.h4("Build complex programs out of simple ones")
+      "Composition: definition",
+      <.p("Build complex programs out of simple ones.")
     ),
 
     slide(
@@ -855,7 +950,7 @@ object Lecture extends JSApp {
         def show[A](a: A): String = a.toString
       """),
       <.br,
-      <.h4(
+      <.p(
         ^.cls := "fragment fade-in",
         "How to compose `replicate` and `show`?"
       )
@@ -897,13 +992,15 @@ object Lecture extends JSApp {
     slide(
       "Composition: data structures",
       code("""
+        val n = 2
+
         val complex: List[A] => List[A] = 
-          as => map(flatMap(as)(replicate(_, a)))(show)
+          as => map(flatMap(as)(replicate(n, _)))(show)
 
 
-        val list = Cons(0, Cons(1, Nil()))
+        val list = Cons(0, Nil())
         
-        complex(list)
+        complex(list) == Cons(Cons("0", Cons("0", Nil())), Nil())
       """)
     ),
 
@@ -921,7 +1018,8 @@ object Lecture extends JSApp {
         // Scala lets you use for-comprehension
         val complexFor: List[Int] => List[Int] = as => 
           for {
-            rep <- replicate(n, as)
+            a   <- as
+            rep <- replicate(n, a)
           } yield show(rep)
 
         complexFor(list) == complex(list)
@@ -958,6 +1056,51 @@ object Lecture extends JSApp {
     )
   )
 
+  val summary = chapter(
+    chapterSlide(
+      <.h2("Summary")
+    ),
+
+    slide(
+      "Immutability",
+      <.h4("Data never changes")
+    ),
+
+    slide(
+      "Algebraic Data Structures",
+      <.h4("Composition of types")
+    ),
+
+    slide(
+      "Pure Functions",
+      <.p(
+        ^.cls := "math",
+        "$f : a \\rightarrow b$"
+      )
+    ),
+
+    slide(
+      "Referential Transparency",
+      <.h4("Expression can be replaced by their evaluation result")
+    ),
+
+    slide(
+      "Recursion",
+      <.h4("Solving a problem where the solution depends on solutions to smaller instances of the same problem")
+    ),
+
+    slide(
+      "Composition",
+      <.h4("Creating complex problems out of simpler ones")
+    ),
+
+    noHeaderSlide(
+      <.h2("Next Topic"),
+      <.br,
+      <.h3("Scala Standard Library")
+    )
+  )
+
   val Show = ScalaComponent
     .builder[Unit]("Slideshow")
     .renderStatic(
@@ -969,8 +1112,10 @@ object Lecture extends JSApp {
           immutability,
           adts,
           pureFunctions,
+          referentialTransparency,
           recursion,
-          composition
+          composition,
+          summary
         )
       )
     )
