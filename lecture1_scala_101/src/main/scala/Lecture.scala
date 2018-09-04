@@ -528,26 +528,6 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Primitive Data Types",
-      code("""
-        Boolean - true false
-        Byte    - Integer from -128 to 127
-        Short   - Integer from -32,768 to 32,767
-        Int     - Integer from -2,147,483,648 to 2,147,483,647
-        Long    - Integer from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807
-        Float   - +- 1.40129846432481707e-45 to 3.40282346638528860e+38
-        Double  - +- 4.94065645841246544e-324 to 1.79769313486231570e+308
-        Char    - signs encoded with Integers from 0 to 65,535
-        String  - sequence of Chars
-      """),
-      <.br,
-      codeFragment("""
-        // And many more complex types. Some of them we will learn
-        // in the course of this workshop.
-      """)
-    ),
-
-    slide(
       "Operation restriction",
       code("""
           1 + 2
@@ -634,12 +614,12 @@ object Lecture extends JSApp {
 
     slide(
       "Functions",
-      <.h4("Special type of expressions which has a name, takes input and returns, as always, a result.")
+      <.p("Special type of expressions which has a name, takes input and returns, as always, a result.")
     ),
 
     slide(
       "Functions",
-      <.h4("They are expression with a declaration.")
+      <.h4("They are expression with a declaration")
     ),
 
     slide(
@@ -1364,7 +1344,7 @@ object Lecture extends JSApp {
     noHeaderSlide(
       <.h2("Next Topic"),
       <.br,
-      <.h3("Next Topic: Functional Programming 101")
+      <.h3("Functional Programming 101")
     )
   )
 
