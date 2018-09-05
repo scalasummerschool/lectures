@@ -39,35 +39,44 @@ object PatternMatchingSpec extends Properties("pattern matching") {
     isEven(value) == testIsEven(value)
   }
 
-  implicit val weaponGen: Arbitrary[Weapon] = Arbitrary(for {
-    length <- Gen.posNum[Int]
-    arrows <- Gen.posNum[Int]
-    weapon <- Gen.oneOf("sword", "staff", "bow")
-  } yield weapon match {
-    case "sword" => Sword(length)
-    case "staff" => Staff
-    case "bow"   => Bow(arrows)
+  def playerAWins(a: Hand, b: Hand): Result = (a, b) match {
+    case (Rock, Scissor)      => Win
+    case (Scissor, Paper)     => Win
+    case (Paper, Rock)        => Win
+    case (ha, hb) if ha == hb => Draw
+    case _                    => Lose
+  }
+
+  implicit val handGen = Arbitrary[Hand](Gen.oneOf(Rock, Paper, Scissor))
+
+  property("rock paper scissors, does player a win") = forAll { (ha: Hand, hb: Hand) =>
+    testWinsA(ha, hb) == playerAWins(ha, hb)
+  }
+
+  implicit val animalGen: Arbitrary[Animal] = Arbitrary(for {
+    name <- Gen.oneOf("cat", "parrot", "goldfish")
+  } yield name match {
+    case "cat"      => Mammal(name, Meat)
+    case "parrot"   => Bird(name, Vegetables)
+    case "goldfish" => Fish(name, Plants)
   })
 
-  def duell(a: Weapon, b: Weapon): Weapon = (a, b) match {
-    case (Staff, Sword(_))  => a
-    case (Staff, _)         => b
-    case (Bow(_), Staff)    => a
-    case (Bow(_), _)        => b
-    case (Sword(_), Bow(_)) => a
-    case (Sword(_), _)      => b
+  def extractName(animal: Animal): String = animal match {
+    case Mammal(name, _) => name
+    case _               => "NO MAMMAL"
   }
 
-  property("duell") = forAll { (a: Weapon, b: Weapon) =>
-    duell(a, b) == testDuell(a, b)
+  property("extract mammal name") = forAll { animal: Animal =>
+    testExtractMammalName(animal) == extractName(animal)
   }
 
-  def numOfArrows(weapon: Weapon): Int = weapon match {
-    case Bow(arrows) => arrows
-    case _           => -1
+  def updateFood(animal: Animal): Animal = animal match {
+    case Bird(name, _)  => Bird(name, Plants)
+    case f @ Fish(_, _) => f
+    case _              => animal
   }
 
-  property("number of arrows") = forAll { weapon: Weapon =>
-    numOfArrows(weapon) == testNumOfArrows(weapon)
+  property("update food") = forAll { animal: Animal =>
+    testUpdateFood(animal) == updateFood(animal)
   }
 }
