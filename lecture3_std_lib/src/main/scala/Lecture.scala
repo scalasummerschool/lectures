@@ -67,13 +67,11 @@ object Lecture extends JSApp {
         a < b  // smaller than
         a == b // equal
         a != b // unequal
-
-        // some more, but not relevant yet
       """)
     ),
 
     noHeaderSlide(
-      <.h3("Numbes")
+      <.h3("Numbers")
     ),
 
     slide(
@@ -167,7 +165,7 @@ object Lecture extends JSApp {
         val a: Double = ???
         val b: Double = ???
 
-        // is dangerous - at whcihh precision do you define them as equal?
+        // is dangerous - at which precision do you define them as equal?
         a == b
       """)
     ),
