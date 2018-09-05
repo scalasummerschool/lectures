@@ -625,11 +625,11 @@ object Lecture extends JSApp {
     slide(
       "Functions",
       code("""
-        def plus(a: Int)(b: Int): Int = a + b
+        def plus(a: Int, b: Int): Int = a + b
       """),
       codeFragment("""
         // declaration
-        def plus(a: Int)(b: Int): Int
+        def plus(a: Int, b: Int): Int
         //   ^     ^       ^       ^
         //   |     '-------|       |
         // identifier    input   result 
@@ -650,10 +650,14 @@ object Lecture extends JSApp {
         // less used syntax
 
         // this becomes
-        def plus(a: Int)(b: Int): Int = a + b
+        def plus(a: Int, b: Int): Int = a + b
 
         // that
-        val plus: Int => Int => Int = a => b => a + b
+        val plus: (Int, Int) => Int = (a, b) => a + b
+
+        // more concise - underscore syntax
+        // first `_` first paremeter, ...
+        val plus: (Int, Int) => Int = _ + _
       """)
     ),
 
@@ -670,45 +674,39 @@ object Lecture extends JSApp {
     slide(
       "Function application",
       code("""
-        val plus1: Int => Int = plus(1)
+        plus(1, 2) == 3
       """),
       codeFragment("""
-        // `1` assigned to `a` and every appearance of `a` was replaced with `1`
-        == val plus1: Int => Int = b => 1 + b
-      """),
-      codeFragment("""
-        val result = plus1(2)
-
-        == val result: Int = 1 + 2
-      """),
-      codeFragment("""
-        // in one step
-        plus(1)(2) == 3
+        // `1` assigned to `a` and `2` to `b`
+        // every appearance of `a` and `b` is replaced by the objects
+        1 + 2      == 3
       """)
     ),
 
     slide(
-      "Function application",
+      "Curried Function",
+      code("""
+        def plusCurried(a: Int)(b: Int): Int = a + b
+
+        // equal to
+     
+        def plusCurried(a: Int): Int => Int = b => a + b
+      """),
+      codeFragment("""
+        val plus1: Int => Int = plusCurried(1)
+      """),
+      codeFragment("""
+        plus1(2) == plus(1, 2)
+      """)
+    ),
+
+    slide(
+      "Curried Functions",
       Enumeration(
         Item.stable(<.p("this technique is called Currying")),
         Item.fadeIn(<.p("apply a single parameter at a time (left to right)")),
         Item.fadeIn(<.p("every application returns a new function of arity $n - 1$"))
       )
-    ),
-
-    slide(
-      "Uncurried function",
-      code("""
-        // you can also write
-        def plusUn: (a: Int, b: Int): Int = a + b
-
-        // or when using `val` syntax 
-        val plusUn: (Int, Int) => Int = (a, b) => a + b
- 
-        // more concise - underscore syntax
-        // first `_` first paremeter, ...
-        val plusUn: (Int, Int) => Int = _ + _
-      """)
     ),
 
     slide(
@@ -747,13 +745,13 @@ object Lecture extends JSApp {
         # start sbt (keep it running)
         $> sbt
         # switch into exercise project
-        sbt> project scala101-exercises
+        sbt> project scala-101-exercises
         # to compile your code
         sbt> compile
         # or let SBT compile on every file change
         sbt> ~compile
         # to test your implementation
-        sbt> test:testOnly exercise1.FunctionsSpec
+        sbt> test:testOnly exercises1.FunctionsSpec
       """)
     ),
 
@@ -761,7 +759,7 @@ object Lecture extends JSApp {
       "Let's code",
       code("""
         // package/path definition: <package>.<object-name> must be unique
-        package exercise1
+        package exercises1
 
         object Functions {
           // your functions go here
@@ -774,8 +772,8 @@ object Lecture extends JSApp {
     exerciseSlide(
       "Let's code",
       bashCode("""
-        sbt> project scala101-exercises
-        sbt> test:testOnly exercise1.HigherOrderSpec
+        sbt> project scala-101-exercises
+        sbt> test:testOnly exercises1.HigherOrderSpec
       """)
     ),
 
@@ -805,8 +803,8 @@ object Lecture extends JSApp {
         Item.fadeIn(<.p("class")),
         Item.fadeIn(<.p("case class")),
         Item.fadeIn(<.p("object")),
-        Item.fadeIn(<.p("abstract Class")),
-        Item.fadeIn(<.p("trait"))
+        Item.fadeIn(<.p("trait")),
+        Item.fadeIn(<.p("abstract Class"))
       )
     ),
 
@@ -893,14 +891,6 @@ object Lecture extends JSApp {
       <.p("All fields are `val`. Therefore, they cannot change after assignment. To change them you have to create a new object.")
     ),
 
-    exerciseSlide(
-      "Let's code",
-      bashCode("""
-        sbt> project scala-101-exercises
-        sbt> test:testOnly exercise1.ClassesSpec
-      """)
-    ),
-
     slide(
       "Case Classes",
       code("""
@@ -951,24 +941,16 @@ object Lecture extends JSApp {
 
     slide(
       "Case Objects",
-      <.p("What if you want to represent some class with known and static fields?"),
+      <.p("What if you want to represent some case which is static?"),
       <.br,
       code("""
         // this is static; will not change
         // why create a new instance every time?
-        case class TheOneRing() {
-        
-          val material = "gold"
-          val ownedBy  = "Sauron"
-        }
+        case class TheOneRing()
       """),
       codeFragment("""
         // use `case objects` instead
-        case object TheOneRing {
-
-          val material = "gold"
-          val ownedBy  = "Sauron"
-        }
+        case object TheOneRing
       """)
     ),
 
@@ -993,11 +975,19 @@ object Lecture extends JSApp {
       """)
     ),
 
-    exerciseSlide(
-      "Let's code",
-      bashCode("""
-        sbt> project scala-101-exercises
-        sbt> test:testOnly exercise1.CaseClassesSpec
+    slide(
+      "Companion Objects: a class's companion",
+      code("""
+        case class Person(name: String, age: Int)
+      """),
+      codeFragment("""
+        // same name as the class, case class, trait, abstract class
+        object Person {
+
+          val Gandalf = Person("Gandalf", 2019)
+
+          def isGandalf(perso: Person): Boolean = person.name == "Gandalf"
+        }
       """)
     ),
 
@@ -1067,6 +1057,66 @@ object Lecture extends JSApp {
     ),
 
     slide(
+      "Abstract Classes",
+      code("""
+        // non complete (abstract methods) class definition
+        abstract class Person(val name: String) {
+
+          def isOlder(person: Person): Boolean
+        }
+      """)
+    ),
+
+    slide(
+      "Functions and Classes",
+      <.p("Function values are instances of Function-Classes in Scala. A Function-Class is a class which provides an ", <.strong("apply"), " method.")
+    ),
+
+    slide(
+      "Functions and Classes",
+      code("""
+        class Plus() {
+
+          def apply(a: Int, b: Int): Int = a + b
+        }
+      """),
+      codeFragment("""
+        val plus = new Plus()
+
+        plus.apply(1, 2) == plus(1, 2)
+                         == 3
+      """)
+    ),
+
+    slide(
+      "Functions and Classes",
+      code("""
+        object Plus {
+
+          def apply(a: Int, b: Int): Int = a + b
+        }
+      """),
+      codeFragment("""
+        Plus.apply(1, 2) == Plus(1, 2)
+                         == 3
+      """)
+    ),
+
+    slide(
+      "Functions and Classes: inheritence",
+      code("""
+        object Plus extends ((Int, Int) => Int) {
+
+          def apply(a: Int, b: Int): Int = a + b
+        }
+      """),
+      codeFragment("""
+        Plus.apply(1, 2) == Plus(1, 2)
+                         == 3
+      """)
+    ),
+
+    slide(
       "OOP",
       <.h4("This all looks like OOP to you?"),
       <.br,
@@ -1080,7 +1130,7 @@ object Lecture extends JSApp {
       "Let's code",
       bashCode("""
         sbt> project scala-101-exercises
-        sbt> test:testOnly exercise1.TraitsSpec
+        sbt> test:testOnly exercises1.ClassesSpec
       """)
     ),
 
@@ -1275,8 +1325,8 @@ object Lecture extends JSApp {
     exerciseSlide(
       "Let's code",
       bashCode("""
-        sbt> project scala101-exercises
-        sbt> test:testOnly exercise1.PatternMatchingSpec
+        sbt> project scala-101-exercises
+        sbt> test:testOnly scala-101-exercises.PatternMatchingSpec
       """)
     )
   )
