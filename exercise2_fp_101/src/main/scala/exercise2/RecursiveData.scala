@@ -1,9 +1,5 @@
 package exercise2
 
-sealed trait List[A]
-case class Cons[A](head: A, tail: List[A]) extends List[A]
-case class Nil[A]() extends List[A]
-
 object RecursiveData {
 
   // a) implement a function which determines if a `List[Int]` is empty or not
@@ -27,6 +23,10 @@ object RecursiveData {
   // d) can we change `List[A]` to guarantee to be not-empty?
 
 }
+
+sealed trait List[A]
+case class Cons[A](head: A, tail: List[A]) extends List[A]
+case class Nil[A]() extends List[A]
 
 /* e) Implement a generic Tree which has its values in the leaves and concised of:
  *      node - left and right Tree
