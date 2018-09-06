@@ -94,3 +94,11 @@ lazy val `std-lib-lecture` = project
     name := "std-lib-lecture"
   )
   .dependsOn(`lectures-shared`)
+
+lazy val `std-lib-exercises` = project
+  .in(file("exercise3_std_lib"))
+  .settings(common)
+  .settings(
+    name := "std-lib-exercises"    
+  )
+  .dependsOn(`exercises-shared` % "compile->compile;test->test")

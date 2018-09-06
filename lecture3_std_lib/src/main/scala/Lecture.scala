@@ -245,6 +245,196 @@ object Lecture extends JSApp {
         Seq[Char]().length  == 0
         Seq(1, 2, 3).length == 3
       """)
+    ),
+
+    slide(
+      "Sequence: retrieve elements",
+      code("""
+        val seq = Seq(1, 2, 3)
+
+        seq(0) == 1
+        seq(2) == 3
+        seq(3) == IndexOutOfBoundsException
+
+        seq.head == 1
+        Nil.head == NoSuchElementException
+
+        seq.headOption == Some(1)
+        Nil.headOption == None
+
+        seq.tail == Seq(2, 3)
+        // you would expect that to be Nil, but ...
+        Nil.tail == UnsupportedOperationException
+      """)
+    ),
+
+    slide(
+      "Sequence: filter",
+      code("""
+        val seq = Seq(1, 2, 3)
+
+        seq.filter(a => a > 1)  == Seq(2, 3)
+        seq.finds(a => a == 2)  == Some(2)
+        seq.exists(a => a > 1 ) == true
+        seq.contains(1)         == true
+      """),
+      code("""
+        // more concise
+        seq.filter(_ > 1) == Seq(2, 3)
+        seq.finds(_ == 2) == Some(2)
+        seq.exists(_ > 1) == true
+        seq.contains(1)   == true
+      """)
+    ),
+
+    slide(
+      "Sequence: sort",
+      code("""
+        val seq = Seq(1, 2, 3)
+
+        seq.sortBy(_ > _) == Seq(3, 2 1)
+      """)
+    ),
+
+    slide(
+      "Sequence: add",
+      code("""
+        val seq = Seq(1, 2, 3)
+
+        0 +: seq         == Seq(0, 1, 2, 3)
+        seq :+ 4         == Seq(1, 2, 3, 4)
+        seq ++ Seq(4, 5) == Seq(1, 2, 3, 4, 5)
+      """)
+    ),
+
+    slide(
+      "Sequence: sub-sequences",
+      code("""
+        val seq = Seq(1, 2, 3)
+
+        seq.take(2)    == Seq(1, 2)
+        seq.drop(2)    == Seq(3)
+        seq.splitAt(2) == (Seq(1, 2), Seq(3))
+      """)
+    ),
+
+    slide(
+      "Sequence: transformations",
+      code("""
+        val seq = Seq(1, 2, 3)
+
+        seq.map(a => a * 2.0) == Seq(2.0, 4.0, 6.0)
+        
+        // def replicate[A](a: A, n: Int): Seq[A]
+        val seqSeq = seq.map(a => replicate(a, 2)) == Seq(Seq(1, 1), Seq(2, 2), Seq(3, 3))
+
+        seqSeq.flatten == Seq(1, 1, 2, 2, 3, 3)
+
+        // or in short
+        seq.flatMap(a => replicate(a, 2)) == Seq(1, 1, 2, 2, 3, 3)
+      """)
+    ),
+
+    slide(
+      "Sequence: transformations",
+      code("""
+        val seq = Seq(1, 2, 3)
+
+        // transforming a Seq into a new "shape" from left to right
+        val sum = seq.foldLeft(0)((agg, a) => agg + a)
+      """),
+      codeFragment("""
+        // what happened?
+        val f: (Int, Int) => Int = (agg, a) => agg + a
+
+        sum == f(0, Seq(1, 2, 3).head)
+            == f(1, Seq(2, 3).head)
+            == f(3, Seq(3).head)
+            == f(6, Nil)
+            == 6
+      """)
+    ),
+
+    slide(
+      "Sequence: transformations",
+      code("""
+        val seq = Seq(1, 2, 3)
+
+        // from right to left
+        seq.foldRight(0)((a, agg) => a + agg) == 6
+      """),
+      codeFragment("""
+        val avg: (Int, Int) => Double = (a, b) => (a + b) / 2.0
+
+        // the higher order function needs to be commutative
+        seq.foldLeft(0.0)(avg) != seq.foldRight(0.0)(avg)
+      """)
+    ),
+
+    slide(
+      "Sequence: foreach",
+      code("""
+        val seq = Seq(1, 2, 3)
+
+        // iterates over all element and returns nothing
+        // just for side effects
+        seq.foreach(a => println(a))
+      """)
+    ),
+
+    slide(
+      "Sequence: pattern matching",
+      code("""
+        val seq = Seq(1, 2, 3)
+
+        seq match {
+          case h +: t       => "we have a head " + h + " and a tail " + t
+          case Nil          => "is empty",
+          case Seq(a, b, c) => "we have 3 elements"
+        }
+      """)
+    ),
+
+    slide(
+      "Sequence: for-comprehension",
+      code("""
+        val seq = Seq(1, 2, 3)
+
+        val newSeq = for {
+          a  <- seq
+          
+          // applies a filter step
+          if a > 1
+
+          rep <- replicate(2, a)
+        } yield rep * 3
+      """),
+      codeFragment("""
+        newSeq == {
+          seq.filter(_ > 1).flatMap(replicate(_, 2)).map(_ * 3)
+        }
+      """)
+    ),
+
+    exerciseSlide(
+      "Let's Code",
+      bashCode("""
+        sbt> project std-lib-exercises
+        sbt> test:testOnly SequenceSpec
+      """)
+    ),
+
+    slide(
+      "Sequence: default implementation",
+      code("""
+        // this
+        val seq = Seq(1, 2, 3)
+
+        // is actually by default
+        val list: List[Int] = Seq(1, 2, 3)
+
+        seq == list
+      """)
     )
   )
 
