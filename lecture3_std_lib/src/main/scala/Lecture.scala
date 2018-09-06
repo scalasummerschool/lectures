@@ -435,6 +435,153 @@ object Lecture extends JSApp {
 
         seq == list
       """)
+    ),
+
+    slide(
+      "Sequence: additional List operations",
+      code("""
+        0 :: list        == 0 +: seq
+        List(0) ::: list == Seq(0) ++ seq
+      """)
+    ),
+
+    noHeaderSlide(
+      <.h3("Vector")
+    ),
+
+    slide(
+      "Vector",
+      <.p("Improved random access and update operations."),
+      <.br,
+      code("""
+        val v = Vector(1, 2, 3)
+
+        v.head == 1
+
+        0 +: v == Vector(0, 1, 2 ,3)
+      """)
+    ),
+
+    noHeaderSlide(
+      <.h3("Set")
+    ),
+
+    slide(
+      "Set",
+      <.p("Collection of unique elements without an order."),
+      <.br,
+      code("""
+        val s = Set(1, 2, 3, 3)
+
+        s == Set(1, 2, 3)
+
+        // exists element?
+        s(3) == true
+        s(0) == false
+      """)
+    ),
+
+    slide(
+      "Set: operations",
+      code("""
+        val s = Set(1, 2, 3)
+
+        s union Set(2, 3, 4)     == Set(1, 2, 3, 4)
+        s diff Set(2, 3, 4)      == Set(1)
+        s intersect Set(2, 3, 4) == Set(2, 3)
+      """)
+    ),
+
+    slide(
+      "Set: operations",
+      <.p("The Set operations are defined in Seq.")
+    ),
+
+    noHeaderSlide(
+      <.h3("Map")
+    ),
+
+    slide(
+      "Map",
+      <.p("Collection of key-value pairs. The keys create a Set."),
+      <.br,
+      code("""
+        val m = Map(
+          ("hello", 0),
+          ("world", 1)
+        )
+      """)
+    ),
+
+    slide(
+      "Map",
+      code("""
+        val m = Map(
+          ("hello", 0),
+          ("world", 1),
+          ("world", 2)
+        )
+
+        m == Map(
+          ("hello", 0),
+          ("world", 2)
+        )
+      """)
+    ),
+
+    slide(
+      "Map: access",
+      code("""
+        val m = Map(("hello", 0), ("world", 1))
+
+        m("hello") == 0
+        m("boom")  == NoSuchElementException
+
+        m.get("hello") == Some(0)
+        m.get("boom")  == None
+
+        m.getOrElse("hello", 1) == 0
+        m.getOrElse("boom", 1)  == 1
+      """)
+    ),
+
+    slide(
+      "Map: access",
+      code("""
+        val m = Map(("hello", 0), ("world", 1))
+
+        m.keySet == Set("hello", "world")
+      """)
+    ),
+
+    slide(
+      "Map: transform",
+      code("""
+        val m = Map(("hello", 0))
+
+        // add or update
+        m + ("world", 2)       == Map(("hello", 0), ("world", 2))
+        m + ("hello", 2)       == Map(("hello", 2))
+        m.updated("hello", 2)  == m + ("hello", 2)
+
+        m ++ Map(("world", 1)) == Map(("hello", 0), ("world", 2))
+
+        // remove
+        m - "hello"       == Map.empty
+
+        m -- Set("hello") == Map.empty
+      """)
+    ),
+
+    slide(
+      "Map: transform",
+      code("""
+        val m = Map(("hello", 0), ("world", 1))
+
+        m.mapValues(_ + 2) == Map(("hello", 2), ("world", 3))
+
+        m.filterKeys(_.contains("e")) == Map(("hello", 2))
+      """)
     )
   )
 
