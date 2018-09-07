@@ -211,6 +211,218 @@ object Lecture extends JSApp {
         // all Integer operators apply
         Char - signs encoded with Integers from 0 to 65,535
       """)
+    ),
+
+    slide(
+      "Primitives: Char look and feel",
+      code("""
+        val a = 'a'
+        
+        a == 97
+      """)
+    ),
+
+    noHeaderSlide(
+      <.h3("String")
+    ),
+
+    slide(
+      "String: the Schrödinger primitive",
+      <.p("A String is an Array of Chars. It isn't rely a primitive but so fundamental that it is considered one.")
+    ),
+
+    slide(
+      "String",
+      code("""
+        // no exactly, but you get the idea
+        "Hello world" ~= Array('H', 'e', ...)
+      """)
+    ),
+
+    slide(
+      "String: access",
+      code("""
+        val str = "Hello world"
+
+        str.charAt(0)  == 'H'
+        str.charAt(50) == StringIndexOutOfBoundsException
+
+        str.take(2)    == "He"
+        str.drop(2)    == "llo world"
+        str.split(" ") == Array("Hello", "world")
+      """)
+    ),
+
+    slide(
+      "String: length & contains",
+      code("""
+        val str = "Hello world"
+
+        str.length          == 11
+        str.containts("wo") == true
+      """)
+    ),
+
+    slide(
+      "String: interpolation",
+      code("""
+        // insert values in Strings
+        val a = 42
+
+        s"The answer to everything is $a"
+
+        // is equal to
+
+        "The answer to everything is 42"
+      """)
+    ),
+
+    slide(
+      "String: interpolation",
+      code("""
+        // you can reference any expression
+
+        s"1 + 2 = ${1 + 2}"
+
+        // is equal to
+
+        "1 + 2 = 3"
+      """)
+    ),
+
+    slide(
+      "String: multi-line",
+      code("""
+        // this is annoying
+        "This is a reaaaaaaalllllllyyyy\n" +
+        "looooooooooooooooooooooooooong\n" +
+        "String"
+      """),
+      codeFragment(
+        "// just write\n" +
+        "\"\"\"\n" + 
+        "this is a reaaaaaaalllllllyyyy\n" +
+        "looooooooooooooooooooooooooong\n" + 
+        "String\n" +
+        "\"\"\""
+      )
+    )
+  )
+
+  val adts = chapter(
+    chapterSlide(
+      <.h2("Build-in ADT")
+    ),
+
+    noHeaderSlide(
+      <.h3("Option")
+    ),
+
+    slide(
+      "Option",
+      <.p("Does a computation finds a result or not?"),
+      <.br,
+      code("""
+        // actual implementation differs - simplified code
+        sealed trait Option[+A]
+
+        case class Some[+A](value: A) extends Option[A]
+        case object Nothing extends Option[Nothing]
+      """)
+    ),
+
+    slide(
+      "Option",
+      code("""
+        Option("hello") == Some("Hello")
+
+        // null is an empty reference - avoid it
+        Option(null)    == None
+        None            == None
+      """)
+    ),
+
+    slide(
+      "Option: access",
+      code("""
+        // don't use `get`
+        Some(0).get == 0
+        None.get    == NoSuchElementException
+
+        // try to use `getOrElse`
+        Some(0).getOrElse(1) == 0
+        None.getOrElse(1)    == 1
+
+        // or
+        Some(0).orElse(Some(1)) == Some(0)
+        None.orElse(Some(1))    == Some(1)
+      """)
+    ),
+
+    slide(
+      "Option: fold",
+      code("""
+        // or fold over the Option
+        val opt: Option[Int] = ???
+
+        opt.fold(
+          "this thing is empty",
+          a => s"we have a $a"
+        )
+      """)
+    ),
+
+    slide(
+      "Option: pattern matching",
+      code("""
+        // or simply match it
+        val opt: Option[Int] = ???
+
+        opt match {
+          case Some(a) => s"we have a $a"
+          case None    => "this thing is empty"
+        }
+      """)
+    ),
+
+    slide(
+      "Option: is empty?",
+      code("""
+        // you can also check if it is empty
+        val opt: Option[Int] = ???
+
+        if (opt.isEmpty) println("this is empty")
+
+        // or
+        if (opt.nonEmpty) println("this isn't empty")
+        
+        // or
+        if (opt.isDefined) println("this isn't empty")
+      """)
+    ),
+
+    slide(
+      "Option: filter",
+      code("""
+        Some(0).filter(_ > 0) == None
+      """)
+    ),
+
+    slide(
+      "Option: transform",
+      code("""
+        Some(0).map(_ + 1) == Some(1)
+        None.map(_ + 1)    == None
+
+        // def returnEven(a: Int): Option[Int]
+        val optOpt = Some(0).map(a => returnEven(a))
+            optOpt == Some(Some(0))
+
+        optOpt.flatten == Some(0)
+
+        // or combined
+        Some(0).flatMap(a => returnEven(a)) == Some(a)
+      """)
     )
   )
 
@@ -326,7 +538,8 @@ object Lecture extends JSApp {
         seq.map(a => a * 2.0) == Seq(2.0, 4.0, 6.0)
         
         // def replicate[A](a: A, n: Int): Seq[A]
-        val seqSeq = seq.map(a => replicate(a, 2)) == Seq(Seq(1, 1), Seq(2, 2), Seq(3, 3))
+        val seqSeq = seq.map(a => replicate(a, 2))
+            seqSeq == Seq(Seq(1, 1), Seq(2, 2), Seq(3, 3))
 
         seqSeq.flatten == Seq(1, 1, 2, 2, 3, 3)
 
@@ -594,6 +807,7 @@ object Lecture extends JSApp {
           ^.cls := "slides",
           overview,
           primitives,
+          adts,
           collections
         )
       )
