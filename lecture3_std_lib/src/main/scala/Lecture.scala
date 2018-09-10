@@ -766,7 +766,7 @@ object Lecture extends JSApp {
 
     slide(
       "Option",
-      <.p("Does a computation finds a result or not? Therefore, this is a two element collection."),
+      <.p("Does a computation found a result or not? Therefore, this is a two element collection."),
       <.br,
       code("""
         // actual implementation differs - simplified code
@@ -780,7 +780,7 @@ object Lecture extends JSApp {
     slide(
       "Option",
       code("""
-        Option("hello") == Some("Hello")
+        Option("hello") == Some("hello")
 
         // null is an empty reference - avoid it
         Option(null)    == None
@@ -873,6 +873,167 @@ object Lecture extends JSApp {
 
     noHeaderSlide(
       <.h3("Either")
+    ),
+
+    slide(
+      "Either",
+      <.p("Does a computation failed or not? This is again a two element collection."),
+      <.br,
+      code("""
+        // actual implementation differs - simplified code
+        sealed trait Either[+A, +B]
+
+        case class Right[+A, +B](value: B) extends Either[A, B]
+        case class Left[+A, +B](value: A) extends Either[A, B]
+      """)
+    ),
+
+    slide(
+      "Either",
+      code("""
+        Either.cond(true, "hello", 5)  == Right[Int, String]("hello")
+        Either.cond(false, "hello", 5) == Left[Int, String](5)
+      """)
+    ),
+
+    slide(
+      "Either: access",
+      code("""
+        Left(0).value        == 0
+        Right("hello").value == "hello"
+
+        // Either is right-biased since 2.12
+        Left(0).getOrElse("boom")        == "boom"
+        Right("hello").getOrElse("boom") == "hello"
+      """)
+    ),
+
+    slide(
+      "Either: fold",
+      code("""
+        // or fold over the Either
+        val e: Either[Int, String] = ???
+
+        e.fold(
+          l => s"left  = $l",
+          r => s"right = $r"
+        )
+      """)
+    ),
+
+    slide(
+      "Either: pattern matching",
+      code("""
+        // or simply match it
+        val e: Either[Int, String] = ???
+
+        e match {
+          case Right(r) => s"right = $r"
+          case Left(l)  => s"left  = $l"
+        }
+      """)
+    ),
+
+    slide(
+      "Either: is left/right?",
+      code("""
+        // you can also check if it is left or right
+        val e: Either[Int, String] = ???
+
+        if (e.isLeft) println("this is left")
+
+        // or
+        if (e.isRight) println("this is right")
+      """)
+    ),
+
+    slide(
+      "Either: filter",
+      code("""
+        Right(0).filterOrElse(_ > 0, "boom") == Left("boom")
+      """)
+    ),
+
+    slide(
+      "Either: swap",
+      code("""
+        Left[Int, String](0).swap  == Right[String, Int](0)
+        Right[Int, String](0).swap == Left[String, Int](0)
+      """)
+    ),
+
+    slide(
+      "Either: transformation",
+      <.p("Equal to Option. It is right-biased.")
+    ),
+
+    noHeaderSlide(
+      <.h3("Try")
+    ),
+
+    slide(
+      "Try",
+      <.p("You work with (Java) code throwing exceptions? Wrap them up in a Try to gain purity."),
+      <.br,
+      code("""
+        // basic idea ... but has some extra methods
+        type Try[A] = Either[Throwable, A]
+      """)
+    ),
+
+    slide(
+      "Try",
+      code("""
+        val result = Try {
+          // Exception throwing code goes here
+        }
+
+        result.toEither
+        result.toOption
+
+        // or just work with
+        result
+      """)
+    ),
+
+    slide(
+      "Try: pattern matching",
+      code("""
+        val t: Try[Int] = ???
+
+        t match {
+          case Success(a)     => s"the number is $a"
+          case Failure(error) => error.printStacktrace()
+        }
+      """)
+    ),
+
+    slide(
+      "Try: recover",
+      code("""
+        val t: Try[Int] = ???
+
+        t.recover {
+          case error => 0
+        }
+
+        t.recoverWith {
+          case error => Success(0)
+        }
+      """)
+    ),
+
+    slide(
+      "Try",
+      <.p("Transformations are equal to Option and Either.")
+    ),
+
+    exerciseSlide(
+      "Let's Code",
+      bashCode("""
+        sbt> project std-lib-exercises
+        sbt> test:testOnly AdtSpec
+      """)
     )
   )
 
