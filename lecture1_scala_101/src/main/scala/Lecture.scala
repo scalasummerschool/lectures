@@ -97,6 +97,15 @@ object Lecture extends JSApp {
     ),
 
     slide(
+      "JVM in a nutshell",
+      <.img(
+        ^.alt   := "JVM in a nutshell",
+        ^.width := "50%",
+        ^.src   := "./img/jvm.svg"
+      )
+    ),
+
+    slide(
       "Why Scala: brings its own ecosysten",
       <.img(^.alt := "Scala Ecosystem", ^.src := "./img/scala-ecosystem.svg")
     ),
@@ -589,6 +598,11 @@ object Lecture extends JSApp {
       codeFragment("""
         // this throws an error (Exception)
       """)
+    ),
+
+    slide(
+      "Exception",
+      <.p("Exceptions aren't captured by types and bypass your programs execution. They are called bottom types.")
     ),
     
     slide(
