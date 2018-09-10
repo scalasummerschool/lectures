@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<svg width="1024px" height="886.6px" viewBox="0 0 1774 1536" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<path id="t" d="M 0 1 L .8660254 -.5 -.8660254 -.5 Z" fill="#13d"/>
+<g id="d1">
+ <use xlink:href="#t" transform="matrix(0.5, 0, 0, 0.5, 0, 0.5)"/>
+ <use xlink:href="#t" transform="matrix(0.5, 0, 0, 0.5, 0.433013, -0.25)"/>
+ <use xlink:href="#t" transform="matrix(0.5, 0, 0, 0.5, -0.433013, -0.25)"/>
+</g>
+<g id="d2">
+ <use xlink:href="#d1" transform="matrix(0.5, 0, 0, 0.5, 0, 0.5)"/>
+ <use xlink:href="#d1" transform="matrix(0.5, 0, 0, 0.5, 0.433013, -0.25)"/>
+ <use xlink:href="#d1" transform="matrix(0.5, 0, 0, 0.5, -0.433013, -0.25)"/>
+</g>
+<g id="d3">
+ <use xlink:href="#d2" transform="matrix(0.5, 0, 0, 0.5, 0, 0.5)"/>
+ <use xlink:href="#d2" transform="matrix(0.5, 0, 0, 0.5, 0.433013, -0.25)"/>
+ <use xlink:href="#d2" transform="matrix(0.5, 0, 0, 0.5, -0.433013, -0.25)"/>
+</g>
+<g id="d4">
+ <use xlink:href="#d3" transform="matrix(0.5, 0, 0, 0.5, 0, 0.5)"/>
+ <use xlink:href="#d3" transform="matrix(0.5, 0, 0, 0.5, 0.433013, -0.25)"/>
+ <use xlink:href="#d3" transform="matrix(0.5, 0, 0, 0.5, -0.433013, -0.25)"/>
+</g>
+<g id="d5">
+ <use xlink:href="#d4" transform="matrix(0.5, 0, 0, 0.5, 0, 0.5)"/>
+ <use xlink:href="#d4" transform="matrix(0.5, 0, 0, 0.5, 0.433013, -0.25)"/>
+ <use xlink:href="#d4" transform="matrix(0.5, 0, 0, 0.5, -0.433013, -0.25)"/>
+</g>
+<g id="d6">
+ <use xlink:href="#d5" transform="matrix(0.5, 0, 0, 0.5, 0, 0.5)"/>
+ <use xlink:href="#d5" transform="matrix(0.5, 0, 0, 0.5, 0.433013, -0.25)"/>
+ <use xlink:href="#d5" transform="matrix(0.5, 0, 0, 0.5, -0.433013, -0.25)"/>
+</g>
+<g id="d7">
+ <use xlink:href="#d6" transform="matrix(.5 0 0 .5 0 .5)" />
+ <use xlink:href="#d6" transform="matrix(.5 0 0 .5 .43301270 -.25)" />
+ <use xlink:href="#d6" transform="matrix(.5 0 0 .5 -.43301270 -.25)" />
+</g>
+<g id="d8">
+ <use xlink:href="#d7" transform="matrix(.5 0 0 .5 0 .5)" />
+ <use xlink:href="#d7" transform="matrix(.5 0 0 .5 .43301270 -.25)" />
+ <use xlink:href="#d7" transform="matrix(.5 0 0 .5 -.43301270 -.25)" />
+</g>
+<!-- Do not activate this code unless you want to wait 3 minutes for this to render
+<g id="d9">
+ <use xlink:href="#d8" transform="matrix(.5 0 0 .5 0 .5)" />
+ <use xlink:href="#d8" transform="matrix(.5 0 0 .5 .43301270 -.25)" />
+ <use xlink:href="#d8" transform="matrix(.5 0 0 .5 -.43301270 -.25)" />
+</g>
+<g id="d10">
+ <use xlink:href="#d9" transform="matrix(.5 0 0 .5 0 .5)" />
+ <use xlink:href="#d9" transform="matrix(.5 0 0 .5 .43301270 -.25)" />
+ <use xlink:href="#d9" transform="matrix(.5 0 0 .5 -.43301270 -.25)" />
+</g>-->
+<g transform="matrix(1024, 0, 0, -1024, 886.81, 1024)">
+  <use xlink:href="#d8"/>
+<!--<use xlink:href="#d10" />-->
+</g>
+</svg>
