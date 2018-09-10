@@ -24,7 +24,8 @@ lazy val root = project
   .aggregate(
     `lectures-shared`, `exercises-shared`, 
     `scala101-lecture`, `scala101-exercises`,
-    `fp101-lecture`, `fp101-exercises`
+    `fp101-lecture`, `fp101-exercises`,
+    `std-lib-lecture`
   )
 
 lazy val `lectures-shared` = project
@@ -79,5 +80,25 @@ lazy val `fp101-exercises` = project
   .settings(common)
   .settings(
     name := "fp101-exercises"    
+  )
+  .dependsOn(`exercises-shared` % "compile->compile;test->test")
+
+lazy val `std-lib-lecture` = project
+  .in(file("lecture3_std_lib"))
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    common,
+    lectureCommon
+  )
+  .settings(
+    name := "std-lib-lecture"
+  )
+  .dependsOn(`lectures-shared`)
+
+lazy val `std-lib-exercises` = project
+  .in(file("exercise3_std_lib"))
+  .settings(common)
+  .settings(
+    name := "std-lib-exercises"    
   )
   .dependsOn(`exercises-shared` % "compile->compile;test->test")
