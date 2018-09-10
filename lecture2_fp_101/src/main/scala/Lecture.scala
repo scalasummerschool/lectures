@@ -421,21 +421,43 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion",
-//      <.img(
- //       ^.alt := "Recursion",
-  //      ^.src := "./img/recursion.svg",
-    //    ^.width := "50%"
-     // )
+      "Recursion: types",
+      Enumeration(
+        Item.stable(<.p("single/multi recursion")),
+        Item.fadeIn(<.p("direct/indirect recursion")),
+        Item.fadeIn(<.p("structural/generative recursion"))
+      )
     ),
 
     slide(
-      "Recursion: data structures",
+      "Recursion: single/multi direct",
+      <.img(
+        ^.alt := "Multi Single Recursion",
+        ^.src := "./img/single_multi_rec.svg",
+        ^.width := "50%"
+      )
+    ),
+
+    slide(
+      "Recursion: indirect",
+      <.img(
+        ^.alt := "Indirect Recursion",
+        ^.src := "./img/indirect_rec.svg",
+        ^.width := "20%"
+      )
+    ),
+
+    noHeaderSlide(
+      <.h3("Data Types")
+    ),
+
+    slide(
+      "Recursion: data types",
       <.p("Definition of the data structures depends on itself.")
     ),
 
     slide(
-      "Recursion: ADT",
+      "Recursion: direct single",
       code("""
         // linked list of Ints
         sealed trait IntList
@@ -454,7 +476,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion: ADT",
+      "Recursion: direct single",
       <.img(
         ^.alt := "Linked List",
         ^.src := "./img/list.svg"
@@ -462,7 +484,7 @@ object Lecture extends JSApp {
     ),
 
     noHeaderSlide(
-      <.h3("We have to write list types for every data structure?"),
+      <.h3("We have to write list types for every data types?"),
       <.br,
       <.h4(
         ^.cls := "fragment fade-in",
@@ -533,6 +555,10 @@ object Lecture extends JSApp {
       <.h4("But how do we process them?")
     ),
 
+    noHeaderSlide(
+      <.h3("Functions")
+    ),
+
     slide(
       "Recursion: functions",
       <.p("Functions which call themselves.")
@@ -562,16 +588,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion: types",
-      Enumeration(
-        Item.stable(<.p("single/multi recursion")),
-        Item.fadeIn(<.p("direct/indirect recursion")),
-        Item.fadeIn(<.p("structural/generative recursion"))
-      )
-    ),
-
-    slide(
-      "Direct Single Recursion",
+      "Recursion: direct single",
       code("""
         def length(list: List[Int]): Int = list match {
       """),
@@ -587,7 +604,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Direct Single Recursion",
+      "Recursion: direct single",
       code("""
         val list = Cons(1, Cons(2, Nil()))
 
@@ -599,7 +616,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Mutli Direct Recursion",
+      "Recursion: direct multi",
       code("""
         /* Tree: either a leaf with a value or a node consisting of a 
          *        left and right tree 
@@ -619,7 +636,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Mutli Direct Recursion",
+      "Recursion: direct multi",
       code("""
         val tree = Node(Node(Leaf(1), Leaf(2)), Leaf(3))
 
@@ -631,7 +648,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Indirect Recursion",
+      "Recursion: indirect",
       code("""
         def even(n: Int): Boolean = 
           if (n == 0) true
@@ -644,7 +661,7 @@ object Lecture extends JSApp {
     ),
 
     slide(
-      "Indirect Recursion",
+      "Recursion: indirect",
       code("""
         even(5) == !odd(4)
                 == even(3)
