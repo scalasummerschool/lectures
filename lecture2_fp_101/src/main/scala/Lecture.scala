@@ -18,7 +18,8 @@ object Lecture extends JSApp {
     slide(
       "What we will learn in this lecture",
       Enumeration(
-        Item.stable(<.p("Immutability")),
+        Item.stable(<.p("Introduction")),
+        Item.fadeIn(<.p("Immutability")),
         Item.fadeIn(<.p("Algebraic Data Types")),
         Item.fadeIn(<.p("Pure Functions")),
         Item.fadeIn(<.p("Referential Transparency")),
@@ -30,6 +31,41 @@ object Lecture extends JSApp {
     noHeaderSlide(
       <.h2("You have a question?"),
       <.h3("Ask it right away!")
+    )
+  )
+
+  val introduction = chapter(
+    chapterSlide(
+      <.h2("Introduction")
+    ),
+
+    slide(
+      "Definition",
+      <.p("FP is a declarative programming paradigm which tries to structure code as expressions and declarations. Thus, we end up with pure functions, no side-effects and shared mutaple state.")
+    ),
+
+    slide(
+      "Who is it coming from",
+      <.p("The basic ideas stem from Lambda Calculus which was developed by Alonzo Church in the 1930s.")
+    ),
+
+    slide(
+      "What we will discuss",
+      <.p("We will concentrate on typed Functional programming fulfilling all properties."),
+      <.br,
+      Enumeration(
+        Item.stable(<.p("Immutability")),
+        Item.stable(<.p("Algebraic Data Types")),
+        Item.stable(<.p("Pure Functions")),
+        Item.stable(<.p("Referential Transparency")),
+        Item.stable(<.p("Recursion")),
+        Item.stable(<.p("Composability"))
+      )
+    ),
+
+    slide(
+      "What other people/languages do",
+      <.p("Other languages/people might just choose a subset.")
     )
   )
 
@@ -72,7 +108,7 @@ object Lecture extends JSApp {
       <.br,
       Enumeration(
         Item.stable(<.p("state of your values known at all times")),
-        Item.fadeIn(<.p("no race-conditions in a concurrent scenario ")),
+        Item.stable(<.p("no race-conditions in a concurrent scenario ")),
         Item.fadeIn(<.p("simplifies reasoning about values in your code"))
       )
     )
@@ -1109,6 +1145,7 @@ object Lecture extends JSApp {
         <.div(
           ^.cls := "slides",
           overview,
+          introduction,
           immutability,
           adts,
           pureFunctions,
