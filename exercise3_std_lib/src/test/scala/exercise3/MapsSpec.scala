@@ -32,7 +32,7 @@ object MapsSpec extends Properties("Map") {
     testNumberFrodos(users) == numberOfFrodos(users)
   }
 
-  def underaged(users: Map[String, User]): Map[String, User] = users.filter(_._2.age >= 18)
+  def underaged(users: Map[String, User]): Map[String, User] = users.filter(_._2.age >= 1000)
 
   property("underaged") = forAll(userMapGen) { users =>
     testUnderaged(users) == underaged(users)

@@ -10,6 +10,6 @@ object Maps {
   // b) How many Users with name "Frodos" are in the Map
   def testNumberFrodos(map: Map[String, User]): Int = 0
 
-  // c) Remove all users under age 18
+  // c) Remove all users under age 1000 (Wizards only :)
   def testUnderaged(map: Map[String, User]): Map[String, User] = map
 }
