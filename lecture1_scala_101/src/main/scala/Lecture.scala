@@ -609,7 +609,7 @@ object Lecture extends JSApp {
       "Types are important",
       Enumeration(
         Item.stable(<.p("give guarantees about state of values / application of operators")),
-        Item.fadeIn(<.p("proofen during compile time")),
+        Item.fadeIn(<.p("proven during compile time")),
         Item.fadeIn(<.p("no extra tests necessary"))
       )
     ),
@@ -628,7 +628,7 @@ object Lecture extends JSApp {
 
     slide(
       "Functions",
-      <.p("Special type of expressions which has a name, takes input and returns, as always, a result.")
+      <.p("Special type of expression which has a name, takes input and returns, as always, a result.")
     ),
 
     slide(
@@ -717,8 +717,8 @@ object Lecture extends JSApp {
     slide(
       "Curried Functions",
       Enumeration(
-        Item.stable(<.p("this technique is called Currying")),
-        Item.fadeIn(<.p("apply a single parameter at a time (left to right)")),
+        Item.stable(<.p("this technique is called currying")),
+        Item.fadeIn(<.p("apply a single parameter at a time (left to right) - it's called partial application")),
         Item.fadeIn(<.p("every application returns a new function of arity $n - 1$"))
       )
     ),
@@ -794,7 +794,7 @@ object Lecture extends JSApp {
     noHeaderSlide(
       <.h3("Enough about functions for now"),
       <.br,
-      <.h4("Let's do something new. Let's create some Data Types")
+      <.h4("Let's do something new. Let's create some data types!")
     )
   )
 
@@ -805,13 +805,13 @@ object Lecture extends JSApp {
 
     slide(
       "Create a new type",
-      <.h3("Scala's objects bring us just so far."),
+      <.h3("Scala's objects only get us so far."),
       <.h4("We want to be able to create our own.")
     ),
 
     slide(
       "Create a new type",
-      <.p("You create new types in Scala by defining Classes. Here, a class is a way to define a set of objects which have same fields and functions."),
+      <.p("You create new types in Scala by defining Classes. A class is a way to define a set of objects which have same fields and functions."),
       <.br,
       Enumeration(
         Item.fadeIn(<.p("class")),
@@ -1013,10 +1013,10 @@ object Lecture extends JSApp {
     slide(
       "Traits",
       code("""
-        // all persons (of some magic realm) but of different type
-        case class Wizard(name: String, power: String) extends People
-        case class Elf(name: String, age: Int)         extends People
-        case class Dwarf(name: String, height: Int)    extends People
+        // all people (of some magic realm) but of different type
+        case class Wizard(name: String, power: String) extends Person
+        case class Elf(name: String, age: Int)         extends Person
+        case class Dwarf(name: String, height: Int)    extends Person
       """)
     ),
 
