@@ -25,7 +25,11 @@ lazy val root = project
     `lectures-shared`, `exercises-shared`, 
     `scala101-lecture`, `scala101-exercises`,
     `fp101-lecture`, `fp101-exercises`,
-    `std-lib-lecture`
+    `std-lib-lecture`, `std-lib-exercises`
+  )
+  .settings(
+    sourceDirectories in Compile := Nil,
+    sourceDirectories in Test := Nil
   )
 
 lazy val `lectures-shared` = project
