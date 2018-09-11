@@ -19,6 +19,36 @@ lazy val lectureCommon = Seq(
   scalaJSUseMainModuleInitializer := true
 )
 
+val copyFast = taskKey[Unit]("Copy fast optimized JS presentation.")
+
+def copyFastImpl(project: String) = Seq(
+  copyFast := {
+    IO.copyFile(
+      target.value / "scala-2.12" / s"$project-fastopt.js",
+      baseDirectory.value / "presentation.js"
+    )
+    IO.copyFile(
+      target.value / "scala-2.12" / s"$project-jsdeps.js",
+      baseDirectory.value / "jsdeps.js"
+    )
+  }
+)
+
+val copyFull = taskKey[Unit]("Copy fully optimized JS presentation.")
+
+def copyFullImpl(project: String) = Seq(
+  copyFull := {
+    IO.copyFile(
+      target.value / "scala-2.12" / s"$project-opt.js",
+      baseDirectory.value / "presentation.js"
+    )
+    IO.copyFile(
+      target.value / "scala-2.12" / s"$project-jsdeps.min.js",
+      baseDirectory.value / "jsdeps.js"
+    )
+  }
+)
+
 lazy val root = project
   .in(file("."))
   .aggregate(
@@ -52,10 +82,14 @@ lazy val `scala101-lecture` = project
   .enablePlugins(ScalaJSPlugin)
   .settings(
     common,
-    lectureCommon
+    lectureCommon,
+    copyFastImpl("scala101-lecture"),
+    copyFullImpl("scala101-lecture"),
+    addCommandAlias("fastCompile", "; fastOptJS; copyFast"),
+    addCommandAlias("fullCompile", "; fullOptJS; copyFull")
   )
   .settings(
-    name := "scala101-lecture"
+    name := "scala101-lecture",
   )
   .dependsOn(`lectures-shared`)
 
@@ -72,7 +106,11 @@ lazy val `fp101-lecture` = project
   .enablePlugins(ScalaJSPlugin)
   .settings(
     common,
-    lectureCommon
+    lectureCommon,
+    copyFastImpl("fp101-lecture"),
+    copyFullImpl("fp101-lecture"),
+    addCommandAlias("fastCompile", "; fastOptJS; copyFast"),
+    addCommandAlias("fullCompile", "; fullOptJS; copyFull")
   )
   .settings(
     name := "fp101-lecture"
@@ -92,7 +130,11 @@ lazy val `std-lib-lecture` = project
   .enablePlugins(ScalaJSPlugin)
   .settings(
     common,
-    lectureCommon
+    lectureCommon,
+    copyFastImpl("std-lib-lecture"),
+    copyFullImpl("std-lib-lecture"),
+    addCommandAlias("fastCompile", "; fastOptJS; copyFast"),
+    addCommandAlias("fullCompile", "; fullOptJS; copyFull")
   )
   .settings(
     name := "std-lib-lecture"
