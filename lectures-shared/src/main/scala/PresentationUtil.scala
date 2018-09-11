@@ -5,7 +5,7 @@ import japgolly.scalajs.react.vdom.TagOf
 import org.scalajs.dom
 import dom.raw.HTMLElement
 
-object SlideshowUtil {  
+object PresentationUtil {  
 
   val font = HtmlTag("font")
 
@@ -82,15 +82,15 @@ object SlideshowUtil {
       codeStr
     )
 
-  def code(codeStr: String): TagOf[HTMLElement] = <.pre(rawCode("Scala", codeStr))
+  def scalaC(codeStr: String): TagOf[HTMLElement] = <.pre(rawCode("Scala", codeStr))
 
-  def codeFragment(codeStr: String): TagOf[HTMLElement] =
+  def scalaCFragment(codeStr: String): TagOf[HTMLElement] =
     <.pre(
       ^.cls := "fragment fade-in",
       rawCode("Scala", codeStr)
     )
 
-  def bashCode(codeStr: String): TagOf[HTMLElement] = <.pre(rawCode("Bash", codeStr))
+  def bash(codeStr: String): TagOf[HTMLElement] = <.pre(rawCode("Bash", codeStr))
 
   object Enumeration {
    
@@ -98,6 +98,8 @@ object SlideshowUtil {
 
       def stable(content: TagOf[HTMLElement]): TagOf[HTMLElement] = <.li(content)
       def fadeIn(content: TagOf[HTMLElement]): TagOf[HTMLElement] = <.li(^.cls := "fragment fade-in", content)
+      def stable(content: String): TagOf[HTMLElement] = <.li(<.p(content))
+      def fadeIn(content: String): TagOf[HTMLElement] = <.li(^.cls := "fragment fade-in", <.p(content))
     }
 
     def apply(head: TagOf[HTMLElement], tail: TagOf[HTMLElement]*): TagOf[HTMLElement] = {

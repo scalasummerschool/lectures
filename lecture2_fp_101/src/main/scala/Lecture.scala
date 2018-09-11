@@ -1,4 +1,4 @@
-import SlideshowUtil._
+import PresentationUtil._
 import japgolly.scalajs.react.ScalaComponent
 import japgolly.scalajs.react.vdom.html_<^._
 import org.scalajs.dom
@@ -18,13 +18,13 @@ object Lecture extends JSApp {
     slide(
       "What we will learn in this lecture",
       Enumeration(
-        Item.stable(<.p("Introduction")),
-        Item.fadeIn(<.p("Immutability")),
-        Item.fadeIn(<.p("Algebraic Data Types")),
-        Item.fadeIn(<.p("Pure Functions")),
-        Item.fadeIn(<.p("Referential Transparency")),
-        Item.fadeIn(<.p("Recursion")),
-        Item.fadeIn(<.p("Composability"))
+        Item.stable("Introduction"),
+        Item.fadeIn("Immutability"),
+        Item.fadeIn("Algebraic Data Types"),
+        Item.fadeIn("Pure Functions"),
+        Item.fadeIn("Referential Transparency"),
+        Item.fadeIn("Recursion"),
+        Item.fadeIn("Composability")
       )
     ),
 
@@ -54,12 +54,12 @@ object Lecture extends JSApp {
       <.p("We will concentrate on typed Functional programming fulfilling all properties."),
       <.br,
       Enumeration(
-        Item.stable(<.p("Immutability")),
-        Item.stable(<.p("Algebraic Data Types")),
-        Item.stable(<.p("Pure Functions")),
-        Item.stable(<.p("Referential Transparency")),
-        Item.stable(<.p("Recursion")),
-        Item.stable(<.p("Composability"))
+        Item.stable("Immutability"),
+        Item.stable("Algebraic Data Types"),
+        Item.stable("Pure Functions"),
+        Item.stable("Referential Transparency"),
+        Item.stable("Recursion"),
+        Item.stable("Composability")
       )
     ),
 
@@ -83,7 +83,7 @@ object Lecture extends JSApp {
       "Data never changes",
       <.h4("We already know it!"),
       <.br,
-      code("""
+      scalaC("""
         // you cannot reassign to `a`
         val a = 5
 
@@ -107,9 +107,9 @@ object Lecture extends JSApp {
       <.h4("What's the benefit?"),
       <.br,
       Enumeration(
-        Item.stable(<.p("state of your values known at all times")),
-        Item.stable(<.p("no race-conditions in a concurrent scenario ")),
-        Item.fadeIn(<.p("simplifies reasoning about values in your code"))
+        Item.stable("state of your values known at all times"),
+        Item.stable("no race-conditions in a concurrent scenario "),
+        Item.fadeIn("simplifies reasoning about values in your code")
       )
     )
   )
@@ -128,7 +128,7 @@ object Lecture extends JSApp {
       "ADT: product types",
       <.h4("Types are grouped into specific classes"),
       <.br,
-      code("""
+      scalaC("""
         // exists a value or not
         sealed trait Option[A]
         case class Some[A](a: A) extends Option[A]
@@ -140,14 +140,14 @@ object Lecture extends JSApp {
       "ADT: sum types",
       <.h4("A single class combining multiple types"),
       <.br,
-      code("""
+      scalaC("""
         case class Pair[A, B](a: A, b: B)
       """)
     ),
 
     slide(
       "ADT: mix and match",
-      code("""
+      scalaC("""
         // already know this construct
         // Person is a product type
         sealed trait Person
@@ -188,7 +188,7 @@ object Lecture extends JSApp {
 
     slide(
       "Pure Functions",
-      code("""
+      scalaC("""
         def plus(a: Int, b: Int): Int = a + b
 
         // works for every input and always returns the same output
@@ -198,7 +198,7 @@ object Lecture extends JSApp {
 
     slide(
       "Pure Functions: replace with value",
-      code("""
+      scalaC("""
         val plus = Map(
           ...,
           1 -> Map(
@@ -215,7 +215,7 @@ object Lecture extends JSApp {
 
     slide(
       "Impure Functions: exceptions",
-      code("""
+      scalaC("""
         def divide(a: Int, b: Int): Int = a / b
 
         // throws an ArithmeticExceptions which bypasses your call stack
@@ -225,7 +225,7 @@ object Lecture extends JSApp {
 
     slide(
       "Impure Functions: partial functions",
-      code("""
+      scalaC("""
         // partial function
         def question(q: String): Int = q match {
           case "answer to everything" => 42
@@ -238,30 +238,30 @@ object Lecture extends JSApp {
 
     slide(
       "Impure Functions: non-determinism",
-      code("""
+      scalaC("""
         def question(q: String): Int = Random.nextInt()
 
         question("what is the answer to everything") == 42
       """),
-      codeFragment("""
+      scalaCFragment("""
         question("what is the answer to everything") == 136
       """),
-      codeFragment("""
+      scalaCFragment("""
         question("what is the answer to everything") == 5310
       """)
     ),
 
     slide(
       "Impure Functions: depend on \"the real world\"",
-      code("""
+      scalaC("""
         // reads file from disk
         def readFile(path: String): Either[Exception, File] = ???
       """),
-      codeFragment("""
+      scalaCFragment("""
         // it might return a file handle
         reaedFile("/usr/people.cvs") == Right(File(...))
       """),
-      codeFragment("""
+      scalaCFragment("""
         // or fail, e.g. file is missing, not enough rights, ...
         reaedFile("/usr/people.cvs") == Left(FileNotFoundException)
       """) 
@@ -269,11 +269,11 @@ object Lecture extends JSApp {
 
     slide(
       "Impure Functions: effect \"the real world\"",
-      code("""
+      scalaC("""
         // writes file to disk
         def writeFile(file: File): Either[Exception, Unit] = ???
       """),
-      codeFragment("""
+      scalaCFragment("""
         // changes the state of your machine aka real world
         val file = new File(...)
         writeFile(file)
@@ -282,7 +282,7 @@ object Lecture extends JSApp {
 
     slide(
       "Impure Functions: effect \"the real world\"",
-      code("""
+      scalaC("""
         // even logging is changing the world
         def log(msg: String): Unit = println(msg)
 
@@ -302,36 +302,36 @@ object Lecture extends JSApp {
 
     exerciseSlide(
       "Is this function pure?",
-      code("""
+      scalaC("""
         def multiply(a: Int, b: Int): Int = a * b
       """),
-      codeFragment("""
+      scalaCFragment("""
         // yes
       """),
       <.br,
-      code("""
+      scalaC("""
         def concat(a: String, b: String): String = {
           println(a)
           a + b
         }
       """),
-      codeFragment("""
+      scalaCFragment("""
         // no -> we mutate the OS by writing to System Out
       """)
     ),
 
     exerciseSlide(
       "Is this function pure?",
-      code("""
+      scalaC("""
         def whatNumber(a: Int): String = a > 100 match {
           case true => "large one"
         }
       """),
-      codeFragment("""
+      scalaCFragment("""
         // no -> partial function, only handles the `true` case
       """),
       <.br,
-      code("""
+      scalaC("""
         def increase(a: Int): Int = {
           // current time in milliseconds
           val current = System.currentTimeMillis
@@ -339,7 +339,7 @@ object Lecture extends JSApp {
           a + current
         }
       """),
-      codeFragment("""
+      scalaCFragment("""
         // no -> result depends on the time we call the function
       """)
     ),
@@ -348,8 +348,8 @@ object Lecture extends JSApp {
       <.h4("What's the benefit?"),
       <.br,
       Enumeration(
-        Item.stable(<.p("makes it easy to reason about code")),
-        Item.fadeIn(<.p("separates business logic from real world interaction"))
+        Item.stable("makes it easy to reason about code"),
+        Item.fadeIn("separates business logic from real world interaction")
       )
     )
   )
@@ -368,9 +368,9 @@ object Lecture extends JSApp {
     slide(
       "Referential Transparency",
       Enumeration(
-        Item.stable(<.p("no side-effects")),
-        Item.fadeIn(<.p("same output for the same input")),
-        Item.fadeIn(<.p("execution order doesn't matter"))
+        Item.stable("no side-effects"),
+        Item.fadeIn("same output for the same input"),
+        Item.fadeIn("execution order doesn't matter")
       )
     ),
 
@@ -388,7 +388,7 @@ object Lecture extends JSApp {
 
     slide(
       "Reftrencial Opaque: variables and execution order",
-      code("""
+      scalaC("""
         // defines a variable - a mutable (imperative) reference
         var a = 1
 
@@ -404,8 +404,8 @@ object Lecture extends JSApp {
       <.h4("What's the benefit?"),
       <.br,
       Enumeration(
-        Item.stable(<.p("makes it easy to reason about code")),
-        Item.fadeIn(<.p("separates business logic from real world interaction"))
+        Item.stable("makes it easy to reason about code"),
+        Item.fadeIn("separates business logic from real world interaction")
       )
     )
   )
@@ -423,9 +423,9 @@ object Lecture extends JSApp {
     slide(
       "Recursion: types",
       Enumeration(
-        Item.stable(<.p("single/multi recursion")),
-        Item.fadeIn(<.p("direct/indirect recursion")),
-        Item.fadeIn(<.p("structural/generative recursion"))
+        Item.stable("single/multi recursion"),
+        Item.fadeIn("direct/indirect recursion"),
+        Item.fadeIn("structural/generative recursion")
       )
     ),
 
@@ -458,7 +458,7 @@ object Lecture extends JSApp {
 
     slide(
       "Recursion: direct single",
-      code("""
+      scalaC("""
         // linked list of Ints
         sealed trait IntList
 
@@ -469,7 +469,7 @@ object Lecture extends JSApp {
         // end of the list
         case object Nil extends IntList
       """),
-      codeFragment("""
+      scalaCFragment("""
 
         val list = Cons(0, Cons(1, Cons(2, Nil)))
       """)
@@ -494,13 +494,13 @@ object Lecture extends JSApp {
 
     slide(
       "Type Parameter: ADT",
-      code("""
+      scalaC("""
         sealed trait List[A]
         //                ^
         //                '
         //           type parameter
       """),
-      codeFragment("""
+      scalaCFragment("""
         case class Cons[A](head: A, tail: List[A]) extends List[A]
         //              ^        ^             ^                ^
         //              '        '----         '----------------|
@@ -515,11 +515,11 @@ object Lecture extends JSApp {
 
     slide(
       "Type Parameter: ADT",
-      code("""
+      scalaC("""
         val intList  = Cons[Int](0, Cons[Int](1, Cons[Int](2, Nil[Int]())))
         val charList = Cons[Char]('a', Cons[Char]('b', Nil[Char]()))
       """),
-      codeFragment("""
+      scalaCFragment("""
         // Scala can infer `A` by looking at the values
 
         val intList  = Cons(0, Cons(1, Cons(2, Nil())))
@@ -535,7 +535,7 @@ object Lecture extends JSApp {
     slide(
       "Type Parameter: ADT",
       Enumeration(
-        Item.stable(<.p("also called generics")),
+        Item.stable("also called generics"),
         Item.fadeIn(<.p("can be fixed by hand: ", <.code("Cons[Int](0, Nil[Int]): List[Int]"))),
         Item.fadeIn(<.p("or inferred by Scala: ", <.code("Cons(0, Nil): List[Int]")))
       )
@@ -543,7 +543,7 @@ object Lecture extends JSApp {
 
     exerciseSlide(
       "Let's Code",
-      bashCode("""
+      bash("""
         sbt> project fp101-exercises
         sbt> test:testOnly RecursiveDataSpec
       """)
@@ -566,20 +566,20 @@ object Lecture extends JSApp {
 
     slide(
       "Recursion: example",
-      code("""
+      scalaC("""
         //factorial
         def fact(n: Int): Int = n match {
           case 1 => 1
           case _ => n * fact(n - 1)
         }
       """),
-      codeFragment("""
+      scalaCFragment("""
           fact(3)
         //  '- 3 * fact(2)
         //           '- 2 * fact(1)
         //                    '- 1
       """),
-      codeFragment("""
+      scalaCFragment("""
         fact(3) == 3 * fact(2)
                 == 3 * 2 * fact(1)
                 == 3 * 2 * 1
@@ -589,14 +589,14 @@ object Lecture extends JSApp {
 
     slide(
       "Recursion: direct single",
-      code("""
+      scalaC("""
         def length(list: List[Int]): Int = list match {
       """),
-      codeFragment("""
+      scalaCFragment("""
         // final state
           case Nil()         => 0
       """),
-      codeFragment("""
+      scalaCFragment("""
         // single direct recusive step (length calls itself)
           case Cons(_, tail) => 1 + length(tail)
         }
@@ -605,7 +605,7 @@ object Lecture extends JSApp {
 
     slide(
       "Recursion: direct single",
-      code("""
+      scalaC("""
         val list = Cons(1, Cons(2, Nil()))
 
         length(list) == 1 + length(Cons(2, Nil()))
@@ -617,18 +617,18 @@ object Lecture extends JSApp {
 
     slide(
       "Recursion: direct multi",
-      code("""
+      scalaC("""
         /* Tree: either a leaf with a value or a node consisting of a 
          *        left and right tree 
          */
 
         def size(tree: Tree[Int]): Int = tree match {
       """),
-      codeFragment("""
+      scalaCFragment("""
         // final state
           case Leaf(_)           => 1
       """),
-      codeFragment("""
+      scalaCFragment("""
         // multiple direct recusive steps (branches into two recursice calls)
           case Node(left, right) => size(left) + size(right)
         }
@@ -637,7 +637,7 @@ object Lecture extends JSApp {
 
     slide(
       "Recursion: direct multi",
-      code("""
+      scalaC("""
         val tree = Node(Node(Leaf(1), Leaf(2)), Leaf(3))
 
         size(tree) == size(Node(Leaf(1), Leaf(2))) + size(Leaf(3))
@@ -649,7 +649,7 @@ object Lecture extends JSApp {
 
     slide(
       "Recursion: indirect",
-      code("""
+      scalaC("""
         def even(n: Int): Boolean = 
           if (n == 0) true
           else        !odd(n - 1)
@@ -662,7 +662,7 @@ object Lecture extends JSApp {
 
     slide(
       "Recursion: indirect",
-      code("""
+      scalaC("""
         even(5) == !odd(4)
                 == even(3)
                 == !odd(2)
@@ -686,33 +686,33 @@ object Lecture extends JSApp {
 
     exerciseSlide(
       "What kind of recursion is it?",
-      code("""
+      scalaC("""
         def plus(n: Int, m: Int): Int = n match {
           case 0 => m
           case _ => 1 + plus(n - 1, m)
         }
       """),
-      codeFragment("""
+      scalaCFragment("""
         // structural direct single
       """)
     ),
 
     exerciseSlide(
       "What kind of recursion is it?",
-      code("""
+      scalaC("""
         def produce(n: Int): List[Int] = n match {
           case 0 => Nil()
           case _ => Cons(n, produce(n))
         }
       """),
-      codeFragment("""
+      scalaCFragment("""
         // generative direct single
       """)
     ),
 
     exerciseSlide(
       "What kind of recursion is it?",
-      code("""
+      scalaC("""
         def parseH(str: List[Char]): Boolean = str match {
           case Cons('h', tail) => parseE(tail)
           case _               => false
@@ -727,7 +727,7 @@ object Lecture extends JSApp {
           case _                => false
         }
       """),
-      codeFragment("""
+      scalaCFragment("""
         // structural indirect multi
       """)
     ),
@@ -735,8 +735,8 @@ object Lecture extends JSApp {
     slide(
       "What are possible problems",
       Enumeration(
-        Item.stable(<.p("How to fix types of Generics?")),
-        Item.fadeIn(<.p("What is the impact of recursion on our hardware?"))
+        Item.stable("How to fix types of Generics?"),
+        Item.fadeIn("What is the impact of recursion on our hardware?")
       )
     ),
 
@@ -752,7 +752,7 @@ object Lecture extends JSApp {
 
     slide(
       "Type Parameters: functions",
-      code("""
+      scalaC("""
         def length[A](list: List[A]): Int = list match {
         //         ^             ^
         //         '             '---------
@@ -767,7 +767,7 @@ object Lecture extends JSApp {
 
     slide(
       "Type Parameters: functions",
-      code("""
+      scalaC("""
         length[Int](Cons(1, Cons(2, Nil()))) == 2
 
         // or we rely on inference again
@@ -786,7 +786,7 @@ object Lecture extends JSApp {
 
     slide(
       "Recursion: call stack",
-      code("""
+      scalaC("""
         length(Cons(0, Cons(1, Nil())))
         // '- 1 + length(Cons(1, Nil()))
         //           '- 1 + length(Nil())
@@ -821,7 +821,7 @@ object Lecture extends JSApp {
 
     slide(
       "Recursion: tail recursion",
-      code("""
+      scalaC("""
         def lengthSafe[A](list: List[A]): Int = list {
           def loop(remaining: List[A], agg: Int): Int = remaining match {
             case Nil()         => agg
@@ -845,7 +845,7 @@ object Lecture extends JSApp {
 
     slide(
       "Recursion: tail recursion",
-      code("""
+      scalaC("""
         def lengthSafe[A](list: List[A]): Int = list {
 
           // Scala now checks of this function is tail recursive
@@ -859,13 +859,13 @@ object Lecture extends JSApp {
 
     exerciseSlide(
       "Is this function stack-safe?",
-      code("""
+      scalaC("""
         def fib(n: Int): Int = n match {
           case 1 | 2 => 1
           case _     => fib(n - 1) + fib(n - 2)
         }
       """),
-      codeFragment("""
+      scalaCFragment("""
         /* no, last expression is the `+` operator and we 
          * create two recursion branches 
          */
@@ -874,26 +874,26 @@ object Lecture extends JSApp {
 
     exerciseSlide(
       "Is this function stack-safe?",
-      code("""
+      scalaC("""
         def last[A](list: List[A]): List[A] = list match {
           case el@ Cons(_, Nil()) => el
           case Cons(_, tail)      => last(tail)
         }
       """),
-      codeFragment("""
+      scalaCFragment("""
         // yes, last expression is `last`
       """)
     ),
 
     exerciseSlide(
       "Is this function stack-safe?",
-      code("""
+      scalaC("""
         def size[A](tree: Tree[A]): Int = tree match {
           case Leaf(_)           => 1
           case Node(left, right) => size(left) + size(right)
         }
       """),
-      codeFragment("""
+      scalaCFragment("""
         /* no, again the last expression is the `+` operator 
          * and we create two recursion branches
          */
@@ -902,7 +902,7 @@ object Lecture extends JSApp {
 
     exerciseSlide(
       "Let's Code",
-      bashCode("""
+      bash("""
         sbt> project fp101-exercises
         sbt> test:testOnly RecursiveFunctionsSpec
       """)
@@ -921,8 +921,8 @@ object Lecture extends JSApp {
       <.h4("What's the benefit?"),
       <.br,
       Enumeration(
-        Item.stable(<.p("represent collections")),
-        Item.fadeIn(<.p("solve complex problems with divide & conquer"))
+        Item.stable("represent collections"),
+        Item.fadeIn("solve complex problems with divide & conquer")
       )
     )
   )
@@ -954,11 +954,11 @@ object Lecture extends JSApp {
 
     slide(
       "Composition: code",
-      code("""
+      scalaC("""
         def compose[A, B, C](f: B => C)(g: A => B): A => C = 
           a => f(g(a))
       """),
-      codeFragment("""
+      scalaCFragment("""
         def double(a: Int): Int = a * 2
         def show(a: Int): String = a.toString
 
@@ -970,13 +970,13 @@ object Lecture extends JSApp {
 
     slide(
       "Composition: Scala",
-      code("""
+      scalaC("""
         // already built-in
         (show _).compose(double)
         //  ^
         //  '- transforming method to a function object
       """),
-      codeFragment("""
+      scalaCFragment("""
         // or work directly with function objects
         val show: Int => String = _.toString
         val double: Int => Int  = _ * 2
@@ -987,14 +987,14 @@ object Lecture extends JSApp {
 
     slide(
       "Composition: Scala",
-      code("""
+      scalaC("""
         double.andThen(show) == show.compose(double)
       """)
     ),
 
     slide(
       "Composition: data structures",
-      code("""
+      scalaC("""
         // consider the following
         def replicate[A](n: Int, a: A): List[A] = 
           if (n == 0) Nil() else Cons(a, replicate(n - 1, a))
@@ -1011,28 +1011,28 @@ object Lecture extends JSApp {
 
     slide(
       "Composition: data structures",
-      code("""
+      scalaC("""
         // we already know map (exercises)
         def map[A, B](as: List[A])(f: A => B): List[B]
 
         map(as)(a => replicate(n, a)) // will not work        
       """),
-      codeFragment("""
+      scalaCFragment("""
         f: A => B != replicate: A => List[B]
       """)
     ),
 
     slide(
       "Composition: data structures",
-      code("""
+      scalaC("""
         // list[list[a]] -> list[a]
         def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] = as match {
       """),
-      codeFragment("""
+      scalaCFragment("""
         // empty case
           case Nil()         => Nil()
       """),
-      codeFragment("""
+      scalaCFragment("""
         // recursive step
           case Cons(a, tail) => 
             val bs = f(a)
@@ -1044,7 +1044,7 @@ object Lecture extends JSApp {
 
     slide(
       "Composition: data structures",
-      code("""
+      scalaC("""
         val n = 2
 
         val complex: List[A] => List[A] = 
@@ -1059,7 +1059,7 @@ object Lecture extends JSApp {
 
     slide(
       "Composition: for-comprehension",
-      code("""
+      scalaC("""
         // make map and flatMap methods of List
         sealed trait List[A] {
           
@@ -1067,7 +1067,7 @@ object Lecture extends JSApp {
           def flatMap[B](f: A => List[B]): List[B]
         }
       """),
-      codeFragment("""
+      scalaCFragment("""
         // Scala lets you use for-comprehension
         val complexFor: List[Int] => List[Int] = as => 
           for {
@@ -1081,7 +1081,7 @@ object Lecture extends JSApp {
 
     slide(
       "Composition: for-comprehension",
-      code("""
+      scalaC("""
         // comes in handy later on
         for {
           a <- f(in)
@@ -1094,7 +1094,7 @@ object Lecture extends JSApp {
 
     exerciseSlide(
       "Let's Code",
-      bashCode("""
+      bash("""
         sbt> project fp101-exercises
         sbt> test:testOnly CompositionsSpec
       """)
@@ -1104,7 +1104,7 @@ object Lecture extends JSApp {
       <.h4("What's the benefit?"),
       <.br,
       Enumeration(
-        Item.stable(<.p("solve complex problems with divide & conquer"))
+        Item.stable("solve complex problems with divide & conquer")
       )
     )
   )

@@ -1,4 +1,4 @@
-import SlideshowUtil._
+import PresentationUtil._
 import japgolly.scalajs.react.ScalaComponent
 import japgolly.scalajs.react.vdom.html_<^._
 import org.scalajs.dom
@@ -18,11 +18,11 @@ object Lecture extends JSApp {
     slide(
       "What we will learn in this lecture",
       Enumeration(
-        Item.stable(<.p("Primitives")),
-        Item.fadeIn(<.p("Collections")),
-        Item.fadeIn(<.p("Option")),
-        Item.fadeIn(<.p("Either")),
-        Item.fadeIn(<.p("Try"))
+        Item.stable("Primitives"),
+        Item.fadeIn("Collections"),
+        Item.fadeIn("Option"),
+        Item.fadeIn("Either"),
+        Item.fadeIn("Try")
       )
     ),
 
@@ -48,14 +48,14 @@ object Lecture extends JSApp {
 
     slide(
       "Primitives: Boolean",
-      code("""
+      scalaC("""
         Boolean - true false
       """)
     ),
 
     slide(
       "Primitives: Boolean operators",
-      code("""
+      scalaC("""
         !a     // negation
 
         a & b  // AND, always evaluates `b`
@@ -77,7 +77,7 @@ object Lecture extends JSApp {
 
     slide(
       "Primitives: numbers",
-      code("""
+      scalaC("""
         Byte    - Integer from -128 to 127
         Short   - Integer from -32,768 to 32,767
         Int     - Integer from -2,147,483,648 to 2,147,483,647
@@ -89,13 +89,13 @@ object Lecture extends JSApp {
 
     slide(
       "Primitives: number operators",
-      code("""
+      scalaC("""
         1 + 2 == 3    // addition
         1 - 2 == -1   // substraction
         2 % 2 == 0    // modulo
         2 * 2 == 4    // multiplication
       """),
-      codeFragment("""
+      scalaCFragment("""
         -1.abs == 1   // absolute value
         2.max(3) == 3 // find the maximum value
         2.min(3) == 2 // find the minimum value
@@ -105,13 +105,13 @@ object Lecture extends JSApp {
 
     slide(
       "Primitives: division",
-      code("""
+      scalaC("""
         // when done with Integers
         1 / 2 == (1: Int) / (2: Int)
               == (1 / 2): Int
               == 0
       """),
-      codeFragment("""
+      scalaCFragment("""
         // at least one element is a Double
         1 / 2.0 == (1: Int) / (2.0: Double)
                 == (1.0 / 2.0): Double
@@ -126,15 +126,15 @@ object Lecture extends JSApp {
 
     slide(
       "Primitives: division",
-      code("""
+      scalaC("""
         // we already know that this will fail
         1 / 0 == ArithmeticException
       """),
-      codeFragment("""
+      scalaCFragment("""
         // but what happens here?
         1 / 0.0
       """),
-      codeFragment("""
+      scalaCFragment("""
         1 / 0.0 = Infinity
       """)
     ),
@@ -146,7 +146,7 @@ object Lecture extends JSApp {
 
     slide(
       "Primitives: infinity",
-      code("""
+      scalaC("""
         val infinity = 1 / 0.0
 
         infinity.isInfinity    == true
@@ -162,7 +162,7 @@ object Lecture extends JSApp {
 
     slide(
       "Primitives: floating point comparison",
-      code("""
+      scalaC("""
         val a: Double = ???
         val b: Double = ???
 
@@ -173,7 +173,7 @@ object Lecture extends JSApp {
 
     slide(
       "Primitives: floating point comparison",
-      code("""
+      scalaC("""
         def eq(a: Double: b: Double, epsilon: Double): Boolean =
           (a - b).abs < epsilon
 
@@ -183,7 +183,7 @@ object Lecture extends JSApp {
 
     slide(
       "Primitives: Integer operators",
-      code("""
+      scalaC("""
         // some Integer specific operators
         2 << 1 == 4 // bit-shift to the left
         2 >> 1 == 1 // bit-shift to the right
@@ -208,7 +208,7 @@ object Lecture extends JSApp {
 
     slide(
       "Primitives: Char",
-      code("""
+      scalaC("""
         // all Integer operators apply
         Char - signs encoded with Integers from 0 to 65,535
       """)
@@ -216,7 +216,7 @@ object Lecture extends JSApp {
 
     slide(
       "Primitives: Char look and feel",
-      code("""
+      scalaC("""
         val a = 'a'
         
         a == 97
@@ -252,7 +252,7 @@ object Lecture extends JSApp {
 
     slide(
       "Tuple",
-      code("""
+      scalaC("""
         (1, 'b')
 
         (9.3, true, 'g')
@@ -263,7 +263,7 @@ object Lecture extends JSApp {
 
     slide(
       "Tuple: access",
-      code("""
+      scalaC("""
         val a = (1, true)
 
         a._1 = 1
@@ -273,7 +273,7 @@ object Lecture extends JSApp {
 
     slide(
       "Tuple: pattern matching",
-      code("""
+      scalaC("""
         val a = (1, true)
 
         a match {
@@ -295,7 +295,7 @@ object Lecture extends JSApp {
       "Sequence: definition",
       <.p("A sequence is a collection of values with an order."),
       <.br,
-      code("""
+      scalaC("""
         Seq[Char]()     // empty
         Seq.empty[Char] // empty
         Seq(1, 2, 3)    // sequence of numbers 1, 2 and 3
@@ -304,7 +304,7 @@ object Lecture extends JSApp {
 
     slide(
       "Sequence: length",
-      code("""
+      scalaC("""
         Seq[Char]().length  == 0
         Seq(1, 2, 3).length == 3
       """)
@@ -312,7 +312,7 @@ object Lecture extends JSApp {
 
     slide(
       "Sequence: retrieve elements",
-      code("""
+      scalaC("""
         val seq = Seq(1, 2, 3)
 
         seq(0) == 1
@@ -333,7 +333,7 @@ object Lecture extends JSApp {
 
     slide(
       "Sequence: filter",
-      code("""
+      scalaC("""
         val seq = Seq(1, 2, 3)
 
         seq.filter(a => a > 1)  == Seq(2, 3)
@@ -341,7 +341,7 @@ object Lecture extends JSApp {
         seq.exists(a => a > 1 ) == true
         seq.contains(1)         == true
       """),
-      code("""
+      scalaC("""
         // more concise
         seq.filter(_ > 1) == Seq(2, 3)
         seq.finds(_ == 2) == Some(2)
@@ -352,7 +352,7 @@ object Lecture extends JSApp {
 
     slide(
       "Sequence: sort",
-      code("""
+      scalaC("""
         val seq = Seq(1, 2, 3)
 
         seq.sortBy(_ > _) == Seq(3, 2 1)
@@ -361,7 +361,7 @@ object Lecture extends JSApp {
 
     slide(
       "Sequence: add",
-      code("""
+      scalaC("""
         val seq = Seq(1, 2, 3)
 
         0 +: seq         == Seq(0, 1, 2, 3)
@@ -372,7 +372,7 @@ object Lecture extends JSApp {
 
     slide(
       "Sequence: sub-sequences",
-      code("""
+      scalaC("""
         val seq = Seq(1, 2, 3)
 
         seq.take(2)    == Seq(1, 2)
@@ -383,7 +383,7 @@ object Lecture extends JSApp {
 
     slide(
       "Sequence: transformations",
-      code("""
+      scalaC("""
         val seq = Seq(1, 2, 3)
 
         seq.map(a => a * 2.0) == Seq(2.0, 4.0, 6.0)
@@ -401,13 +401,13 @@ object Lecture extends JSApp {
 
     slide(
       "Sequence: transformations",
-      code("""
+      scalaC("""
         val seq = Seq(1, 2, 3)
 
         // transforming a Seq into a new "shape" from left to right
         val sum = seq.foldLeft(0)((agg, a) => agg + a)
       """),
-      codeFragment("""
+      scalaCFragment("""
         // what happened?
         val f: (Int, Int) => Int = (agg, a) => agg + a
 
@@ -421,13 +421,13 @@ object Lecture extends JSApp {
 
     slide(
       "Sequence: transformations",
-      code("""
+      scalaC("""
         val seq = Seq(1, 2, 3)
 
         // from right to left
         seq.foldRight(0)((a, agg) => a + agg) == 6
       """),
-      codeFragment("""
+      scalaCFragment("""
         val avg: (Int, Int) => Double = (a, b) => (a + b) / 2.0
 
         // the higher order function needs to be commutative
@@ -437,7 +437,7 @@ object Lecture extends JSApp {
 
     slide(
       "Sequence: foreach",
-      code("""
+      scalaC("""
         val seq = Seq(1, 2, 3)
 
         // iterates over all element and returns nothing
@@ -448,7 +448,7 @@ object Lecture extends JSApp {
 
     slide(
       "Sequence: pattern matching",
-      code("""
+      scalaC("""
         val seq = Seq(1, 2, 3)
 
         seq match {
@@ -461,7 +461,7 @@ object Lecture extends JSApp {
 
     slide(
       "Sequence: for-comprehension",
-      code("""
+      scalaC("""
         val seq = Seq(1, 2, 3)
 
         val newSeq = for {
@@ -473,7 +473,7 @@ object Lecture extends JSApp {
           rep <- replicate(2, a)
         } yield rep * 3
       """),
-      codeFragment("""
+      scalaCFragment("""
         newSeq == {
           seq.filter(_ > 1).flatMap(replicate(_, 2)).map(_ * 3)
         }
@@ -482,7 +482,7 @@ object Lecture extends JSApp {
 
     exerciseSlide(
       "Let's Code",
-      bashCode("""
+      bash("""
         sbt> project std-lib-exercises
         sbt> test:testOnly SequenceSpec
       """)
@@ -490,7 +490,7 @@ object Lecture extends JSApp {
 
     slide(
       "Sequence: default implementation",
-      code("""
+      scalaC("""
         // this
         val seq = Seq(1, 2, 3)
 
@@ -503,7 +503,7 @@ object Lecture extends JSApp {
 
     slide(
       "Sequence: additional List operations",
-      code("""
+      scalaC("""
         0 :: list        == 0 +: seq
         List(0) ::: list == Seq(0) ++ seq
       """)
@@ -515,7 +515,7 @@ object Lecture extends JSApp {
 
     slide(
       "String",
-      code("""
+      scalaC("""
         // no exactly, but you get the idea
         // you don't have `+:`, `:+`
         "Hello world" ~= Seq('H', 'e', ...)
@@ -524,7 +524,7 @@ object Lecture extends JSApp {
 
     slide(
       "String: access",
-      code("""
+      scalaC("""
         val str = "Hello world"
 
         str.charAt(0)  == 'H'
@@ -538,7 +538,7 @@ object Lecture extends JSApp {
 
     slide(
       "String: length & contains",
-      code("""
+      scalaC("""
         val str = "Hello world"
 
         str.length          == 11
@@ -548,7 +548,7 @@ object Lecture extends JSApp {
 
     slide(
       "String: interpolation",
-      code("""
+      scalaC("""
         // insert values in Strings
         val a = 42
 
@@ -562,7 +562,7 @@ object Lecture extends JSApp {
 
     slide(
       "String: interpolation",
-      code("""
+      scalaC("""
         // you can reference any expression
 
         s"1 + 2 = ${1 + 2}"
@@ -575,13 +575,13 @@ object Lecture extends JSApp {
 
     slide(
       "String: multi-line",
-      code("""
+      scalaC("""
         // this is annoying
         "This is a reaaaaaaalllllllyyyy\n" +
         "looooooooooooooooooooooooooong\n" +
         "String"
       """),
-      codeFragment(
+      scalaCFragment(
         "// just write\n" +
         "\"\"\"\n" + 
         "this is a reaaaaaaalllllllyyyy\n" +
@@ -593,7 +593,7 @@ object Lecture extends JSApp {
 
     exerciseSlide(
       "Let's Code",
-      bashCode("""
+      bash("""
         sbt> project std-lib-exercises
         sbt> test:testOnly StringsSpec
       """)
@@ -607,7 +607,7 @@ object Lecture extends JSApp {
       "Vector",
       <.p("Improved random access and update operations."),
       <.br,
-      code("""
+      scalaC("""
         val v = Vector(1, 2, 3)
 
         v.head == 1
@@ -624,7 +624,7 @@ object Lecture extends JSApp {
       "Set",
       <.p("Collection of unique elements without an order."),
       <.br,
-      code("""
+      scalaC("""
         val s = Set(1, 2, 3, 3)
 
         s == Set(1, 2, 3)
@@ -637,7 +637,7 @@ object Lecture extends JSApp {
 
     slide(
       "Set: operations",
-      code("""
+      scalaC("""
         val s = Set(1, 2, 3)
 
         s union Set(2, 3, 4)     == Set(1, 2, 3, 4)
@@ -659,7 +659,7 @@ object Lecture extends JSApp {
       "Map",
       <.p("Collection of key-value pairs. The keys create a Set."),
       <.br,
-      code("""
+      scalaC("""
         val m = Map(
           ("hello", 0),
           ("world", 1)
@@ -669,7 +669,7 @@ object Lecture extends JSApp {
 
     slide(
       "Map",
-      code("""
+      scalaC("""
         val m = Map(
           ("hello", 0),
           ("world", 1),
@@ -685,7 +685,7 @@ object Lecture extends JSApp {
 
     slide(
       "Map: access",
-      code("""
+      scalaC("""
         val m = Map(("hello", 0), ("world", 1))
 
         m("hello") == 0
@@ -701,7 +701,7 @@ object Lecture extends JSApp {
 
     slide(
       "Map: access",
-      code("""
+      scalaC("""
         val m = Map(("hello", 0), ("world", 1))
 
         m.keySet == Set("hello", "world")
@@ -710,7 +710,7 @@ object Lecture extends JSApp {
 
     slide(
       "Map: transform",
-      code("""
+      scalaC("""
         val m = Map(("hello", 0))
 
         // add or update
@@ -729,7 +729,7 @@ object Lecture extends JSApp {
 
     slide(
       "Map: transform",
-      code("""
+      scalaC("""
         val m = Map(("hello", 0), ("world", 1))
 
         m.mapValues(_ + 2) == Map(("hello", 2), ("world", 3))
@@ -740,7 +740,7 @@ object Lecture extends JSApp {
 
     exerciseSlide(
       "Let's Code",
-      bashCode("""
+      bash("""
         sbt> project std-lib-exercises
         sbt> test:testOnly MapsSpec
       """)
@@ -769,7 +769,7 @@ object Lecture extends JSApp {
       "Option",
       <.p("Does a computation found a result or not? Therefore, this is a two element collection."),
       <.br,
-      code("""
+      scalaC("""
         // actual implementation differs - simplified code
         sealed trait Option[+A]
 
@@ -780,7 +780,7 @@ object Lecture extends JSApp {
 
     slide(
       "Option",
-      code("""
+      scalaC("""
         Option("hello") == Some("hello")
 
         // null is an empty reference - avoid it
@@ -791,7 +791,7 @@ object Lecture extends JSApp {
 
     slide(
       "Option: access",
-      code("""
+      scalaC("""
         // don't use `get`
         Some(0).get == 0
         None.get    == NoSuchElementException
@@ -808,7 +808,7 @@ object Lecture extends JSApp {
 
     slide(
       "Option: fold",
-      code("""
+      scalaC("""
         // or fold over the Option
         val opt: Option[Int] = ???
 
@@ -821,7 +821,7 @@ object Lecture extends JSApp {
 
     slide(
       "Option: pattern matching",
-      code("""
+      scalaC("""
         // or simply match it
         val opt: Option[Int] = ???
 
@@ -834,7 +834,7 @@ object Lecture extends JSApp {
 
     slide(
       "Option: is empty?",
-      code("""
+      scalaC("""
         // you can also check if it is empty
         val opt: Option[Int] = ???
 
@@ -850,14 +850,14 @@ object Lecture extends JSApp {
 
     slide(
       "Option: filter",
-      code("""
+      scalaC("""
         Some(0).filter(_ > 0) == None
       """)
     ),
 
     slide(
       "Option: transform",
-      code("""
+      scalaC("""
         Some(0).map(_ + 1) == Some(1)
         None.map(_ + 1)    == None
 
@@ -880,7 +880,7 @@ object Lecture extends JSApp {
       "Either",
       <.p("Does a computation failed or not? This is again a two element collection."),
       <.br,
-      code("""
+      scalaC("""
         // actual implementation differs - simplified code
         sealed trait Either[+A, +B]
 
@@ -891,7 +891,7 @@ object Lecture extends JSApp {
 
     slide(
       "Either",
-      code("""
+      scalaC("""
         Either.cond(true, "hello", 5)  == Right[Int, String]("hello")
         Either.cond(false, "hello", 5) == Left[Int, String](5)
       """)
@@ -899,7 +899,7 @@ object Lecture extends JSApp {
 
     slide(
       "Either: access",
-      code("""
+      scalaC("""
         Left(0).value        == 0
         Right("hello").value == "hello"
 
@@ -911,7 +911,7 @@ object Lecture extends JSApp {
 
     slide(
       "Either: fold",
-      code("""
+      scalaC("""
         // or fold over the Either
         val e: Either[Int, String] = ???
 
@@ -924,7 +924,7 @@ object Lecture extends JSApp {
 
     slide(
       "Either: pattern matching",
-      code("""
+      scalaC("""
         // or simply match it
         val e: Either[Int, String] = ???
 
@@ -937,7 +937,7 @@ object Lecture extends JSApp {
 
     slide(
       "Either: is left/right?",
-      code("""
+      scalaC("""
         // you can also check if it is left or right
         val e: Either[Int, String] = ???
 
@@ -950,14 +950,14 @@ object Lecture extends JSApp {
 
     slide(
       "Either: filter",
-      code("""
+      scalaC("""
         Right(0).filterOrElse(_ > 0, "boom") == Left("boom")
       """)
     ),
 
     slide(
       "Either: swap",
-      code("""
+      scalaC("""
         Left[Int, String](0).swap  == Right[String, Int](0)
         Right[Int, String](0).swap == Left[String, Int](0)
       """)
@@ -976,7 +976,7 @@ object Lecture extends JSApp {
       "Try",
       <.p("You work with (Java) code throwing exceptions? Wrap them up in a Try to gain purity."),
       <.br,
-      code("""
+      scalaC("""
         // basic idea ... but has some extra methods
         type Try[A] = Either[Throwable, A]
       """)
@@ -984,7 +984,7 @@ object Lecture extends JSApp {
 
     slide(
       "Try",
-      code("""
+      scalaC("""
         val result = Try {
           // Exception throwing code goes here
         }
@@ -999,7 +999,7 @@ object Lecture extends JSApp {
 
     slide(
       "Try: pattern matching",
-      code("""
+      scalaC("""
         val t: Try[Int] = ???
 
         t match {
@@ -1011,7 +1011,7 @@ object Lecture extends JSApp {
 
     slide(
       "Try: recover",
-      code("""
+      scalaC("""
         val t: Try[Int] = ???
 
         t.recover {
@@ -1031,7 +1031,7 @@ object Lecture extends JSApp {
 
     exerciseSlide(
       "Let's Code",
-      bashCode("""
+      bash("""
         sbt> project std-lib-exercises
         sbt> test:testOnly AdtSpec
       """)
@@ -1052,7 +1052,7 @@ object Lecture extends JSApp {
       "Collections",
       <.p("Operations on sequences and the different instances thereof"),
       <.br,
-      code("""
+      scalaC("""
         Seq(1, 2, 3)
 
         List(1, 2, 3)
@@ -1067,7 +1067,7 @@ object Lecture extends JSApp {
       "Option, Either, Try",
       <.p("Build-In algebraic data types."),
       <.br,
-      code("""
+      scalaC("""
         Option(1)                     == Some(1)
         Either.cond(true, "hello", 1) == Right(1)
         Try(1)                        == Success(1)
