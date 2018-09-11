@@ -24,7 +24,8 @@ package exercise1
  *      - Meat
  *      - Vegetables
  *      - Plants
- *    and update the Animal description.
+ *    and update the Animal description. Also add a companion object with an apply method:
+ *      def apply(food: String): Option[Food]
  * 
  * g) Test your function implementation test functions below.
  */
