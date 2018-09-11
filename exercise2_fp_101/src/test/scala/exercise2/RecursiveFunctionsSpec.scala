@@ -31,82 +31,22 @@ object RecursiveFunctionsSpec extends Properties("recursive functions") {
   } yield (n, a)
 
   property("replicate value") = forAll(replicationGen) { case (n, a) => 
-    RecursiveFunctions.testReplicate(n, a) == {
-      @tailrec
-      def loop(agg: List[String], rem: Int): List[String] = {
-        if (rem == 0) agg
-        else          loop(Cons(a, agg), rem - 1)
-      }
-
-      loop(Nil(), n)
-    }
-  }
-
-  def reverse[A](list: List[A]): List[A] = {
-    @tailrec
-    def loop(rem: List[A], agg: List[A]): List[A] = rem match {
-      case Nil()         => agg
-      case Cons(a, tail) => loop(tail, Cons(a, agg))
-    }
-
-    loop(list, Nil())
+    RecursiveFunctions.testReplicate(n, a) == RecursiveFunctionsSolution.replicate(n, a)
   }
 
   property("reverse lists") = forAll { list: List[Int] => 
-    RecursiveFunctions.testReverse(list) == reverse(list)
-  }
-
-  def map[A, B](list: List[A])(f: A => B): List[B] = {
-    @tailrec
-    def loop(rem: List[A], agg: List[B]): List[B] = rem match {
-      case Nil()         => agg
-      case Cons(a, tail) => loop(tail, Cons(f(a), agg))
-    }
-
-    reverse(loop(list, Nil()))
+    RecursiveFunctions.testReverse(list) == RecursiveFunctionsSolution.reverse(list)
   }
 
   property("map values") = forAll { list: List[Int] => 
-    RecursiveFunctions.testMap[Int, String](list, _.toString) == map(list)(_.toString)
-  }
-
-  def combine[A](l: List[A], r: List[A]): List[A] = {
-    @tailrec
-    def loop(lReversedRem: List[A], agg: List[A]): List[A] = lReversedRem match {
-      case Nil()         => agg
-      case Cons(a, tail) => loop(tail, Cons(a, agg))
-    }
-
-    loop(reverse(l), r)
+    RecursiveFunctions.testMap[Int, String](list, _.toString) == RecursiveFunctionsSolution.map(list)(_.toString)
   }
 
   property("combine lists") = forAll { (l: List[Int], r: List[Int]) =>
-    RecursiveFunctions.testCombine(l, r) == combine(l, r)
-  }
-
-  def take[A](n: Int, as: List[A]): List[A] = {
-    if (n < 0)
-      Nil()
-    else if (n >= RecursiveFunctions.length(as))
-      as
-    else {
-      @tailrec
-      def loop(rem: List[A], agg: List[A]): List[A] = rem match {
-        case Nil()         => Nil()
-        case Cons(a, tail) => 
-          val updatedAgg = Cons(a, agg)
-
-          if (RecursiveFunctions.length(updatedAgg) == n) 
-            reverse(updatedAgg)
-          else
-            loop(tail, updatedAgg)
-      }
-
-      loop(as, Nil())
-    }
+    RecursiveFunctions.testCombine(l, r) == RecursiveFunctionsSolution.combine(l, r)
   }
 
   property("take first n elements") = forAll { (n: Int, as: List[Int]) =>
-    RecursiveFunctions.testTake(n, as) == take(n, as)
+    RecursiveFunctions.testTake(n, as) ==  RecursiveFunctionsSolution.take(n, as)
   }
 }

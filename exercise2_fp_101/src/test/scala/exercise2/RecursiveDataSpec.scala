@@ -19,18 +19,15 @@ object RecursiveDataSpec extends Properties("recursive data") {
     generateList(Nil(), length)
   }
 
-  property("List[Int] head") = forAll(listGen) {
-    case Nil()              => RecursiveData.testListIntHead(Nil()) == -1
-    case list@Cons(head, _) => RecursiveData.testListIntHead(list) == head
+  property("List[Int] head") = forAll(listGen) { list =>
+    RecursiveData.testListIntHead(list) == RecursiveDataSolution.listHead(list)
   }
 
-  property("List[Int] tail") = forAll(listGen) {
-    case Nil()              => RecursiveData.testListIntTail(Nil()) == Nil()
-    case list@Cons(_, tail) => RecursiveData.testListIntTail(list) == tail
+  property("List[Int] tail") = forAll(listGen) { list =>
+    RecursiveData.testListIntTail(list) == RecursiveDataSolution.listTail(list)
   }
 
-  property("List[Int] is empty") = forAll(listGen) {
-    case Nil()              => RecursiveData.testListIntEmpty(Nil())
-    case list@Cons(_, tail) => !RecursiveData.testListIntEmpty(list)
+  property("List[Int] is empty") = forAll(listGen) { list =>
+    RecursiveData.testListIntEmpty(list) == RecursiveDataSolution.isListEmpty(list)
   }
 }

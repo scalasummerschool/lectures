@@ -14,22 +14,12 @@ object CompositionsSpec extends Properties("compositions") {
     }
   }
 
-  def map[A, B, C](e: Either[A, B])(f: B => C): Either[A, C] = e match {
-    case Right(r) => Right(f(r))
-    case Left(l)  => Left(l)
-  }
-
   property("map either") = forAll { e: Either[String, Int] =>
-    Compositions.testMap[String, Int, Boolean](e, _ % 2 == 0) == map(e)(_ % 2 == 0)
-  }
-
-  def flatMap[A, B, C](e: Either[A, B])(f: B => Either[A, C]): Either[A, C] = e match {
-    case Right(r) => f(r)
-    case Left(l)  => Left(l)
+    Compositions.testMap[String, Int, Boolean](e, _ % 2 == 0) == CompositionsSolution.map(e)(_ % 2 == 0)
   }
 
   property("flatMap either") = forAll { e: Either[String, Int] =>
-    Compositions.testFlatMap[String, Int, Boolean](e, r => Right(r % 2 == 0)) == flatMap(e)(r => Right(r % 2 == 0))
+    Compositions.testFlatMap[String, Int, Boolean](e, r => Right(r % 2 == 0)) == CompositionsSolution.flatMap(e)(r => Right(r % 2 == 0))
   }
 
   def double(a: Int): Either[String, Double]  = Right(a * 2.0)
@@ -37,12 +27,6 @@ object CompositionsSpec extends Properties("compositions") {
   def prefix(s: String): String = "AWESOME " + s
 
   property("for-comprehension") = forAll { e: Either[String, Int] =>
-    Compositions.testForComprehension(e)(double)(show)(prefix) == (
-      for {
-        v <- e
-        d <- double(v)
-        s <- show(d)
-      } yield prefix(s)
-    )
+    Compositions.testForComprehension(e)(double)(show)(prefix) == CompositionsSolution.forComprehension(e)(double)(show)(prefix)
   }
 }
