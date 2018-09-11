@@ -6,7 +6,7 @@ import org.scalajs.dom
 import scala.scalajs.js.JSApp
 import scala.scalajs.js.annotation.JSExport
 
-object Lecture extends JSApp {
+object FP101Lecture extends JSApp {
 
   import Enumeration._
 
