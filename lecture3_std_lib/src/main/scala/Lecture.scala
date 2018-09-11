@@ -21,7 +21,8 @@ object Lecture extends JSApp {
         Item.stable(<.p("Primitives")),
         Item.fadeIn(<.p("Collections")),
         Item.fadeIn(<.p("Option")),
-        Item.fadeIn(<.p("Either"))
+        Item.fadeIn(<.p("Either")),
+        Item.fadeIn(<.p("Try"))
       )
     ),
 
@@ -1037,6 +1038,49 @@ object Lecture extends JSApp {
     )
   )
 
+  val summary = chapter(
+    chapterSlide(
+      <.h2("Summary")
+    ),
+
+    slide(
+      "Primitives",
+      <.p("Scala's build-in types.")
+    ),
+
+    slide(
+      "Collections",
+      <.p("Operations on sequences and the different instances thereof"),
+      <.br,
+      code("""
+        Seq(1, 2, 3)
+
+        List(1, 2, 3)
+
+        Set(1, 2, 3)
+
+        Map(1 -> 'a', 2 -> 'b')
+      """)
+    ),
+
+    slide(
+      "Option, Either, Try",
+      <.p("Build-In algebraic data types."),
+      <.br,
+      code("""
+        Option(1)                     == Some(1)
+        Either.cond(true, "hello", 1) == Right(1)
+        Try(1)                        == Success(1)
+      """)
+    ),
+
+    noHeaderSlide(
+      <.h2("Next"),
+      <.br,
+      <.h3("Coding Project")
+    )
+  )
+
   val Show = ScalaComponent
     .builder[Unit]("Slideshow")
     .renderStatic(
@@ -1047,7 +1091,8 @@ object Lecture extends JSApp {
           overview,
           primitives,
           collections,
-          adts
+          adts,
+          summary
         )
       )
     )
