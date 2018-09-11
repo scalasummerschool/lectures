@@ -17,25 +17,16 @@ object MapsSpec extends Properties("Map") {
 
   implicit val userArb = Arbitrary[User](userGen)
 
-  def averageAge(users: Seq[User]): Map[String, Int] = 
-    users
-      .groupBy(_.name)
-      .mapValues(_.map(_.age).sum / users.length)
-
   property("groupd users") = forAll { users: Seq[User] =>
-    testGroupUsers(users) == averageAge(users)
+    testGroupUsers(users) == MapsSolution.averageAge(users)
   }
-
-  def numberOfFrodos(users: Map[String, User]): Int = users.count(_._1 == "Frodo")
 
   property("number of Frodos") = forAll(userMapGen) { users =>
-    testNumberFrodos(users) == numberOfFrodos(users)
+    testNumberFrodos(users) == MapsSolution.numberOfFrodos(users)
   }
 
-  def underaged(users: Map[String, User]): Map[String, User] = users.filter(_._2.age >= 1000)
-
   property("underaged") = forAll(userMapGen) { users =>
-    testUnderaged(users) == underaged(users)
+    testUnderaged(users) == MapsSolution.underaged(users)
   }
 
   val userMapGen = for {
