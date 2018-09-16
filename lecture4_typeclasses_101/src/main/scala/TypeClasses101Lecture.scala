@@ -134,7 +134,8 @@ object TypeClasses101Lecture extends JSApp {
           |}
         """.stripMargin),
       <.br,
-      <.p("Introduce a generic parameter A instead of concrete overloads.")
+      <.p("Introduce a generic parameter A instead of concrete overloads."),
+      <.p("Since A is all quantified it must subsume all types including future ones.")
     ),
     noHeaderSlide(
       scalaCFragment(
