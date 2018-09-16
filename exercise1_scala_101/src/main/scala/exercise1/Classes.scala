@@ -1,43 +1,44 @@
 package exercise1
 
-/* a) Create a class Animal which has the following fields:
+/* This task has no tests. It is an exercise for you to write different class structures.
+ * 
+ * a) Create a class Animal which has the following fields:
  *      - name: String (name of the species)
  *      - species: String (e.g. mammal or reptile)
  *      - food: String
  * 
- * b) Create instances for the following animals:
+ *    Syntax: class MyClass(val publicField: Int, privateField: String) {
+ *              // put other fields and methods here
+ *            }
+ * 
+ * b) Create an Companion Object for Animal and add the following instances as fields:
  *      - cat, mammal, meat
  *      - parrot, bird, vegetables
  *      - goldfish, fish, plants
  * 
+ *    Syntax: object MyClass {
+ *              // put your static fields and methods here
+ *            }
+ * 
  * c) Add the following method to Animals:
  *      def eats(food: String): Boolean
- *    which checks if an animal eats the given food
+ *    
+ *     which checks if an animal eats the given food
  * 
- * d) Define Animal as trait and create case class instances for the Mammals, Birds, and Fishs.
+ * d) Redefine your class Animal as trait and create case class instances for Mammals, Birds, and Fishs.
+ *    do you still need the field `species`?
  * 
- * e) Create a Companion Object Animal. Put the animals from (b) as fields into it and add the following functions:
+ * e) Put the animals from (b) as fields into it and add the following functions to Animals Companion Object:
  *      def knownAnimal(name: String): Boolean  // true if it is the name of one of the three animals we know
- *      def apply(name: String): Option[Animal] // returns one of the three animals matching the name or nothing (None), see Option below
+ *      def apply(name: String): Option[Animal] // returns one of the three animals matching the name (Some) or nothing (None), see Option below
  * 
  * f) Create a trait Food with the following case objects:
  *      - Meat
  *      - Vegetables
  *      - Plants
- *    and update the Animal description. Also add a companion object with an apply method:
+ *    and add it to Animal definition. Also add a companion object with an apply method:
  *      def apply(food: String): Option[Food]
- * 
- * g) Test your function implementation test functions below.
  */
-
-object Classes {
-
-  def testKnownAnimal(name: String): Boolean = false
-
-  // use apply here to find the instance and then call eats(food) on it
-  // return false if no instance could be found
-  def testEats(food: String, name: String): Boolean = false
-}
 
 sealed trait Option[A] {
  

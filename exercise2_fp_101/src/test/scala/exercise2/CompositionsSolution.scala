@@ -2,23 +2,26 @@ package exercise2
 
 object CompositionsSolution {
 
-  def map[A, B, C](e: Either[A, B])(f: B => C): Either[A, C] = e match {
-    case Right(r) => Right(f(r))
-    case Left(l)  => Left(l)
+  def compose[A, B, C, D](f: A => B)
+                         (g: B => C)
+                         (h: C => D): A => D = h.compose(g.compose(f))
+
+  def mapFlatMap[A, B, C, D](f: A => Option[B])
+                            (g: B => Option[C])
+                            (h: C => D): Option[A] => Option[D] = opt => {
+    opt
+      .flatMap(f)
+      .flatMap(g)
+      .map(h)
   }
 
-  def flatMap[A, B, C](e: Either[A, B])(f: B => Either[A, C]): Either[A, C] = e match {
-    case Right(r) => f(r)
-    case Left(l)  => Left(l)
-  }
-
-  def forComprehension[A, B, C, D, E](e: Either[A, B]) 
-                                     (f: B => Either[A, C])
-                                     (g: C => Either[A, D])
-                                     (h: D => E): Either[A, E] = 
+  def forComprehension[A, B, C, D](f: A => Option[B])
+                                  (g: B => Option[C])
+                                  (h: C => D): Option[A] => Option[D] = opt => {
     for {
-        v <- e
+        v <- opt
         d <- f(v)
         s <- g(d)
       } yield h(s)
+  }
 }

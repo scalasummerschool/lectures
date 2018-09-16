@@ -10,8 +10,8 @@ object AdtsSpec extends Properties("ADT") {
     Adts.testGetNth(list, n) == AdtsSolution.getNth(list, n)
   }
 
-  property("double optional number or zero") = forAll { n: Option[Int] =>
-    Adts.testDoubleOrZero(n) == AdtsSolution.doubleOrZero(n)
+  property("double optional number") = forAll { n: Option[Int] =>
+    Adts.testDouble(n) == AdtsSolution.double(n)
   }
 
   property("is an even number") = forAll { n: Int =>

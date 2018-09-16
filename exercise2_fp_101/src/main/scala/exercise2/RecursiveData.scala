@@ -1,34 +1,30 @@
 package exercise2
 
+sealed trait List[A]
+case class Cons[A](head: A, tail: List[A]) extends List[A]
+case class Nil[A]() extends List[A]
+
+/** Write your solutions as stand-alone functions. */
 object RecursiveData {
 
-  // a) implement a function which determines if a `List[Int]` is empty or not
+  // a) Implement a function which determines if a `List[Int]` is empty or not.
 
 
 
   def testListIntEmpty(list: List[Int]): Boolean = false
 
-  // b) implement a function which gets the head of a `List[Int]` or returns -1 if empty
+  // b) Implement a function which gets the head of a `List[Int]` or returns -1 if empty.
 
 
 
   def testListIntHead(list: List[Int]): Int = 0
 
-  // c) implement a function which gets the tail of a `List[Int]`
+  // c) Can we change `List[A]` to guarantee to be not-empty?
 
 
-
-  def testListIntTail(list: List[Int]): List[Int] = list
-
-  // d) can we change `List[A]` to guarantee to be not-empty?
+  /* d) Implement a generic Tree which has its values in the leafs and consists of:
+   *      node - left and right Tree
+   *      leaf - a value of type A
+   */
 
 }
-
-sealed trait List[A]
-case class Cons[A](head: A, tail: List[A]) extends List[A]
-case class Nil[A]() extends List[A]
-
-/* e) Implement a generic Tree which has its values in the leaves and concised of:
- *      node - left and right Tree
- *      leaf - a value of type A
- */

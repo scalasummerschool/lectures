@@ -1,47 +1,47 @@
 package exercise2
 
-sealed trait Either[A, B] {
+/** An Option indicates if an operation returned a result or not. This is often used when
+  * searching for values or when operations can fail and you don't care about the 
+  * reason.
+  * 
+  * The composition functions `map` and `flatMap` are context sensitive. If the Option
+  * is a None they ignore any function application since no value is available. On the 
+  * other hand, if it is a Some the functions are applied to transform the value.
+  */
+sealed trait Option[A] {
 
-  def map[C](f: B => C): Either[A, C]
-  def flatMap[C](f: B => Either[A, C]): Either[A, C]
+  def map[B](f: A => B): Option[B]
+  def flatMap[B](f: A => Option[B]): Option[B]
 }
-case class Left[A, B](a: A) extends Either[A, B] {
+case class Some[A](a: A) extends Option[A] {
 
-  def map[C](f: B => C): Either[A, C] = ???
-  def flatMap[C](f: B => Either[A, C]): Either[A, C] = ???
+  def map[B](f: A => B): Option[B] = Some(f(a))
+  def flatMap[B](f: A => Option[B]): Option[B] = f(a)
 }
-case class Right[A, B](b: B) extends Either[A, B] {
+case class None[A]()     extends Option[A] {
 
-  def map[C](f: B => C): Either[A, C] = ???
-  def flatMap[C](f: B => Either[A, C]): Either[A, C] = ???
+  def map[B](f: A => B): Option[B] = None()
+  def flatMap[B](f: A => Option[B]): Option[B] = None()
 }
 
+/** Implement your solutions within the test functions. */
 object Compositions {
 
-  /* a) implement map - be aware, that is should forward errors (left values):
-   *         map(Left[String, Int]("boom")(_ + 1) == Left("boom")
-   *         map(Right[String, Int](1)(_ + 1)     == Right(2)
-   */
+  // a) Compose the given functions.
 
+  def testCompose[A, B, C, D](f: A => B)
+                             (g: B => C)
+                             (h: C => D): A => D = ???
 
+  // a) Combose the functions using `map` and `flatMap`.
 
-  def testMap[A, B, C](e: Either[A, B], f: B => C): Either[A, C] = ???
+  def testMapFlatMap[A, B, C, D](f: A => Option[B])
+                                (g: B => Option[C])
+                                (h: C => D): Option[A] => Option[D] = ???
 
-  /* b) implement flatMap - be aware, that is should forward errors (left values):
-   *         flatMap(Left[String, Int]("boom")(a => Right(a)) == Left("boom")
-   *         flatMap(Right[String, Int](1)(a => Left("baam")) == Left("baam")
-   *         flatMap(Right[String, Int](1)(a => Right(1 + a)) == Right(2)
-   */
+  // a) Combose the functions using for-comprehension.
 
-
-
-  def testFlatMap[A, B, C](e: Either[A, B], f: B => Either[A, C]): Either[A, C] = ???
-
-  /* c) use for-comprehension to apply the given functions in order to the Either value
-   */
-
-  def testForComprehension[A, B, C, D, E](e: Either[A, B]) 
-                                         (f: B => Either[A, C])
-                                         (g: C => Either[A, D])
-                                         (h: D => E): Either[A, E] = ???
+  def testForComprehension[A, B, C, D](f: A => Option[B])
+                                      (g: B => Option[C])
+                                      (h: C => D): Option[A] => Option[D] = ???
 }

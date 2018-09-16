@@ -12,11 +12,6 @@ object RecursiveDataSolution {
     case Nil()         => -1
   }
 
-  def listTail(list: List[Int]): List[Int] = list match {
-    case Cons(_, tail) => tail
-    case Nil()         => Nil()
-  }
-
   sealed trait Tree[A]
   case class Node[A](left: Tree[A], right: Tree[A]) extends Tree[A]
   case class Leaf[A](a: A)                          extends Tree[A]

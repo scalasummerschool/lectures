@@ -28,15 +28,16 @@ object PatternMatchingSpec extends Properties("pattern matching") {
   }
 
   implicit val animalGen: Arbitrary[Animal] = Arbitrary(for {
-    name <- Gen.oneOf("cat", "parrot", "goldfish")
+    name   <- Gen.oneOf("cat", "parrot", "goldfish")
+    weight <- Gen.posNum[Int]
   } yield name match {
-    case "cat"      => Mammal(name, Meat)
+    case "cat"      => Mammal(name, Meat, weight)
     case "parrot"   => Bird(name, Vegetables)
     case "goldfish" => Fish(name, Plants)
   })
 
-  property("extract mammal name") = forAll { animal: Animal =>
-    PatternMatchingSolution.extractName(animal) == testExtractMammalName(animal)
+  property("extract mammal weight") = forAll { animal: Animal =>
+    PatternMatchingSolution.extractWeight(animal) == testExtractMammalWeight(animal)
   }
 
   property("update food") = forAll { animal: Animal =>

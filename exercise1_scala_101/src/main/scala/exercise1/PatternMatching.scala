@@ -1,12 +1,22 @@
 package exercise1
 
+/** Write your solution as stand-alone function. 
+  * 
+  * Syntax:
+  *   val a: Int = ???
+  * 
+  *   a match {
+  *     case 0 => true
+  *     case _ => false
+  *   }
+  */
 object PatternMatching {
 
-  /* a) if value is:
-   *    1 => "it is one"
-   *    2 => "it is two"
-   *    3 => "it is three"
-   *    otherwise => "what's that"
+  /* a) If value is:
+   *     1 => "it is one"
+   *     2 => "it is two"
+   *     3 => "it is three"
+   *     otherwise => "what's that"
    */
 
 
@@ -14,15 +24,15 @@ object PatternMatching {
   def testIntToString(value: Int): String = value.toString
 
   /* b) `value` is true if it is:
-   *    "max" or "Max
-   *    "moritz" or "Moritz"
+   *     "max" or "Max
+   *     "moritz" or "Moritz"
    */
 
 
 
   def testIsMaxAndMoritz(value: String): Boolean = false
 
-  // c) is `value` even (use guards)
+  // c) Is `value` even (use guards)
 
 
 
@@ -30,27 +40,26 @@ object PatternMatching {
 
 
   
-
-  /* c) rock paper scissors (see classes below):
-   *    1. rock beats scissor
-   *    2. scissor beats paper
-   *    3. paper beats rock
-   *    Does player a win?
+  /* d) Rock paper scissors (see classes below):
+   *     1. rock beats scissor
+   *     2. scissor beats paper
+   *     3. paper beats rock
+   *    Does player `a` win?
    */
 
 
 
   def testWinsA(a: Hand, b: Hand): Result = Draw
 
-  // use the definition of Animals below
+  // REMARK: Use the definition of Animals below
 
-  // d) Extract the name of a Mammal or return "NO MAMMAL".
+  // e) Extract the weight of a Mammal else return -1.
 
 
 
-  def testExtractMammalName(animal: Animal): String = animal.name
+  def testExtractMammalWeight(animal: Animal): Int = 0
 
-  // e) The the food for Fishes and Birds to Plants, leaf the Mammals as they are
+  // f) Update the food of Fishes and Birds to Plants, keep Mammels unchanged.
 
 
 
@@ -80,7 +89,7 @@ object PatternMatching {
     val name: String
     val food: Food
   }
-  case class Mammal(name: String, food: Food) extends Animal
-  case class Fish(name: String, food: Food)   extends Animal
-  case class Bird(name: String, food: Food)   extends Animal
+  case class Mammal(name: String, food: Food, weight: Int) extends Animal
+  case class Fish(name: String, food: Food)                extends Animal
+  case class Bird(name: String, food: Food)                extends Animal
 }
