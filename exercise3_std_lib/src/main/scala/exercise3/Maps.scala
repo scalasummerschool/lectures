@@ -1,15 +1,19 @@
 package exercise3
 
+/** Write your solution into the test functions.
+  * 
+  * https://docs.scala-lang.org/overviews/collections/maps.html
+  */
 object Maps {
 
   case class User(name: String, age: Int)
 
-  // a) Given a Seq[User] group them by name (`groupBy`) and return only `name -> averageAge`
+  // a) Given a Seq[User] group the users by name (`groupBy`) and calculate the average age: `name -> averageAge`
   def testGroupUsers(users: Seq[User]): Map[String, Int] = Map.empty
 
-  // b) How many Users with name "Frodos" are in the Map
+  // b) How many Users with name "Frodos" are in the Map?
   def testNumberFrodos(map: Map[String, User]): Int = 0
 
-  // c) Remove all users under age 1000 (Wizards only :)
+  // c) Remove all users under age 1000 (Wizards only :).
   def testUnderaged(map: Map[String, User]): Map[String, User] = map
 }

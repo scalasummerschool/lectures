@@ -23,10 +23,6 @@ object RecursiveDataSpec extends Properties("recursive data") {
     RecursiveData.testListIntHead(list) == RecursiveDataSolution.listHead(list)
   }
 
-  property("List[Int] tail") = forAll(listGen) { list =>
-    RecursiveData.testListIntTail(list) == RecursiveDataSolution.listTail(list)
-  }
-
   property("List[Int] is empty") = forAll(listGen) { list =>
     RecursiveData.testListIntEmpty(list) == RecursiveDataSolution.isListEmpty(list)
   }

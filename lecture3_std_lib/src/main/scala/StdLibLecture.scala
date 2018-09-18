@@ -60,12 +60,14 @@ object StdLibLecture extends JSApp {
 
         a & b  // AND, always evaluates `b`
         a && b // AND, evaluates `b` only if `a` is true
-        
+
         a | b  // OR, always evaluates b
         a || b // OR, evaluates `b` only if `a` is true
-        
+
         a > b  // greater than
         a < b  // smaller than
+        a >= b // greater-equal than
+        a <= b // smaller-equal than
         a == b // equal
         a != b // unequal
       """)
@@ -210,7 +212,7 @@ object StdLibLecture extends JSApp {
       "Primitives: Char",
       scalaC("""
         // all Integer operators apply
-        Char - signs encoded with Integers from 0 to 65,535
+        Char - signs encoded with Integers from 0 to 65.535
       """)
     ),
 
@@ -218,7 +220,7 @@ object StdLibLecture extends JSApp {
       "Primitives: Char look and feel",
       scalaC("""
         val a = 'a'
-        
+
         a == 97
       """)
     ),
@@ -266,8 +268,8 @@ object StdLibLecture extends JSApp {
       scalaC("""
         val a = (1, true)
 
-        a._1 = 1
-        a._2 = true
+        a._1 == 1
+        a._2 == true
       """)
     ),
 
@@ -344,9 +346,9 @@ object StdLibLecture extends JSApp {
       scalaC("""
         // more concise
         seq.filter(_ > 1) == Seq(2, 3)
-        seq.finds(_ == 2) == Some(2)
+        seq.find(_ == 2)  == Some(2)
         seq.exists(_ > 1) == true
-        seq.contains(1)   == true
+        seq.containts(1)  == true
       """)
     ),
 
@@ -387,7 +389,7 @@ object StdLibLecture extends JSApp {
         val seq = Seq(1, 2, 3)
 
         seq.map(a => a * 2.0) == Seq(2.0, 4.0, 6.0)
-        
+
         // def replicate[A](a: A, n: Int): Seq[A]
         val seqSeq = seq.map(a => replicate(a, 2))
             seqSeq == Seq(Seq(1, 1), Seq(2, 2), Seq(3, 3))
@@ -466,7 +468,7 @@ object StdLibLecture extends JSApp {
 
         val newSeq = for {
           a  <- seq
-          
+
           // applies a filter step
           if a > 1
 
@@ -484,7 +486,7 @@ object StdLibLecture extends JSApp {
       "Let's Code",
       bash("""
         sbt> project std-lib-exercises
-        sbt> test:testOnly SequenceSpec
+        sbt> test:testOnly exercise3.SequenceSpec
       """)
     ),
 
@@ -516,7 +518,7 @@ object StdLibLecture extends JSApp {
     slide(
       "String",
       scalaC("""
-        // no exactly, but you get the idea
+        // not exactly, but you get the idea
         // you don't have `+:`, `:+`
         "Hello world" ~= Seq('H', 'e', ...)
       """)
@@ -583,9 +585,9 @@ object StdLibLecture extends JSApp {
       """),
       scalaCFragment(
         "// just write\n" +
-        "\"\"\"\n" + 
+        "\"\"\"\n" +
         "this is a reaaaaaaalllllllyyyy\n" +
-        "looooooooooooooooooooooooooong\n" + 
+        "looooooooooooooooooooooooooong\n" +
         "String\n" +
         "\"\"\""
       )
@@ -742,7 +744,7 @@ object StdLibLecture extends JSApp {
       "Let's Code",
       bash("""
         sbt> project std-lib-exercises
-        sbt> test:testOnly MapsSpec
+        sbt> test:testOnly exercise3.MapsSpec
       """)
     ),
 
@@ -767,7 +769,7 @@ object StdLibLecture extends JSApp {
 
     slide(
       "Option",
-      <.p("Does a computation found a result or not? Therefore, this is a two element collection."),
+      <.p("Does a computation yield a result or not? Therefore, this is a two element collection."),
       <.br,
       scalaC("""
         // actual implementation differs - simplified code
@@ -842,7 +844,7 @@ object StdLibLecture extends JSApp {
 
         // or
         if (opt.nonEmpty) println("this isn't empty")
-        
+
         // or
         if (opt.isDefined) println("this isn't empty")
       """)
@@ -878,7 +880,7 @@ object StdLibLecture extends JSApp {
 
     slide(
       "Either",
-      <.p("Does a computation failed or not? This is again a two element collection."),
+      <.p("Did a computation fail or not? This is again a two element collection."),
       <.br,
       scalaC("""
         // actual implementation differs - simplified code
@@ -974,7 +976,7 @@ object StdLibLecture extends JSApp {
 
     slide(
       "Try",
-      <.p("You work with (Java) code throwing exceptions? Wrap them up in a Try to gain purity."),
+      <.p("You work with (Java) code throwing exceptions? Wrap them up in a Try to regain purity."),
       <.br,
       scalaC("""
         // basic idea ... but has some extra methods
@@ -1033,7 +1035,7 @@ object StdLibLecture extends JSApp {
       "Let's Code",
       bash("""
         sbt> project std-lib-exercises
-        sbt> test:testOnly AdtSpec
+        sbt> test:testOnly exercise3.AdtSpec
       """)
     )
   )
@@ -1050,7 +1052,7 @@ object StdLibLecture extends JSApp {
 
     slide(
       "Collections",
-      <.p("Operations on sequences and the different instances thereof"),
+      <.p("Operations on sequences and the different instances thereof."),
       <.br,
       scalaC("""
         Seq(1, 2, 3)

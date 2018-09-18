@@ -2,7 +2,13 @@ package exercise2
 
 import scala.annotation.tailrec
 
-// REMARK: try to make all functions tail recursive; use the annotation to proof it
+/** Implement stand-alone functions for your solutions.
+  * REMARK: Try to make all functions tail recursive; use the annotation to proof it.
+  * 
+  * A function is tail recursive if if:
+  *   1. it is single direct recursion
+  *   2. the last expression is the recursive call
+  */
 object RecursiveFunctions {
 
   def length[A](as: List[A]): Int = {
@@ -15,15 +21,7 @@ object RecursiveFunctions {
     loop(as, 0)
   }
 
-  /* a) write a function that replicates a value n-times to create a list:
-   *        def replicate[A](n: Int, a: A): List[A]
-   */
-
-
-
-  def testReplicate[A](n: Int, a: A): List[A] = Nil()
-
-  /* b) write a function that reverses a list:
+  /* a) Write a function that reverses a list:
    *        def reverse[A](list: List[A]): List[A]
    */
 
@@ -31,7 +29,7 @@ object RecursiveFunctions {
 
   def testReverse[A](list: List[A]): List[A] = list
 
-  /* c) write a function that applies a function to every value of a list:
+  /* b) Write a function that applies a function to every value of a list:
    *        def map[A, B](list: List[A])(f: A => B): List[B]
    */
 
@@ -39,28 +37,25 @@ object RecursiveFunctions {
 
   def testMap[A, B](list: List[A], f: A => B): List[B] = Nil()
   
-  /* d) write a function that combines two lists:
-   *        def combine[A](l: List[A], r: List[A]): List[A]
+  /* c) Write a function that appends one list to another:
+   *        def append[A](l: List[A], r: List[A]): List[A]
    */
 
 
 
-  def testCombine[A](l: List[A], r: List[A]): List[A] = l
+  def testAppend[A](l: List[A], r: List[A]): List[A] = l
 
-  /* e) write a function which takes the first n elements:
-   *        def take[A](n: Int, as: List[A]): List[A]
-   *    return `as` when n >= length(as) and Nil if n < 0
+  /* d) Write a function that applies a function to every value of a list:
+   *        def flatMap[A, B](list: List[A])(f: A => List[B]): List[B]
+   * 
+   *    it gets a function which creates a new List[B] for every element of type A in 
+   *    the list. Therefore, you generate a List[List[B]]. You have to flatten this 
+   *    structure.
    */
 
 
 
-  def testTake[A](n: Int, as: List[A]): List[A] = as
+  def testFlatMap[A, B](list: List[A], f: A => List[B]): List[B] = Nil()
 
-  /* f) Is it possible to write a tail recursive map function for `Tree`s? If no, why? */
-
-  /* g) Is it possible to write a tail recursive function to calculate the Fibonacci numbers? If yes, how?
-   *    Fibonacci: n is Natural Number
-   *       if n == 1 or n == 2 then return 1
-   *       else return fibonacci for (n - 1) + fibunacci for (n - 2)
-   */
+  /* e) Question: Is it possible to write a tail recursive map function for `Tree`s? If no, why and are you sure :) ? */
 }

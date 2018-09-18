@@ -16,8 +16,4 @@ object FunctionsSpec extends Properties("functions") {
   property("rectangle uncurried") = forAll { (a: Double, b: Double) =>
     FunctionsSolution.rectangleUncurried(a, b) == Functions.testRectangleUc(a, b)
   }
-
-  property("rectangle unscore") = forAll { (a: Double, b: Double) =>
-    FunctionsSolution.rectangleUnderscore(a, b) == Functions.testRectangleUs(a, b)
-  }
 }

@@ -30,10 +30,6 @@ object RecursiveFunctionsSpec extends Properties("recursive functions") {
     a <- arbitrary[String]
   } yield (n, a)
 
-  property("replicate value") = forAll(replicationGen) { case (n, a) => 
-    RecursiveFunctions.testReplicate(n, a) == RecursiveFunctionsSolution.replicate(n, a)
-  }
-
   property("reverse lists") = forAll { list: List[Int] => 
     RecursiveFunctions.testReverse(list) == RecursiveFunctionsSolution.reverse(list)
   }
@@ -42,11 +38,11 @@ object RecursiveFunctionsSpec extends Properties("recursive functions") {
     RecursiveFunctions.testMap[Int, String](list, _.toString) == RecursiveFunctionsSolution.map(list)(_.toString)
   }
 
-  property("combine lists") = forAll { (l: List[Int], r: List[Int]) =>
-    RecursiveFunctions.testCombine(l, r) == RecursiveFunctionsSolution.combine(l, r)
+  property("append lists") = forAll { (l: List[Int], r: List[Int]) =>
+    RecursiveFunctions.testAppend(l, r) == RecursiveFunctionsSolution.append(l, r)
   }
 
-  property("take first n elements") = forAll { (n: Int, as: List[Int]) =>
-    RecursiveFunctions.testTake(n, as) ==  RecursiveFunctionsSolution.take(n, as)
+  property("flatMap values") = forAll { list: List[Int] => 
+    RecursiveFunctions.testFlatMap[Int, String](list, a => Cons(a.toString, Nil())) == RecursiveFunctionsSolution.flatMap(list)(a => Cons(a.toString, Nil()))
   }
 }

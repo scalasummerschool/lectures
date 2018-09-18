@@ -1,8 +1,17 @@
 package exercise1
 
+/** Write your solutions as stand-alone functions. 
+  * 
+  * Syntax:
+  *   // method
+  *   def myFunction(param0: Int, param1: String): Double = // body expression
+  * 
+  *   // value
+  *   val myFunction: (Int, String) => Double (param0, param1) => // body expression
+  */
 object Functions {
 
-  /* a) write a function which calculates the area of a
+  /* a) Write a function which calculates the area of a
    *    circle r^2 * Math.PI
    */
 
@@ -10,25 +19,17 @@ object Functions {
 
   def testCircle(r: Double): Double = r
   
-  /* b) write a curried function which calculates the area of a
-   *    rectangle a * b
+  /* b) Write a curried function which calculates the area of a
+   *    rectangle a * b.
    */
 
 
 
   def testRectangleCurried(a: Double, b: Double): Double = a
 
-  // c) write a uncurried `rectangle` function
+  // c) Write a uncurried `rectangle` function.
 
 
 
   def testRectangleUc(a: Double, b: Double): Double = a
-
-  // d) use `_` for `circle` and uncurried `rectangle`
-
-
-
-  def testRectangleUs(a: Double, b: Double): Double = a
-
-  // e) why can't you use `_` for curried `rectangle`?
 }

@@ -10,7 +10,7 @@ object AdtsSolution {
     else
       list.drop(n).headOption
 
-  def doubleOrZero(n: Option[Int]): Int = n.fold(0)(_ * 2)
+  def double(n: Option[Int]): Option[Int] = n.map(_ * 2)
 
   def isEven(n: Int): Either[String, Int] =
     if (n % 2 == 0) Right(n)
