@@ -29,98 +29,84 @@ object TypeClasses101Lecture extends JSApp {
     )
   )
 
-  val motivatingExample = chapter(
+  val expressionProblem = chapter(
     chapterSlide(
       <.h2("What problem do type classes solve")
     ),
 
     slide(
-      "Show values",
+      "Dealing with change",
       <.br,
       scalaC(
         """
-          |object Show {
-          |  def showInt(a: Int): String = s"an Int: ${a}"
-          |  def showString(a: String): String = s"a String: ${a}"
-          |  def showBool(a: Boolean): String = s"a Boolean: ${a}"
+          |sealed trait Animal
+          |case class Mammal(name: String)
+          |case class Fish(name: String, habitat: String)
+          |
+          |object Animal {
+          |  def show(animal: Animal): String = animal match {
+          |    case Mammal(name)        => "A mammal with name ${name}"
+          |    case Fish(name, habitat) => "A fish named ${name} living at ${habitat}"
+          |  }
           |}
-        """.stripMargin),
-      <.h2("Can show be implemented more generically?")
-    ),
-
-    noHeaderSlide(
-      <.h4("Overloaded method"),
-      scalaC("""
-        def show(a: ???): String = ???
-      """),
-      scalaCFragment("""
-        object Show {
-          def show(a: Int) String = s"an Int: ${a}"
-          def show(a: String) String = s"an Int: ${a}"
-          def show(a: Boolean) String = s"an Int: ${a}"
-        }
-      """)
-    ),
-
-    noHeaderSlide(
-      <.h4("But, what if we want to show a new type?"),
-      scalaC("""
-        Show.show(Mammal("Hamster"))
-      """),
-      <.br,
-      <.h5(
-        ^.cls := "fragment fade-in",
-        "We can't do that without changing the Show object"
-      )
+          |
+        """.stripMargin)
     ),
 
     slide(
-     "Show pretty",
-      <.br,
-      <.h5("Add a new operation showPretty"),
+      "Can we add a new Animal and have it shown?",
+      <.p("Yes, but we need to update Animal.show"),
       scalaC(
         """
-          Show.showPretty(1)
-          Show.showPretty("A string")
-          Show.showPretty(Mammal("Hamster")
+          |sealed trait Animal
+          |case class Mammal(name: String)
+          |case class Fish(name: String, habitat: String)
+          |case class Rodent(name: String, food: String)
+          |
+          |object Animal {
+          |  def show(animal: Animal): String = animal match {
+          |    case Mammal(name)        => "A mammal with name ${name}"
+          |    case Fish(name, habitat) => "A fish named ${name} living at ${habitat}"
+          |    case Rodent(name, food)  => "A rodent named ${name} eating ${food}"
+          |  }
+          |}
+          |
         """.stripMargin),
-      <.br,
-      <.h5(
-        ^.cls := "fragment fade-in",
-        "We can't do that without changing the Show object"
-      ),
-    slide(
-      "Expression problem",
-      <.br,
-      <.blockquote(
-        """
-          |The goal is to define a datatype by cases, where one can add new cases to the datatype and new functions over the datatype,
-          |without recompiling existing code, and while retaining static type safety (e.g., no casts).
-        """.stripMargin)
-      )
-    )
-  )
+      <.p("This means a code change for every new animal")
+    ),
 
-  val expressionProblem = chapterSlide(
-    <.h2("The expression problem"),
-    noHeaderSlide(
-      <.blockquote(
+    slide(
+      "Can we add a new function pver existing animals?",
+      <.p("Yes, but we need to update the Animal object"),
+      scalaC(
+        """
+          |object Animal {
+          |  def isA(a: Animal, b: Animal): Boolean = (a,b) match {
+          |    case (Mammal(_), Mammal(_)) | (Fish(_, _), Fish(_, _)) | (Rodent(_,_), Rodent(_, _)) => true
+          |    case (Rodent(_,_), Mammal(_)) => true
+          |    case _ => false
+          |  }
+          |}
+        """.stripMargin
+      ),
+      <.p("This means a code change for every new operation")
+    ),
+
+    slide(
+      "The expression problem",
+       <.blockquote(
        """
           |The goal is to define a datatype by cases, where one can add new cases to the datatype and new functions over the datatype,
           |without recompiling existing code, and while retaining static type safety (e.g., no casts).
-        """.stripMargin
-      )
-    ),
-    slide(
-      "Show is an instance of the expression problem",
-      <.p("We want to support more types"),
-      <.p("We want to add more operations (showPretty)"),
-      <.p("We do not want to change the Show object")
+        """.stripMargin)
     )
   )
 
-  val expressionSolution = chapterSlide(
-    <.h2("How do type classes solve the expression problem"),
+  val expressionSolution = chapter(
+    chapterSlide(
+      <.h2("How do type classes solve the expression problem")
+    ),
+
     slide(
       "The Show type class",
       scalaC(
@@ -134,37 +120,42 @@ object TypeClasses101Lecture extends JSApp {
           |}
         """.stripMargin),
       <.br,
-      <.p("Introduce a generic parameter A instead of concrete overloads."),
-      <.p("Since A is all quantified it must subsume all types including future ones.")
+      Enumeration(
+        Item.fadeIn("Create trait for the operation"),
+        Item.fadeIn("Introduce generic parameter A"),
+        Item.fadeIn("Since A is all quantified it must support all types, including new ones")
+      )
     ),
-    noHeaderSlide(
+    slide(
+      "Implement Show for Animal",
       scalaCFragment(
         """
-          | val intShow = new Show[Int] {
-          |   def show(a: Int): String = s"an Int: ${a}"
-          | }
-          |
-          | val stringShow = new Show[String] {
-          |   def show(a: String): String = s"a String: ${a}"
-          | }
-          | // ....
+          |val animalShow = new Show[Animal] {
+          |  def show(a: Animal): String = a.match {
+          |    case Mammal(name)        => "A mammal with name ${name}"
+          |    case Fish(name, habitat) => "A fish named ${name} living at ${habitat}"
+          |    case Rodent(name, food)  => "A rodent named ${name} eating ${food}"|
+          |  }
+          |}
         """.stripMargin),
-      <.p("Provide implementations")
     ),
-    noHeaderSlide(
+    slide(
+      "Use the implementation",
       scalaC(
         """
           | object Show {
           |   def show[A](a: A, showImpl: Show[A]): String = showImpl.show(a)
           | }
           |
-          | Show.show(3, intShow)
+          | Show.show(Rodent("Hamster", "Carrots"), animalShow)
         """.stripMargin),
-      <.p("Provide interface method")
+      <.br,
+      <.p("The Show object provides an interface method")
     ),
 
     slide("Can't we make that simpler?",
       <.h5("Make the implementation parameter implicit"),
+      <.br,
       scalaC(
         """
           | object Show {
@@ -173,13 +164,15 @@ object TypeClasses101Lecture extends JSApp {
         """.stripMargin),
       scalaCFragment(
         """
-          | implicit val intShow = new Show[Int] {
-          |   def show(a: Int): String = s"an Int: ${a}"
-          | }
+          |implicit val animalShow = new Show[Animal] {
+          |  def show(a: Animal): String = a.match {
+          |     ...
+          |  }
+          |}
         """.stripMargin),
       scalaCFragment(
         """
-          | Show.show(3)
+          | Show.show(Rodent("Hamster", "Carrots"))
         """.stripMargin)
     ),
     noHeaderSlide(
@@ -187,33 +180,44 @@ object TypeClasses101Lecture extends JSApp {
       scalaC(
         """
           | object Show {
-          |   def show[A : Show](a: A): String = implicitely[Show[A]].show(a)
+          |   def show[A : Show](a: A): String = implicitly[Show[A]].show(a)
           | }
         """.stripMargin)
     ),
     noHeaderSlide(
-      <.p("New types can easily be supported"),
+      <.p("But can we add new operations?"),
       scalaC(
         """
-          | sealed trait Shape
-          | case class Circle(d: Int) extends Shape
-          | case class Square(l: Int) extends Shape
-        """.stripMargin),
-      scalaCFragment(
-        """
-          | object Shape {
-          |   implicit val shapeShow = new Show[Shape] {
-          |     def show(a: Shape): String = a match {
-          |       case Circle(d) => "a circle with diameter: ${d}"
-          |       case Square(l) => "a square with length: ${l}"
-          |     }
-          |   }
+          | trait Eq[T] {
+          |   def eq(lhs: T, rhs: T): Boolean
+          | }
+          |
+          | object Eq {
+          |   def def[T: Eq](lhs: T, rhs: T): Boolen = implicitly[Eq[T]].eq(lhs, rhs)
           | }
         """.stripMargin),
       scalaCFragment(
         """
-          | Show.show(Circe(3))
+           | val animalEq = new Eq[Animal] {
+           |   def eq(a: Animal, b: Animal): Boolean = a == b
+           | }
+        """.stripMargin),
+      scalaCFragment(
+        """
+          | Eq.eq(Rodent("Hamster", "Carrots"), Mammal("Mouse"))
         """.stripMargin)
+    )
+  )
+
+  val summary = chapter(
+    chapterSlide(
+      <.h2("Type classes 101 summary"),
+      <.p("Type classes are a mechanism to write extensible and adaptable code."),
+      Enumeration(
+        Item.fadeIn("Operations and types can be added without changing existing code"),
+        Item.fadeIn("Type classes provide polymorphic implementations ad hoc, also called duck tying"),
+        Item.fadeIn("Type classes use implicit resolution to find instances")
+      )
     )
   )
 
@@ -225,7 +229,9 @@ object TypeClasses101Lecture extends JSApp {
         <.div(
           ^.cls := "slides",
           overview,
-          motivatingExample
+          expressionProblem,
+          expressionSolution,
+          summary
         )
       )
     )
