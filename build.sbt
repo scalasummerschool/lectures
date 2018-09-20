@@ -56,7 +56,8 @@ lazy val root = project
     `scala101-lecture`, `scala101-exercises`,
     `fp101-lecture`, `fp101-exercises`,
     `std-lib-lecture`, `std-lib-exercises`,
-    `typeclasses-101-lecture`, `typeclasses-101-exercises`
+    `typeclasses-101-lecture`, `typeclasses-101-exercises`,
+    `typeclasses-incarnations-lecture`, `typeclasses-incarnations-exercises`
   )
   .settings(
     sourceDirectories in Compile := Nil,

@@ -82,37 +82,37 @@ object TypeClassesIncarnationsLecture extends JSApp {
 
   val typeClassOrder = chapter(
     chapterSlide(
-      "The Order type class"
+      <.h2("The Order type class")
     )
   )
 
   val typeClassMonoid = chapter(
     chapterSlide(
-      "The monoid type class"
+      <.h2("The monoid type class")
     )
   )
 
   val typeClassFunctor = chapter(
     chapterSlide(
-      "The functor type class"
+      <.h2("The functor type class")
     )
   )
 
   val typeClassApplicative = chapter(
     chapterSlide(
-      "The applicative type class"
+      <.h2("The applicative type class")
     )
   )
 
   val typeClassMonad = chapter(
     chapterSlide(
-      "The monad type class"
+      <.h2("The monad type class")
     )
   )
 
   val summary = chapter(
     chapterSlide(
-      "Type class incarnations"
+      <.h2("Type class incarnations")
     )
   )
 
