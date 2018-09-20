@@ -181,7 +181,7 @@ lazy val `typeclasses-incarnations-lecture` = project
   .settings(
     name := "typeclasses-incarnations-lecture"
   )
-  .dependsOn(`exercises-shared` % "compile->compile;test->test")
+  .dependsOn(`lectures-shared` % "compile->compile;test->test")
 
 lazy val `typeclasses-incarnations-exercises` = project
   .in(file("exercise5_typeclasses_incarnations"))

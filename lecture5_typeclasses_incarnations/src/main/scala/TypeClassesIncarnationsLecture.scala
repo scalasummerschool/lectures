@@ -1,12 +1,12 @@
 import PresentationUtil._
 import japgolly.scalajs.react.ScalaComponent
-import org.scalajs.dom
-import japgolly.scalajs.react.ScalaComponent
 import japgolly.scalajs.react.vdom.html_<^._
+import org.scalajs.dom
 import scala.scalajs.js.JSApp
 import scala.scalajs.js.annotation.JSExport
 
 object TypeClassesIncarnationsLecture extends JSApp {
+  import Enumeration._
 
   val overview = chapter(
     chapterSlide(
@@ -45,10 +45,10 @@ object TypeClassesIncarnationsLecture extends JSApp {
       Enumeration(
         Item.stable("A set of useful abstractions for functional programming in scala"),
         Item.stable("Uses type classes to implement those abstractions"),
-        Item.stable("Syntax to use type classes more conveniently")
+        Item.stable("Syntax to use type classes more conveniently"),
         Item.stable("Additional tooling to scrap boilderplate and scrutinize instances")
       )
-    ),
+    )
   )
 
   val typeClassEq = chapter(
@@ -75,7 +75,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
          |     ^
          |     |----- Syntax that invokes uses the Eq instances
        """.stripMargin
-      )
+      ),
       <.br,
       <.p("More information can be found here: https://typelevel.org/cats/typeclasses/eq.html")
     ))
