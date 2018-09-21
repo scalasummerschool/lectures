@@ -15,6 +15,8 @@ object TypeClassesIncarnationsLecture extends JSApp {
 
     slide(
       "What we will learn in this lecture",
+      <.h3("What you will learn in this lecture"),
+      <.br,
       Enumeration(
         Item.stable("Introduction to the cats project"),
         Item.fadeIn("Eq"),
@@ -38,7 +40,8 @@ object TypeClassesIncarnationsLecture extends JSApp {
     ),
 
     slide(
-      "Cats is a scala library for \"categorical\" programming",
+      "Welcome cats",
+      <.h3("Cats is a scala library for \"categorical\" programming"),
       <.br,
       <.p("Find it at: https://typelevel.org/cats/"),
       <.br,
@@ -58,45 +61,209 @@ object TypeClassesIncarnationsLecture extends JSApp {
 
     slide(
       "Type safe equality",
-      <.p("Encoding in type class is sensible since not all types define an equality relation"),
+      <.h3("Sensible type-safe equality via Eq"),
+      <.p(<.small("More information can be found here: https://typelevel.org/cats/typeclasses/eq.html")),
+      <.br,
       scalaC(
         """
           |trait Eq[A] {
           |  def eqv(x: A, y: A): Boolean
-          |  ...
+          |  // more 
           |}
         """.stripMargin),
-      scalaCFragment(
+   
+      ),
+    slide("Type safe equality",
+      <.h3("Use it easily"),
+      scalaC(
        """
          | import cats.kernel.Eq
          | import cats.implicits._
-         |
-         | 42 === 42
-         |     ^
-         |     |----- Syntax that invokes uses the Eq instances
+         |  
+         | Eq[Int].eqv(10, 20)
+         | //  ^    ^
+         | //  |    |---- Use the eqv method
+         | //  |
+         | //  |----- Summon the instance       
        """.stripMargin
-      ),
-      <.br,
-      <.p("More information can be found here: https://typelevel.org/cats/typeclasses/eq.html")
+    ),
+    <.br,
+    scalaCFragment(
+      """
+        | 42 === 42
+        | //  ^
+        | //  |----- Syntax that invokes uses the Eq instances
+      """.stripMargin
+    )
     ))
 
   val typeClassOrder = chapter(
     chapterSlide(
       <.h2("The Order type class")
-    )
+    ),
+    slide(
+      "Type safe ordering",
+      <.h3("Sensible type-safe ordering via Order"),
+      <.p(<.small("More information can be found here: https://typelevel.org/cats/typeclasses/order.html")),
+      <.br,
+      scalaC(
+        """
+          |trait Order[A] {
+          |  def compare(x: A, y: A): Int
+          |  // more 
+          |}
+        """.stripMargin),
+   
+      ),
+    slide("Type safe ordering",
+      <.h3("Use it easily"),
+      scalaC(
+       """
+         | import cats.kernel.Order
+         | import cats.implicits._
+         |  
+         | Order[Int].compare(10, 20)
+         | //  ^    ^
+         | //  |    |---- Use the compare method
+         | //  |
+         | //  |----- Summon the instance       
+       """.stripMargin
+    ),
+    <.br,
+    scalaCFragment(
+      """
+        | Order[Int].max(10, 20)
+        |
+        | 42 compare 42
+        | //  ^
+        | //  |----- Syntax that invokes uses the Order instances
+      """.stripMargin
+    ))
   )
 
   val typeClassMonoid = chapter(
     chapterSlide(
       <.h2("The monoid type class")
+    ),
+    slide(
+      "Combine things",
+      <.h3("Combine all sorts of things"),
+      <.p(<.small("More information can be found here: https://typelevel.org/cats/typeclasses/monoid.html")),
+      <.br,
+      scalaC(
+        """
+          |trait Monoid[A] {
+          |  def pure: A
+          |  def combine(x: A, y: A): A
+          |}
+        """.stripMargin),
+      ),
+    slide("Combine things",
+      <.h3("Use it easily"),
+      scalaC(
+       """
+         | import cats.kernel.Monoid
+         | import cats.implicits._
+         |  
+         | Monoid[Int].combine(10, 20) 
+         | //  ^         ^
+         | //  |         |---- Use the combine method
+         | //  |
+         | //  |----- Summon the instance       
+       """.stripMargin
+    ),
+    <.br,
+    scalaCFragment(
+      """
+        | 42 combine 42
+        | //  ^
+        | //  |----- Syntax that invokes uses the Monoid instances
+      """.stripMargin
+    )),
+   slide(
+     "Obey the laws",
+     <.h3("Monoid laws"),
+     <.p,
+     Enumeration(
+       Item.stable("Associativity: a combine (b combine c) == (a combine b) combine c")
+     )
+   ),
+   slide(
+     "All those monoids",
+     <.h3("There are many possible monoid instances"),
+     <.p,
+     Enumeration(
+       Item.stable("Int with (+, *)"),
+       Item.stable("List[A]"),
+       Item.stable("Set[A]"),
+       Item.stable("Bloomfilters"),
+       Item.stable("Many more ...")
+     )
     )
-  )
+  ) 
 
   val typeClassFunctor = chapter(
     chapterSlide(
       <.h2("The functor type class")
+    ),
+    slide(
+      "Represent effects",
+      <.h3("Map things and capture effects"),
+      <.p(<.small("More information can be found here: https://typelevel.org/cats/typeclasses/functor.html")),
+      <.br,
+      scalaC(
+        """
+          |trait Functor[F[_]] {
+          | 
+          |  def map[A, B](x: F[A])(f: A -> B): F[B]
+          |}
+        """.stripMargin),
+      ),
+    slide("Combine things",
+      <.h3("Use it easily"),
+      scalaC(
+       """
+         | import cats.Functor
+         | import cats.implicits._
+         |  
+         | Functor[List[Int]].map(List(10, 20, 30), identity) 
+         | //  ^               ^
+         | //  |               |---- Use the map method
+         | //  |
+         | //  |----- Summon the instance       
+       """.stripMargin
+    ),
+    <.br,
+    scalaCFragment(
+      """
+        | List(1,3,4) map identity
+        | //          ^
+        | //          |----- Syntax that invokes uses the Functor instances
+      """.stripMargin
+    )),
+   slide(
+     "Obey the laws",
+     <.h3("Functor laws"),
+     <.p,
+     Enumeration(
+       Item.stable("Identity:    f.map(identity) == f"),
+       Item.stable("Composition: f.map(g).map(h) == f.map(g.compose(h))")
+     )
+   ),
+   slide(
+     "All those functors",
+     <.h3("There are many possible functor instances"),
+     <.p,
+     Enumeration(
+       Item.stable("List[A]"),
+       Item.stable("Set[A]"),
+       Item.stable("Option[A]"),
+       Item.stable("Either[A, B]"),
+       Item.stable("IO[A]"),
+       Item.stable("Many more ...")
+     )
     )
-  )
+   ) 
 
   val typeClassApplicative = chapter(
     chapterSlide(

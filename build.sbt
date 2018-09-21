@@ -177,11 +177,17 @@ lazy val `typeclasses-101-exercises` = project
 
 lazy val `typeclasses-incarnations-lecture` = project
   .in(file("lecture5_typeclasses_incarnations"))
-  .settings(common)
+  .enablePlugins(ScalaJSPlugin)
   .settings(
+    common,
+    lectureCommon,
+    copyFastImpl("typeclasses-incarnations-lecture"),
+    copyFullImpl("typeclasses-incarnations-lecture"),
+    addCommandAlias("fastCompile", "; fastOptJS; copyFast"),
+    addCommandAlias("fullCompile", "; fullOptJS; copyFull")
+  ).settings(
     name := "typeclasses-incarnations-lecture"
-  )
-  .dependsOn(`lectures-shared` % "compile->compile;test->test")
+  ).dependsOn(`lectures-shared`)
 
 lazy val `typeclasses-incarnations-exercises` = project
   .in(file("exercise5_typeclasses_incarnations"))
