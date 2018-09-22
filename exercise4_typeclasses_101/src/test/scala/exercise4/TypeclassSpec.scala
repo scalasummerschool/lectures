@@ -19,8 +19,4 @@ object TypeclassSpec extends Properties("Map") {
   property("smash string") = forAll { inp: (String, String) =>
     TypeclassSolution.testSmashString(inp._1, inp._2) == Typeclasses.testSmashString(inp._1, inp._2)
   }
-
-  property("smash reverse") = forAll { inp: (List[String], List[String]) =>
-    TypeclassSolution.testSmashReverse(inp._1, inp._2) == Typeclasses.testSmashListReverse(inp._1, inp._2)
-  }
 }

@@ -1,27 +1,25 @@
 package exercise4
 
 object TypeclassSolution {
-  //1) Define a type class Reversable which reverses values
-  trait Reversable[T] {
-    def reverse(a: T): T
-  }
 
+  trait Reversable[A] {
+
+    def reverse(a: A): A
+  }
+ 
   object Reversable {
+
     implicit val stringReverse = new Reversable[String] {
       override def reverse(a: String): String = a.reverse
     }
 
-    def reverse[T: Reversable](a: T): T = implicitly[Reversable[T]].reverse(a)
+    def reverse[A: Reversable](a: A): A = implicitly[Reversable[A]].reverse(a)
   }
 
-  //2) Provide an instance of Reverse for String
 
-  def testReversableString(str: String) = Reversable.reverse(str)
+  trait Smash[A] {
 
-
-  //3) Write a type class named Smash that allows to smash values of the same type type together.
-  trait Smash[T] {
-    def smash(a: T, b: T): T
+    def smash(a: A, b: A): A
   }
 
   object Smash {
@@ -41,21 +39,12 @@ object TypeclassSolution {
       override def smash(a: List[_], b: List[_]): List[_] = a ++ b
     }
 
-    def smash[T : Smash](a: T, b: T): T = implicitly[Smash[T]].smash(a, b)
+    def smash[A : Smash](a: A, b: A): A = implicitly[Smash[A]].smash(a, b)
   }
 
-  //4) Provide an instance for Smash for the Int and Double types
-  // Use addition for the Int type and multiplication for the Double type
+
+  def testReversableString(str: String) = Reversable.reverse(str)
   def testSmashInt(a: Int, b: Int): Int = Smash.smash(a, b)
-
   def testSmashDouble(a: Double, b: Double): Double = Smash.smash(a, b)
-
-  //5) Provide and instance for Smash for String type such that it concatenates the input
   def testSmashString(a: String, b: String): String = Smash.smash(a, b)
-
-
-  //6) Implement the method so that it consumes reversable and smashable things
-  def testSmashReverse[T](a: T, b: T)(rev: Reversable[T], smash: Smash[T]): T = {
-    Smash.smash(Reversable.reverse(a)(rev), Reversable.reverse(b)(rev))(smash)
-  }
 }
