@@ -1,7 +1,8 @@
-import PresentationUtil._
+import PresentationUtil.{slide, _}
 import japgolly.scalajs.react.ScalaComponent
 import japgolly.scalajs.react.vdom.html_<^._
 import org.scalajs.dom
+
 import scala.scalajs.js.JSApp
 import scala.scalajs.js.annotation.JSExport
 
@@ -92,7 +93,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
       """
         | 42 === 42
         | //  ^
-        | //  |----- Syntax that invokes uses the Eq instances
+        | //  |----- Syntax that invokes the Eq instances
       """.stripMargin
     )
     ))
@@ -153,7 +154,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
       scalaC(
         """
           |trait Monoid[A] {
-          |  def pure: A
+          |  def empty: A
           |  def combine(x: A, y: A): A
           |}
         """.stripMargin),
@@ -185,7 +186,8 @@ object TypeClassesIncarnationsLecture extends JSApp {
      <.h3("Monoid laws"),
      <.p,
      Enumeration(
-       Item.stable("Associativity: a combine (b combine c) == (a combine b) combine c")
+       Item.stable("Associativity: a combine (b combine c) == (a combine b) combine c"),
+       Item.stable("Identity element: a combine empty == a")
      )
    ),
    slide(
@@ -199,6 +201,13 @@ object TypeClassesIncarnationsLecture extends JSApp {
        Item.stable("Bloomfilters"),
        Item.stable("Many more ...")
      )
+    ),
+    slide(
+      "Monoids everwhere",
+      <.img(
+        ^.alt := "Everywhere",
+        ^.src := "./img/monoids-monoids-everywhere.jpg"
+      )
     )
   ) 
 
@@ -215,11 +224,11 @@ object TypeClassesIncarnationsLecture extends JSApp {
         """
           |trait Functor[F[_]] {
           | 
-          |  def map[A, B](x: F[A])(f: A -> B): F[B]
+          |  def map[A, B](x: F[A])(f: A => B): F[B]
           |}
         """.stripMargin),
       ),
-    slide("Combine things",
+    slide("Represent effects",
       <.h3("Use it easily"),
       scalaC(
        """
@@ -268,6 +277,104 @@ object TypeClassesIncarnationsLecture extends JSApp {
   val typeClassApplicative = chapter(
     chapterSlide(
       <.h2("The applicative type class")
+    ),
+    slide("Map over things with structure",
+      <.h3("Monoidal functors"),
+      <.p(<.small("More information can be found here: https://typelevel.org/cats/typeclasses/applicative.html")),
+      <.br,
+      scalaC(
+        """
+          |import cats.Functor
+          |
+          |trait Applicative[F[_]] extends Functor[F] {
+          |  def ap[A, B](ff: F[A => B])(fa: F[A]): F[B]
+          |
+          |  def pure[A](a: A): F[A]
+          |
+          |  def map[A, B](fa: F[A])(f: A => B): F[B] = ap(pure(f))(fa)
+          |}
+        """.stripMargin)),
+
+    slide("Map over things with structure",
+      <.h3("Use it easily"),
+      scalaC(
+        """
+          | import cats.Functor
+          | import cats.implicits._
+          |
+          | Applicative[Option].pure(3) == Some(3)
+          | Applicative[Option].ap(Some((_ + 1)), Some(3)) == Some(4)
+          | Applicative[Option].ap(None, Some(3)) == None
+          | Applicative[Option].ap(Some((_ + 1)), None) == None
+          |
+        """.stripMargin
+      )),
+    slide("It's just apply",
+      <.h3("The ladder of function application"),
+      <.br,
+        scalaCFragment(
+          """
+            | val add1: Int => Int = (_ + 1)
+            |
+            | // normal application
+            | add1(3) == 4
+          """.stripMargin),
+         scalaCFragment(
+         """
+           | // functorial application
+           | Some(3).map(add1) == Some(4)
+         """.stripMargin),
+        scalaCFragment(
+          """
+            | // monoial functorial application
+            | Applicative[Option].app(Some(add1), Some(3))
+          """.stripMargin
+         )
+    ),
+    slide("More useful operations",
+      <.h3("More usefule methods"),
+      <.br,
+      scalaC(
+        """
+          |Applicative[Option].map3(Some(1), Some(2), Some(3))(_ + _ + _)
+        """.stripMargin),
+       <.br,
+       scalaCFragment(
+          """
+            |import cats.instances.list._
+            |import cats.syntax.traverse._
+            |
+            |List(Some(1), Some(3)).sequence == Some(List(1, 3))
+          """.stripMargin),
+        <.br,
+        scalaCFragment(
+          """
+            |import cats.instances.list._
+            |import cats.syntax.traverse._
+            |
+            |List(1,3,3).map(Some(_)).sequence == Some(List(1,3,3))
+            |
+            |List(1,3,3).traverse(Some(_)) == Some(List(1,3,3))
+          """.stripMargin)
+    ),
+    slide("Obey the laws",
+      <.h3("Applicative functor laws"),
+      <.br,
+      Enumeration(
+        Item.stable("Identity:    ap(pure(identity), v) == v"),
+        Item.stable("Homomorphism: ap(f, pure(x)) == pure (f x)"),
+        Item.stable("Associativity: ap(ap(a, b), c) == ap(a, ap(b, c)) ")
+      )
+    ),
+    slide(
+      "All those applicative functors",
+      <.h3("There are quite some applicative functor instances"),
+      <.p,
+      Enumeration(
+        Item.stable("Either[A]"),
+        Item.stable("Option[A]"),
+        Item.stable("IO[A]")
+      )
     )
   )
 
@@ -295,8 +402,8 @@ object TypeClassesIncarnationsLecture extends JSApp {
           typeClassEq,
           typeClassOrder,
           typeClassMonoid,
-          typeClassApplicative,
-          typeClassMonad
+          typeClassApplicative //,
+          //typeClassMonad
         )
       )
     )
