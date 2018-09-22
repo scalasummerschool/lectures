@@ -91,7 +91,7 @@ object StdLibLecture extends JSApp {
       "Primitives: number operators",
       scalaC("""
         1 + 2 == 3    // addition
-        1 - 2 == -1   // substraction
+        1 - 2 == -1   // subtraction
         2 % 2 == 0    // modulo
         2 * 2 == 4    // multiplication
       """),
@@ -99,7 +99,7 @@ object StdLibLecture extends JSApp {
         -1.abs == 1   // absolute value
         2.max(3) == 3 // find the maximum value
         2.min(3) == 2 // find the minimum value
-        3.signum == 1 // singum
+        3.signum == 1 // signum
       """)
     ),
 

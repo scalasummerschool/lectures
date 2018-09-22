@@ -41,7 +41,7 @@ object FP101Lecture extends JSApp {
 
     slide(
       "Definition",
-      <.p("FP is a declarative programming paradigm which tries to structure code as expressions and declarations. Thus, we end up with pure functions, no side-effects or shared mutaple state.")
+      <.p("FP is a declarative programming paradigm which tries to structure code as expressions and declarations. Thus, we end up with pure functions, no side-effects or shared mutable state.")
     ),
 
     slide(
