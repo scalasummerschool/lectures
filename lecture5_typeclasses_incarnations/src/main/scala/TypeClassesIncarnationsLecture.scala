@@ -250,6 +250,20 @@ object TypeClassesIncarnationsLecture extends JSApp {
         | //          |----- Syntax that invokes uses the Functor instances
       """.stripMargin
     )),
+    slide("They compose",
+      <.h3("Functors compose"),
+      <.br,
+      scalaC(
+        """
+          |import cats.Functor
+          |import cats.instances.list._
+          |import cats.instances.option._
+          |
+          |val listOption = List(Some(1), None, Some(2))
+          |
+          |Functor[List].compose[Option].map(listOption)(_ + 1)
+        """.stripMargin)
+    ),
    slide(
      "Obey the laws",
      <.h3("Functor laws"),
@@ -332,7 +346,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
          )
     ),
     slide("More useful operations",
-      <.h3("More usefule methods"),
+      <.h3("More useful methods"),
       <.br,
       scalaC(
         """
@@ -356,6 +370,21 @@ object TypeClassesIncarnationsLecture extends JSApp {
             |
             |List(1,3,3).traverse(Some(_)) == Some(List(1,3,3))
           """.stripMargin)
+    ),
+    slide("They compose",
+      <.h3("Applicative functors compose"),
+      <.br,
+      scalaC(
+        """
+          |import cats.instances.future._
+          |import scala.concurrent.Future
+          |import scala.concurrent.ExecutionContext.Implicits.global
+          |
+          |// compute a future of Option[Int]
+          |val x: Future[Option[Int]] = Future.successful(Some(5))
+          |val y: Future[Option[Char]] = Future.successful(Some('a'))
+          |val composed = Applicative[Future].compose[Option].map2(x, y)(_ + _)
+        """.stripMargin)
     ),
     slide("Obey the laws",
       <.h3("Applicative functor laws"),
@@ -381,6 +410,78 @@ object TypeClassesIncarnationsLecture extends JSApp {
   val typeClassMonad = chapter(
     chapterSlide(
       <.h2("The monad type class")
+    ),
+    slide(
+      "Sequence computation",
+      <.h3("Sequence (effectful) computations"),
+      <.p(<.small("More information can be found here: https://typelevel.org/cats/typeclasses/monad.html")),
+      <.br,
+      scalaC(
+        """
+          |trait Monad[F[_]] extends Applicative[F] {
+          |
+          |  def flatMap[A, B](x: F[A])(f: A => F[B]): F[B]
+          |}
+        """.stripMargin),
+    ),
+    slide("Represent effects",
+      <.h3("Use it easily"),
+      scalaC(
+        """
+          | import cats._
+          |
+          | Monad[List[Int]].flatMap(List(10, 20, 30), x => List.iterate(0, x)(_ + 1))
+        """.stripMargin
+      ),
+      <.br,
+      scalaCFragment(
+        """
+          | List(1,3,4) flatMap someOperation
+          |
+          | Some(1).flatMap(x => None) == None
+        """.stripMargin
+      ),
+      <.br,
+      scalaCFragment(
+        """
+          | for {
+          |   x <- monadicComputation
+          |   y <- monadicComputation2(x) // <- this depends on the result x
+          |   z <- monadicComputation3(x)
+          | } yield z
+        """.stripMargin)
+    ),
+    slide("They compose",
+      <.h3("Monads do not compose, do they?"),
+      <.br,
+      scalaC(
+        """
+          | Monad[Option].compose[List] // this does not work :(
+        """.stripMargin),
+      <.p("Different monad instances don't generally compose."),
+      <.p("The same monad instance can be composed using kleisli composition."),
+    ),
+    slide(
+      "Obey the laws",
+      <.h3("Monad laws"),
+      <.p,
+      Enumeration(
+        Item.stable("Left identity:  pure(x).flatMap(f) == (f x) "),
+        Item.stable("Right identity: x.flatMap(pure) == x"),
+        Item.stable("Associativity: left out for now. See Kleisli composition")
+      )
+    ),
+    slide(
+      "All those monads",
+      <.h3("There are many possible monad instances"),
+      <.p,
+      Enumeration(
+        Item.stable("List[A]"),
+        Item.stable("Option[A]"),
+        Item.stable("Either[A, B]"),
+        Item.stable("IO[A]"),
+        Item.stable("Many more ...")
+      )
     )
   )
 
@@ -402,8 +503,8 @@ object TypeClassesIncarnationsLecture extends JSApp {
           typeClassEq,
           typeClassOrder,
           typeClassMonoid,
-          typeClassApplicative //,
-          //typeClassMonad
+          typeClassApplicative,
+          typeClassMonad
         )
       )
     )
