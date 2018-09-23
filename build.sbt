@@ -193,6 +193,7 @@ lazy val `typeclasses-incarnations-exercises` = project
   .in(file("exercise5_typeclasses_incarnations"))
   .settings(common)
   .settings(
-    name := "typeclasses-incarnations-exercises"
+    name := "typeclasses-incarnations-exercises",
+    libraryDependencies += "org.typelevel" %% "cats-core" % "1.4.0" % Compile
   )
   .dependsOn(`exercises-shared` % "compile->compile;test->test")
