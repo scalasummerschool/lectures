@@ -214,7 +214,7 @@ object TypeClasses101Lecture extends JSApp {
       Enumeration(
         Item.stable("Create trait for the operation"),
         Item.fadeIn("Introduce generic parameter F[_]"),
-        Item.fadeIn("Since F is all quantified it must support all types, including new ones")
+        Item.fadeIn("Since F is universally quantified it must support all types, including new ones")
       )
     ),
 
@@ -293,7 +293,7 @@ object TypeClasses101Lecture extends JSApp {
             implicit val whenOkOption = new WhenOk[Option] {
               def whenOk[A, B](value: Option[A], f: A => B): Option[B] = {
                 value match {
-                  case Some(v) => v
+                  case Some(v) => Some(f(v))
                   case None    => None
                 }
               }
