@@ -383,7 +383,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
       ),
       scalaCFragment(
         """
-          // monodial functorial application
+          // monoidal functorial application
           Applicative[Option].ap(Some(add1), Some(3))
         """
       )
@@ -507,7 +507,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
            for {
              x <- monadicComputation
              y <- monadicComputation2(x) // <- this depends on the result x
-             z <- monadicComputation3(x)
+             z <- monadicComputation3(y)
            } yield z
         """)
     ),
