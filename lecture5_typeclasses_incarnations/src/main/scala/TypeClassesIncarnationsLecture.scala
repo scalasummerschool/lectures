@@ -801,6 +801,273 @@ object TypeClassesIncarnationsLecture extends JSApp {
         sbt> project typeclasses-incarnations-exercises
         sbt> test:testOnly exercise5.MonadTransformersSpec
       """)
+    ),
+
+    noHeaderSlide(
+      <.h3("Last step, some useful Monads")
+    )
+  )
+
+  val monadIncarnations = chapter(
+    chapterSlide(
+      <.h2("Monad Incarnations")
+    ),
+
+    noHeaderSlide(
+      <.h3("Reader Monad")
+    ),
+
+    slide(
+      "Monads: Reader",
+      <.p("Imagine you have some context you have to carry around."),
+      <.br,
+      scalaC("""
+        case class GameConfig(maxMoves: Int)
+
+        def move(dir: Direction, 
+                 current: Pos,
+                 moveCount: Int,
+                 conf: GameConfig): Either[String, Pos] = 
+          if (moveCount < conf.maxMoves)
+            dir match { ??? }
+          else
+            Left("No moves left over")
+      """)
+    ),
+
+    slide(
+      "Monads: Reader",
+      <.p("But now every function calling `move` has to provide the static `GameConfig`."),
+      <.br,
+      scalaC("""
+        def moveUp(..., conf: GameConfig): Either[String, Pos] = 
+          move(Up, current, moveCount, conf)
+
+        ...
+
+        def parse(dirRaw: String, ..., conf: GameConfig): Either[String, Pos] =
+          dirRaw.toLowerCase match {
+            case "up" => moveUp(current, moveCount, conf)
+            ...
+          }
+      """)
+    ),
+
+    slide(
+      "Monads: Reader",
+      <.p("What if we could store such information in the background?")
+    ),
+
+    slide(
+      "Monads: Reader",
+      scalaC("""
+        case class Reader[E, A](run: E => A)
+
+        implicit def readerM[E] = new Monad[Reader[E, ?]] {
+
+          def flatMap[A, B](fa: Reader[E, A])
+                           (f: A => Reader[E, B]): Reader[E, B] = {
+            Reader { env =>
+              val reader = f(fa.run(env))
+
+              reader.run
+            }
+        }
+      """)
+    ),
+
+    slide(
+      "Monads: Reader",
+      scalaC("""
+        object Reader {
+
+          // get the context
+          def ask[E]: Reader[E, E] = Reader(identity)
+
+          // update context
+          def local[E, A](f: E => E)(fa: Reader[E, A]): Reader[E, A] =
+            Reader { env =>
+              fa.run(f(env))
+            }
+        }
+      """)
+    ),
+
+    slide(
+      "Monads: Reader",
+      scalaC("""
+        type ConfR[A] = Reader[GameConfig, A]
+
+        def move(dir: Direction, 
+                 current: Pos,
+                 moveCount: Int): ConfR[Either[String, Pos]] = 
+          Reader.ask[GameConfig].map { conf =>
+            if (moveCount < conf.maxMoves)
+              dir match { ??? }
+            else
+              Left("No moves left over")
+          }
+      """)
+    ),
+
+    slide(
+      "Monads: Reader",
+      scalaC("""
+        def moveUp(current: Pos, moveCount: Int): ConfR[Either[String, Pos]] = 
+          move(Up, current, moveCount)
+
+        ...
+
+        parse("up", Pos(0, 0), 0).run(GameConfig(5)) === Right(Pos(1, 0))
+      """)
+    ),
+
+    noHeaderSlide(
+      <.h3("What about writing information?")
+    ),
+
+    slide(
+      "Monads: Writer",
+      scalaC("""
+        // let's modify the old `moveUp` to log moves
+        def moveUp(current: Pos,
+                   moveCount: Int,
+                   conf: GameConfig,
+                   moves: List[String]): Either[String, (List[String], Pos)] =
+          moves(Up, current, moveCount, conf)
+            .map(pos => ("up" :: moves, pos))
+      """)
+    ),
+
+    slide(
+      "Monads: Writer",
+      <.p("But now we carry a list around to store log entries.")
+    ),
+
+    slide(
+      "Monads: Writer",
+      scalaC("""
+        case class Writer[E, A](run: (E, A))
+
+        implicit def writerM[E: Semigroup] = new Monad[Writer[E, ?]] {
+
+          def flatMap[B](fa: Writer[E, A])
+                        (f: A => Writer[E, B]): Writer[E, B] = {
+            val writer = f(fa.run._2)
+
+            (writer.run._1 |+| fa.run._1, writer.run._2)
+          }
+        }
+      """)
+    ),
+
+    slide(
+      "Monads: Writer",
+      scalaC("""
+        object Writer {
+
+          // store some information
+          def tell[E: Semigroup, A](e: E): Writer[E, A] = 
+            Writer { case (before, value) =>
+              (e |+| before, value)
+            }
+        }
+      """)
+    ),
+
+    slide(
+      "Monads: Writer",
+      scalaC("""
+        type GameW[A] = Writer[List[String], A]
+
+        def moveUp(current: Pos,
+                   moveCount: Int,
+                   conf: GameConfig): GameW[Either[String, Pos]] =
+          for {
+            pos <- pure(moves(Up, current, moveCount, conf))
+            _   <- Writer.tell(List("up"))
+          } yield pos
+      """)
+    ),
+
+    slide(
+      "Monads: Writer",
+      scalaC("""
+        val (logs, value) = parse("up", Pos(0, 0), 0, GameConfig(5)).run
+
+        logs  === List("up")
+        value === Pos(1, 0)
+      """)
+    ),
+
+    noHeaderSlide(
+      <.h3("Can I ask and tell?")
+    ),
+
+    slide(
+      "Monads: State",
+      scalaC("""
+        case class State[S, A](run: S => (S, A))
+
+        implicit def stateM[S: Semigroup] = new Monad[State[S, ?]] {
+
+          def flatMap[B](fa: State[S, A])
+                        (f: A => State[S, B]): State[S, B] =
+            State { state =>
+              val (state0, value0) = fa(state)
+              val (state1, value1) = f(value0)
+
+              (state1 |+| state0, value1)
+            }
+        }
+      """)
+    ),
+
+    slide(
+      "Monads: State",
+      scalaC("""
+        case class GameState(current: Pos, 
+                             moveCount: Int)
+
+        type GameS[A] = State[GameState, A]
+      """)
+    ),
+
+    slide(
+      "Monads: State",
+      scalaC("""
+        def move(dir: Direction, conf: GameConfig): GameS[Either[String, Unit]] = 
+          for {
+            state  <- State.ask[GameState]
+            result <- {
+              if (state.moveCount < conf.maxMoves)
+                dir match {
+                  case Up => State.tell(GameState(Pos(1, 0), 1))
+                  ...
+                }
+              else
+                pure(Left("No moves left over"))
+            }
+          } yield result
+      """)
+    ),
+
+    slide(
+      "Monads: State",
+      scalaC("""
+        val (state, _) = parse("up", GameConf(5)).run(GameState(Pos(0, 0), 0))
+
+        state === GameState(Pos(1, 0), 1)
+      """)
+    ),
+
+    noHeaderSlide(
+      <.h3("You can that and more in Cats"),
+      <.br,
+      <.a(
+        ^.href := "https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data",
+        "cats/core/data"
+      )
     )
   )
 
@@ -823,6 +1090,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
           catsKernel,
           catsCore,
           monadTransformers,
+          monadIncarnations,
           summary
         )
       )
