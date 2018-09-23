@@ -1,5 +1,6 @@
 import PresentationUtil.{Enumeration, _}
 import japgolly.scalajs.react.ScalaComponent
+import japgolly.scalajs.react.vdom.Style
 import japgolly.scalajs.react.vdom.html_<^._
 import org.scalajs.dom
 
@@ -34,26 +35,26 @@ object TypeClasses101Lecture extends JSApp {
     chapterSlide(
       <.h2("What problem do type classes solve")
     ),
-
     slide(
       "Dealing with change",
-      <.br,
       scalaC(
         """
-          |object Execution {
-          |  def resolveFields(fields: List[Field], resolver: (Field) => Option[Json]): List[Option[Json]] = {
-          |    fields.map { field =>
-          |      resolver(field) match {
-          |        case Some(value) => wrapResult(value)
-          |        case failure     => failure
-          |      }
-          |    }
-          |  }
-          |
-          |  def wrapResult(json: Json): Json = ??
-          |}
-        """.stripMargin),
-        <.br,
+          object Execution {
+            def resolveFields(fields: List[Field], 
+                              resolver: Field => Option[Json])
+                : List[Option[Json]] = {
+
+              fields.map { field =>
+                resolver(field) match {
+                  case Some(value) => wrapResult(value)
+                  case failure     => failure
+                }
+              }
+            }
+          
+            def wrapResult(json: Json): Option[Json] = ???
+          }
+        """),
         <.br,
         <.p(
          ^.cls := "fragment fade-in",
@@ -62,22 +63,24 @@ object TypeClasses101Lecture extends JSApp {
 
     slide(
       "Dealing with change",
-      <.h3("Try this"),
-      <.br,
       scalaC(
         """
-          |object Execution {
-          |  def resolveFields(fields: List[Field], resolver: (Field) => Try[Json])): List[Try[[[Json]]]] = {
-          |    fields.map { field =>
-          |      resolver(field) match {
-          |        case Success(value) => wrapResult(value)
-          |        case failure     => failure
-          |      }
-          |    }
-          |  }
-          |  def wrapResult(json: Json): Json = ??
-          |}
-        """.stripMargin),
+          object Execution {
+            def resolveFields(fields: List[Field], 
+                              resolver: Field => Try[Json])
+                : List[Try[Json]] = {
+
+              fields.map { field =>
+                resolver(field) match {
+                  case Success(value) => wrapResult(value)
+                  case failure        => failure
+                }
+              }
+            }
+
+            def wrapResult(json: Json): Try[Json] = ???
+          }
+        """),
         <.br,
         <.p(
         ^.cls := "fragment fade-in",
@@ -86,21 +89,24 @@ object TypeClasses101Lecture extends JSApp {
 
     slide(
      "Dealing with change",
-      <.br,
       scalaC(
         """
-          |object Execution {
-          |  def resolveFields(fields: List[Field], resolver: (Field) => ErrorOr[Json])): List[ErrorOr[[[Json]]]] = {
-          |    fields.map { field =>
-          |      resolveSingleField(field) match {
-          |        case Broken(value) => wrapResult(value)
-          |        case failure     => failure
-          |      }
-          |    }
-          |  }
-          |  def wrapResult(json: Json): Json = ??
-          |}
-        """.stripMargin),
+          object Execution {
+            def resolveFields(fields: List[Field], 
+                              resolver: Field => ErrorOr[Json])
+                : List[ErrorOr[Json]] = {
+
+              fields.map { field =>
+                resolveSingleField(field) match {
+                  case Broken(value) => wrapResult(value)
+                  case failure       => failure
+                }
+              }
+            }
+
+            def wrapResult(json: Json): ErrorOr[Json] = ???
+          }
+        """),
         <.br,
         <.p(
          ^.cls := "fragment fade-in",
@@ -110,7 +116,8 @@ object TypeClasses101Lecture extends JSApp {
     slide(
       "Dealing with change",
       <.h3("The only constant in your code base is its change"),
-      <.h5("What does functional programming give to deal with this?")
+      <.br,
+      <.p("What does functional programming give to deal with this?")
     )
   )
 
@@ -125,80 +132,87 @@ object TypeClasses101Lecture extends JSApp {
       <.br,
       scalaC(
         """
-          |fields.map { field =>
-          |  resolver(field) match {
-          |    case Success(value) => wrapResult(value) // <--- this changes
-          |    case failure        => failure
-          |  }
-          |}
-        """.stripMargin),
-      <.br
-     ),
+          fields.map { field =>
+            resolver(field) match {
+              case Success(value) => wrapResult(value) // <--- this changes
+              case failure        => failure
+            }
+          }
+        """),
+    ),
+
     slide(
       "Discover the type class",
       <.h3("Employ wishful thinking"),
       <.br,
       scalaC(
         """
-          |fields.map { field =>
-          |  whenOk(resolver(field), wrapResult)
-          |}
-        """.stripMargin),
-      <.br
+          fields.map { field =>
+            whenOk(resolver(field), wrapResult)
+          }
+        """)
     ),
+
     slide(
       "Discover the type class",
       <.h3("Different implementations"),
       <.br,
       scalaC(
         """
-          |whenOk(val: Option[Json], fn: Json => Json): Option[Json] = ???
-          |whenOk(val: Try[Json], fn: Json => Json): Try[Json] = ???
-          |whenOk(val: ErrorOr[Json], fn: Json => Json): ErrorOr[Json] = ???
-        """.stripMargin),
-      <.br
+          whenOk(value: Option[Json], f: Json => Json): Option[Json] = ???
+          whenOk(value: Try[Json], f: Json => Json): Try[Json] = ???
+          whenOk(value: ErrorOr[Json], f: Json => Json): ErrorOr[Json] = ???
+        """)
     ),
+
     slide(
       "Discover the type class",
       <.h3("Extract the essence"),
       <.br,
       scalaC(
         """
-          |whenOk(val: Option[Json], fn: Json => Json): Option[Json] = ???
-          |whenOk(val: Try[Json], fn: Json => Json): Try[Json] = ???
-          |whenOk(val: ErrorOr[Json], fn: Json => Json): ErrorOr[Json] = ???
-        """.stripMargin),
-      <.br,
+          whenOk(value: Option[Json], f: Json => Json): Option[Json] = ???
+          whenOk(value: Try[Json], f: Json => Json): Try[Json] = ???
+          whenOk(value: ErrorOr[Json], f: Json => Json): ErrorOr[Json] = ???
+        """),
       scalaCFragment(
         """
-          |whenOk(val: F[Json], fn: (Json) => Json): F[Json]
-        """.stripMargin),
-      <.br,
+          // abstract computational context
+          whenOk[F[_]](value: F[Json], f: Json => Json): F[Json]
+        """),
       scalaCFragment(
         """
-          |whenOk[A](val: F[A], fn: (A) => A): F[A]
-        """.stripMargin),
-      <.br,
+          // abstract over values
+          whenOk[F[_], A](value: F[A], f: A => A): F[A]
+        """),
       scalaCFragment(
         """
-          |whenOk[A, B](val: F[A], fn: (A) => B): F[B]
-        """.stripMargin)
+          // make result type independent
+          whenOk[F[_], A, B](value: F[A], f: A => B): F[B]
+        """)
     ),
+
+    noHeaderSlide(
+      <.h3("Encode it in a type class")
+    ),
+
     slide(
       "Discover the type class",
-      <.h3("Encode it in a type class"),
-      <.br,
       scalaC(
         """
-          |trait WhenOk[F[_]] {
-          |          // ^
-          |          // |--- any type constructor
-          |
-          |  def whenOk[A, B](f: F[A], fn: (A) => B): F[B]
-          |}
-        """.stripMargin),
+          trait WhenOk[F[_]] {
+                    // ^
+                    // '-- any type constructor
+          
+            def whenOk[A, B](f: F[A], fn: A => B): F[B]
+          }
+        """),
+    ),
+
+    slide(
+      "Discover the type class",
       Enumeration(
-        Item.fadeIn("Create trait for the operation"),
+        Item.stable("Create trait for the operation"),
         Item.fadeIn("Introduce generic parameter F[_]"),
         Item.fadeIn("Since F is universally quantified it must support all types, including new ones")
       )
@@ -210,33 +224,39 @@ object TypeClasses101Lecture extends JSApp {
       <.br,
       scalaC(
         """
-          |resolveFields(fields: List[Field], resolver: (Field) => Option[Json], impl: WhenOk[Json]): List[Option[Json]] = {
-          |   fields.map { field =>
-          |     impl.whenOk(resolver(field), wrapResult)
-          |   }
-          |}
-        """.stripMargin)
-      ),
+          def resolveFields(fields: List[Field], 
+                            resolver: Field => Option[Json], 
+                            impl: WhenOk[Option]): List[Option[Json]] = {
+
+             fields.map { field =>
+               impl.whenOk(resolver(field), wrapResult)
+             }
+          }
+        """)
+    ),
+
     slide(
       "Discover the type class",
       <.h3("Provide type class instances"),
       <.br,
       scalaC(
         """
-          |val whenOkOption = new WhenOk[Option] {
-          |  def whenOk[A, B](value: Option[A], fn: (A) => B): Option[B] = {
-          |    value match {
-          |      case Some(v) => fn(v)
-          |      case none    => none
-          |    }
-          |  }
-          |}
-        """.stripMargin),
+          val whenOkOption = new WhenOk[Option] {
+            def whenOk[A, B](value: Option[A], f: A => B): Option[B] = {
+              value match {
+                case Some(v) => Some(f(v))
+                case None    => None
+              }
+            }
+          }
+        """),
       scalaCFragment(
         """
-          |resolveFields(myFields, fieldResolver, whenOkOption)
-        """.stripMargin)),
-     slide(
+          resolveFields(myFields, fieldResolver, whenOkOption)
+        """)
+    ),
+
+    slide(
       "Discover the type class",
       <.h3("That's kind of awesome!"),
       <.br,
@@ -245,69 +265,85 @@ object TypeClasses101Lecture extends JSApp {
         ^.src := "./img/yeah.gif"
       )
     ),
+
+    noHeaderSlide(
+      <.h3("Welcome the implicit parameter")
+    ),
+
     slide(
       "Discover the type class",
-      <.h3("Welcome the implicit parameter"),
-      <.br,
       scalaC(
         """
-          |resolveFields(fields: List[Field], resolver: (Field) => Option[Json])(implicit impl: WhenOk[Option[Json]]): List[Option[Json]] = {
-          |   fields.map { field =>
-          |     impl.whenOk(resolver(field), wrapResult)
-          |   }
-          |}
-        """.stripMargin),
-      <.br,
-      scalaCFragment(
+          def resolveFields(fields: List[Field], resolver: Field => Option[Json])
+                           (implicit impl: WhenOk[Option])
+              : List[Option[Json]] = {
+
+             fields.map { field =>
+               impl.whenOk(resolver(field), wrapResult)
+             }
+          }
+        """),
+    ),
+
+    slide(
+      "Discover the type class",
+      scalaC(
         """
-          |object Execution {
-          |  implicit val whenOkOption = new WhenOk[Option] {
-          |    def whenOk[A, B](value: Option[A], fn: (A) => B): Option[B] = {
-          |      value match {
-          |        case Some(v) => v
-          |        case none    => none
-          |      }
-          |    }
-          |  }
-          |}
-        """.stripMargin)),
-    <.br,
+          object Execution {
+            implicit val whenOkOption = new WhenOk[Option] {
+              def whenOk[A, B](value: Option[A], f: A => B): Option[B] = {
+                value match {
+                  case Some(v) => v
+                  case None    => None
+                }
+              }
+            }
+          }
+        """),
     scalaCFragment(
       """
-        |resolveFields(myFields, fieldResolver)
-      """.stripMargin),
+        resolveFields(myFields, fieldResolver)
+      """)
+    ),
+
+    noHeaderSlide(
+      <.h3("Make it future proof")
+    ),
+    
     slide(
     "Discover the type class",
-      <.h3("Make it future proof"),
-      <.br,
       scalaC(
         """
-          |resolveFields(fields: List[Field], resolver: (Field) => Option[Json])(implicit impl: WhenOk[Option[Json]]): List[Option[Json]] = {
-          |   fields.map { field =>
-          |     impl.whenOk(resolver(field), wrapResult)
-          |   }
-          |}
-        """.stripMargin),
+          def resolveFields(fields: List[Field], resolver: Field => Option[Json])
+                           (implicit impl: WhenOk[Option])
+               : List[Option[Json]] = ???
+        """),
+      <.br,
       scalaCFragment(
         """
-          |resolveFields[F[_]](fields: List[Field], resolver: (Field) => F[Json], impl: WhenOk[F[Json]]): List[F[Json]] = {
-          |   fields.map { field =>
-          |     impl.whenOk(resolver(field), wrapResult)
-          |   }
-          |}
-        """.stripMargin)
+          def resolveFields[F[_]](fields: List[Field], 
+                                  resolver: Field => F[Json])
+                                 (implicit impl: WhenOk[F])
+              : List[F[Json]] = ???
+        """)
     ),
+
     slide("The Show type class",
       <.h3("Syntax matters"),
       <.br,
       scalaC(
         """
-          |resolveFields[F[_] : WhenOk](fields: List[Field], resolver: (Field) => F[Json]): List[F[Json]] = {
-          |   fields.map { field =>
-          |     implicitly[WhenOk[F[Json]]].whenOk(resolveSingleField(field), wrapResult)
-          |   }
-          |}
-        """.stripMargin)
+          resolveFields[F[_] : WhenOk](fields: List[Field], 
+                                       resolver: Field => F[Json])
+               : List[F[Json]] = {
+             
+             val impl = implicitly[WhenOk[F]]
+
+             fields.map { field =>
+               impl.whenOk(resolveSingleField(field), wrapResult)
+             }
+          }
+        """)
     )
   )
 
@@ -315,16 +351,20 @@ object TypeClasses101Lecture extends JSApp {
     chapterSlide(
       <.h2("Express yourself")
     ),
+
     slide(
       "The expression problem",
       <.h3("The expression problem"),
-      <.blockquote(
+      <.br,
+      <.p(
+        Style("text-align") := "left",
         """
-          |The goal is to define a datatype by cases, where one can add new cases to the datatype and new functions over the datatype,
-          |without recompiling existing code, and while retaining static type safety (e.g., no casts).
-        """.stripMargin),
+          The goal is to define a datatype by cases, where one can add new cases to the datatype and new functions over the datatype,
+          without recompiling existing code, and while retaining static type safety (e.g., no casts).
+        """),
       <.p(<.small("Originally coined by lambda man aka Philip Wadler"))
     ),
+
     slide(
       "The expression problem",
       <.h3("Type classes are one solution for the expression problem")
