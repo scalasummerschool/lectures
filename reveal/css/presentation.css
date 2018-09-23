@@ -54,6 +54,18 @@
     margin-right: 0;
 }
 
+.team-img {
+    height: 20%;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.florian-img {
+    height: 300px;
+}
+
 /* ########## Queries */
 @media only screen and (min-width: 600px) {
     .slide-header img,
