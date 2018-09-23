@@ -19,6 +19,7 @@ Before you can start you have to install the following tools:
  1. JDK 8 or newer (I think the latest stable version is 10)
  2. [Scala](https://www.scala-lang.org/download/)
  3. [SBT](https://www.scala-sbt.org/download.html) - it is the build-tool we will use
+ 4. `git clone` this repository
  
  You have to install it in that order because each tool relies on the tools installed before.
  
@@ -52,6 +53,27 @@ sbt> test:testOnly <name of test>
 ```
 
 If you want some more information take a look into the [introduction slides](https://scalasummerschool.github.io/lectures/introduction/).
+
+## Build the Lectures
+To build a lecture go through the following steps:
+
+```bash
+$> cd /path/to/repo
+$> sbt
+# select one of the shown lecture
+sbt> project
+sbt> project scala101-lecture
+
+# minimum JS optimizations
+sbt> fastCompile
+
+# maximum JS optimizations (Github page)
+sbt> fullCompile
+sbt> exit
+
+# opens lecture in default browser
+$> open lecture1_scala_101/index.html
+```
 
 ## License
 As stated in the [License file](https://github.com/scalasummerschool/lectures/blob/master/LICENSE) all lecture slides are provided under Creative Commons BY-NC 4.0. The exercise code is released under a MIT license.
