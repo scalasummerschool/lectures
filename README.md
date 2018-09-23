@@ -3,6 +3,16 @@
 # Scala Summer School Content
 Here you find the lectures and exercises for the [Scala Summer School](http://scalasummerschool.github.io). It is still Work In Progress (WIP) and only a subset of all lectures and exercises are available.
 
+## Table of Contents
+ 1. [Introduction](https://scalasummerschool.github.io/lectures/introduction)
+ 2. [Scala 101](https://scalasummerschool.github.io/lectures/lecture1_scala_101)
+ 3. [Functional Programming 101](https://scalasummerschool.github.io/lectures/lecture2_fp_101)
+ 4. [Standard Library](https://scalasummerschool.github.io/lectures/lecture3_std_lib)
+ 5. [Type Classes](https://scalasummerschool.github.io/lectures/lecture4_typeclasses_101)
+ 6. [Type Class Incarnations](https://scalasummerschool.github.io/lectures/lecture5_typeclasses_incarnations)
+ 
+All lectures are based on [reveal.js]. Therefore, to navigate use your arrow keys. Chapters are organized in columns, slides in rows. To get an overview of all slides within a lecture press ESC.
+
 ## Preparations
 ### Mandatory
 Before you can start you have to install the following tools:
@@ -14,13 +24,6 @@ Before you can start you have to install the following tools:
  
  ### Optional
   - [Ammonite](http://ammonite.io/#Ammonite-REPL) - this is an enhanced REPL which makes it easier to fiddle around with some code. But you don't need it. Scala comes already with a REPL. But it isn't that great :).
- 
-Also make sure you compiled the material **before** the workshop takes place. SBT needs to download "the internet" on its first start and this may take some time.
-
-```bash
-cd <path to this repo>
-sbt "compile"
-```
 
 ## SBT
 Here, you find a list of useful SBT commands:
@@ -47,3 +50,14 @@ sbt> test
 # run a certain test
 sbt> test:testOnly <name of test>
 ```
+
+If you want some more information take a look into the [introduction slides](https://scalasummerschool.github.io/lectures/introduction/).
+
+## License
+As stated in the [License file](https://github.com/scalasummerschool/lectures/blob/master/LICENSE) all lecture slides are provided under Creative Commons BY-NC 4.0. The exercise code is released under a MIT license.
+
+The following people are authors of the content in this repository:
+ - Paul Heymann
+ - David Krentzlin
+ - Christian Stein
+ - Florian Sachse
