@@ -357,8 +357,12 @@ object Scala101Lecture extends JSApp {
              a + b
           }
         }
-      """),
-      scalaCFragment("""
+      """)
+    ),
+
+    slide(
+      "Scoping: values in blocks",
+      scalaC("""
         {
           val a = 3
  
@@ -469,8 +473,10 @@ object Scala101Lecture extends JSApp {
     slide(
       "Comparison",
       scalaC("""
-        a > b  // greater than
-        a < b  // smaller than
+        a >  b  // greater than
+        a <  b  // smaller than
+        a >= b  // greater or equal
+        a <= b  // smaller or equal
         a == b // equal
         a != b // equal
 
@@ -510,7 +516,8 @@ object Scala101Lecture extends JSApp {
     slide(
       "Expression Evaluation",
       Enumeration(
-        Item.stable("from left to right"),
+        Item.stable("from top to bottom"),
+        Item.fadeIn("from left to right"),
         Item.fadeIn("before application"),
         Item.fadeIn("following precedence rules")
       )
@@ -618,12 +625,12 @@ object Scala101Lecture extends JSApp {
 
     slide(
       "Definition",
-      <.h3("Types put constraints on term.")
+      <.h3("Types put constraints on term")
     ),
 
     slide(
       "State of a value",
-      <.p("Restriction of objects."),
+      <.p("Restriction on objects."),
       <.br,
       scalaC("""
         val a: Int = 0
@@ -638,7 +645,7 @@ object Scala101Lecture extends JSApp {
 
     slide(
       "Operation restriction",
-      <.p("Restriction of operations"),
+      <.p("Restriction on operations"),
       <.br,
       scalaC("""
         1 + 2    == 3: Int
@@ -991,16 +998,24 @@ object Scala101Lecture extends JSApp {
         // equal to
           def isOlder(other: Person): Boolean = this.age > other.age
         }
-      """),
-      scalaCFragment("""
+      """)
+    ),
+
+    slide(
+      "Classes: methods",
+      <.p("Methods aka context sensitive functions."),
+      <.br,
+      scalaC("""
         // or
-        def isOlder(user: Person)(other: Person): Boolean = user.age > other.age
+        def isOlder(user: Person)(other: Person): Boolean = 
+          user.age > other.age
       """),
       scalaCFragment("""
         val gandalf = new Person("Gandalf", 2019)
 
-        gandalf
-          .isOlder(new Person("Frodo", 33)) == isOlder(gandalf)(new Person("Frodo", 33))
+        gandalf.isOlder(new Person("Frodo", 33)) == {
+          isOlder(gandalf)(new Person("Frodo", 33))
+        }
       """)
     ),
 
@@ -1108,7 +1123,8 @@ object Scala101Lecture extends JSApp {
           // constant fields start with a uppercase letter
           val Gandalf = Person("Gandalf", 2019)
 
-          def older(a: Person, b: Person): Person = if (a.age > b.age) a else b
+          def older(a: Person, b: Person): Person = 
+            if (a.age > b.age) a else b
         }
       """),
       scalaCFragment("""
@@ -1129,14 +1145,15 @@ object Scala101Lecture extends JSApp {
 
           val Gandalf = Person("Gandalf", 2019)
 
-          def isGandalf(person: Person): Boolean = person.name == "Gandalf"
+          def isGandalf(person: Person): Boolean = 
+            person.name == "Gandalf"
         }
       """)
     ),
 
     slide(
       "Traits",
-      <.h4("But what if we have multiple data types which share a relation?")
+      <.p("But what if we have multiple data types which share a relation?")
     ),
 
     noHeaderSlide(
@@ -1147,9 +1164,9 @@ object Scala101Lecture extends JSApp {
       "Traits",
       scalaC("""
         // all people (of some magic realm) but of different type
-        case class Wizard(name: String, power: String) extends Person
-        case class Elf(name: String, age: Int)         extends Person
-        case class Dwarf(name: String, height: Int)    extends Person
+        case class Wizard(name: String, power: String)
+        case class Elf(name: String, age: Int)        
+        case class Dwarf(name: String, height: Int)   
       """)
     ),
 
@@ -1183,8 +1200,12 @@ object Scala101Lecture extends JSApp {
           // default implementation
           def sameName(other: Person): Boolean = name == other.name
         }
-      """),
-      scalaCFragment("""
+      """)
+    ),
+
+    slide(
+      "Traits: common properties and behaviour",
+      scalaC("""
         case class Wizard(name: String, power: String) extends Person {
           def likesPlace(place: String): Boolean = true
         }
@@ -1339,16 +1360,16 @@ object Scala101Lecture extends JSApp {
       """),
       scalaCFragment("""
         person match {
-          case Wizard(name, power) => name  <= check
-          case Elf(name, age)      => name
-          case Dwarf(name, height) => name
+          case Wizard(name, power) => s"this Wizards uses $power"
+          case Elf(name, age)      => s"this Elf is $age years old"
+          case Dwarf(name, height) => s"this dwarf is $height cm tall"
         }
       """),
       scalaCFragment("""
         person match {
-          case Wizard(name = "Gandalf", power) => name  <= fits
-          // case Elf(name, age)      => name
-          // case Dwarf(name, height) => name
+          case Wizard(name, power = "magic") => s"this Wizards uses $power"
+          // case Elf(name, age)             => ...
+          //case Dwarf(name, height)         => ...
         }
       """)
     ),
@@ -1360,23 +1381,23 @@ object Scala101Lecture extends JSApp {
       """),
       scalaCFragment("""
         person match {
-          case Wizard(name, power) => name  <= check
-          case Elf(name, age)      => name
-          case Dwarf(name, height) => name
+          case Wizard(name, power) => s"this Wizards uses $power"
+          case Elf(name, age)      => s"this Elf is $age years old"
+          case Dwarf(name, height) => s"this dwarf is $height cm tall"
         }
       """),
       scalaCFragment("""
         person match {
-          // case Wizard(name, power) => name
-          case Elf(name, age)      => name  <= check
-          case Dwarf(name, height) => name
+          // case Wizard(name, power) => ...
+          case Elf(name, age)         => s"this Elf is $age years old"
+          case Dwarf(name, height)    => s"this dwarf is $height cm tall"
         }
       """),
       scalaCFragment("""
         person match {
-          // case Wizard(name, power) => name
-          // case Elf(name, age)      => name
-          case Dwarf(name = "Gimli", height) => name  <= fits
+          // case Wizard(name, power)    => ...
+          // case Elf(name, age)         => ...
+          case Dwarf(name, height = 107) => s"this dwarf is $height cm tall"
         }
       """)
     ),

@@ -52,10 +52,12 @@ def copyFullImpl(project: String) = Seq(
 lazy val root = project
   .in(file("."))
   .aggregate(
-    `lectures-shared`, `exercises-shared`, 
+    `lectures-shared`, `exercises-shared`,
     `scala101-lecture`, `scala101-exercises`,
     `fp101-lecture`, `fp101-exercises`,
-    `std-lib-lecture`, `std-lib-exercises`
+    `std-lib-lecture`, `std-lib-exercises`,
+    `typeclasses-101-lecture`, `typeclasses-101-exercises`,
+    `typeclasses-incarnations-lecture`, `typeclasses-incarnations-exercises`
   )
   .settings(
     sourceDirectories in Compile := Nil,
@@ -97,7 +99,7 @@ lazy val `scala101-exercises` = project
   .in(file("exercise1_scala_101"))
   .settings(common)
   .settings(
-    name := "scala101-exercises"    
+    name := "scala101-exercises"
   )
   .dependsOn(`exercises-shared` % "compile->compile;test->test")
 
@@ -121,7 +123,7 @@ lazy val `fp101-exercises` = project
   .in(file("exercise2_fp_101"))
   .settings(common)
   .settings(
-    name := "fp101-exercises"    
+    name := "fp101-exercises"
   )
   .dependsOn(`exercises-shared` % "compile->compile;test->test")
 
@@ -145,6 +147,53 @@ lazy val `std-lib-exercises` = project
   .in(file("exercise3_std_lib"))
   .settings(common)
   .settings(
-    name := "std-lib-exercises"    
+    name := "std-lib-exercises"
+  )
+  .dependsOn(`exercises-shared` % "compile->compile;test->test")
+
+lazy val `typeclasses-101-lecture` = project
+  .in(file("lecture4_typeclasses_101"))
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    common,
+    lectureCommon,
+    copyFastImpl("typeclasses-101-lecture"),
+    copyFullImpl("typeclasses-101-lecture"),
+    addCommandAlias("fastCompile", "; fastOptJS; copyFast"),
+    addCommandAlias("fullCompile", "; fullOptJS; copyFull")
+  )
+  .settings(
+    name := "typeclasses-101-lecture"
+  )
+  .dependsOn(`lectures-shared`)
+
+lazy val `typeclasses-101-exercises` = project
+  .in(file("exercise4_typeclasses_101"))
+  .settings(common)
+  .settings(
+    name := "typeclasses-101-exercises"
+  )
+  .dependsOn(`exercises-shared` % "compile->compile;test->test")
+
+lazy val `typeclasses-incarnations-lecture` = project
+  .in(file("lecture5_typeclasses_incarnations"))
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    common,
+    lectureCommon,
+    copyFastImpl("typeclasses-incarnations-lecture"),
+    copyFullImpl("typeclasses-incarnations-lecture"),
+    addCommandAlias("fastCompile", "; fastOptJS; copyFast"),
+    addCommandAlias("fullCompile", "; fullOptJS; copyFull")
+  ).settings(
+    name := "typeclasses-incarnations-lecture"
+  ).dependsOn(`lectures-shared`)
+
+lazy val `typeclasses-incarnations-exercises` = project
+  .in(file("exercise5_typeclasses_incarnations"))
+  .settings(common)
+  .settings(
+    name := "typeclasses-incarnations-exercises",
+    libraryDependencies += "org.typelevel" %% "cats-core" % "1.4.0" % Compile
   )
   .dependsOn(`exercises-shared` % "compile->compile;test->test")

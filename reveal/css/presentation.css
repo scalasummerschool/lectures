@@ -6,10 +6,6 @@
     box-shadow: none;
 }
 
-.reveal section pre {
-    margin-left: 20%;
-}
-
 .slide-header,
 .exercise-header {
     position: fixed;

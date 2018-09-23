@@ -20,9 +20,7 @@ object StdLibLecture extends JSApp {
       Enumeration(
         Item.stable("Primitives"),
         Item.fadeIn("Collections"),
-        Item.fadeIn("Option"),
-        Item.fadeIn("Either"),
-        Item.fadeIn("Try")
+        Item.fadeIn("Build-In ADTs")
       )
     ),
 
@@ -93,7 +91,7 @@ object StdLibLecture extends JSApp {
       "Primitives: number operators",
       scalaC("""
         1 + 2 == 3    // addition
-        1 - 2 == -1   // substraction
+        1 - 2 == -1   // subtraction
         2 % 2 == 0    // modulo
         2 * 2 == 4    // multiplication
       """),
@@ -101,7 +99,7 @@ object StdLibLecture extends JSApp {
         -1.abs == 1   // absolute value
         2.max(3) == 3 // find the maximum value
         2.min(3) == 2 // find the minimum value
-        3.signum == 1 // singum
+        3.signum == 1 // signum
       """)
     ),
 
@@ -159,7 +157,7 @@ object StdLibLecture extends JSApp {
 
     slide(
       "Primitives: comparison operators",
-      <.p("All Boolean comparison opeartors are available for numbers.")
+      <.p("All Boolean comparison operators are available for numbers.")
     ),
 
     slide(
@@ -274,6 +272,15 @@ object StdLibLecture extends JSApp {
     ),
 
     slide(
+      "Tuple: swap",
+      scalaC("""
+        val a = (1, true)
+
+        a.swap == (true, 1)
+      """)
+    ),
+
+    slide(
       "Tuple: pattern matching",
       scalaC("""
         val a = (1, true)
@@ -339,9 +346,9 @@ object StdLibLecture extends JSApp {
         val seq = Seq(1, 2, 3)
 
         seq.filter(a => a > 1)  == Seq(2, 3)
-        seq.finds(a => a == 2)  == Some(2)
+        seq.find(a => a == 2)   == Some(2)
         seq.exists(a => a > 1 ) == true
-        seq.contains(1)         == true
+        seq.containts(1)        == true
       """),
       scalaC("""
         // more concise
@@ -410,7 +417,7 @@ object StdLibLecture extends JSApp {
         val sum = seq.foldLeft(0)((agg, a) => agg + a)
       """),
       scalaCFragment("""
-        // what happened?
+        // what is going on?
         val f: (Int, Int) => Int = (agg, a) => agg + a
 
         sum == f(0, Seq(1, 2, 3).head)
@@ -597,7 +604,7 @@ object StdLibLecture extends JSApp {
       "Let's Code",
       bash("""
         sbt> project std-lib-exercises
-        sbt> test:testOnly StringsSpec
+        sbt> test:testOnly exercise3.StringsSpec
       """)
     ),
 
@@ -720,7 +727,7 @@ object StdLibLecture extends JSApp {
         m + ("hello", 2)       == Map(("hello", 2))
         m.updated("hello", 2)  == m + ("hello", 2)
 
-        m ++ Map(("world", 1)) == Map(("hello", 0), ("world", 2))
+        m ++ Map(("world", 2)) == Map(("hello", 0), ("world", 2))
 
         // remove
         m - "hello"       == Map.empty
@@ -769,14 +776,14 @@ object StdLibLecture extends JSApp {
 
     slide(
       "Option",
-      <.p("Does a computation yield a result or not? Therefore, this is a two element collection."),
+      <.p("Does a computation yield a result or not? Think of it as a two element collection."),
       <.br,
       scalaC("""
         // actual implementation differs - simplified code
         sealed trait Option[+A]
 
         case class Some[+A](value: A) extends Option[A]
-        case object Nothing extends Option[Nothing]
+        case object None extends Option[Nothing]
       """)
     ),
 
@@ -965,18 +972,13 @@ object StdLibLecture extends JSApp {
       """)
     ),
 
-    slide(
-      "Either: transformation",
-      <.p("Equal to Option. It is right-biased.")
-    ),
-
     noHeaderSlide(
       <.h3("Try")
     ),
 
     slide(
       "Try",
-      <.p("You work with (Java) code throwing exceptions? Wrap them up in a Try to regain purity."),
+      <.p("You are working with (Java) code throwing exceptions? Wrap it in a Try to regain purity."),
       <.br,
       scalaC("""
         // basic idea ... but has some extra methods
@@ -1006,7 +1008,7 @@ object StdLibLecture extends JSApp {
 
         t match {
           case Success(a)     => s"the number is $a"
-          case Failure(error) => error.printStacktrace()
+          case Failure(error) => error.printStackTrace()
         }
       """)
     ),
@@ -1079,7 +1081,7 @@ object StdLibLecture extends JSApp {
     noHeaderSlide(
       <.h2("Next"),
       <.br,
-      <.h3("Coding Project")
+      <.h3("First Workshop Project")
     )
   )
 

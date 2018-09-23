@@ -41,7 +41,7 @@ object FP101Lecture extends JSApp {
 
     slide(
       "Definition",
-      <.p("FP is a declarative programming paradigm which tries to structure code as expressions and declarations. Thus, we end up with pure functions, no side-effects or shared mutaple state.")
+      <.p("FP is a declarative programming paradigm which tries to structure code as expressions and declarations. Thus, we end up with pure functions, no side-effects or shared mutable state.")
     ),
 
     slide(
@@ -51,16 +51,7 @@ object FP101Lecture extends JSApp {
 
     slide(
       "What we will discuss",
-      <.p("We will concentrate on typed Functional programming fulfilling all properties."),
-      <.br,
-      Enumeration(
-        Item.stable("Immutability"),
-        Item.stable("Algebraic Data Types"),
-        Item.stable("Pure Functions"),
-        Item.stable("Referential Transparency"),
-        Item.stable("Recursion"),
-        Item.stable("Composability")
-      )
+      <.p("We will concentrate on typed Functional programming fulfilling all properties.")
     ),
 
     slide(
@@ -133,8 +124,8 @@ object FP101Lecture extends JSApp {
         sealed trait Animal
 
         case class Mammal extends Animal
-        case class Bird extends Animal
-        case class Fish extends Animal
+        case class Bird   extends Animal
+        case class Fish   extends Animal
       """)
     ),
 
@@ -143,7 +134,7 @@ object FP101Lecture extends JSApp {
       <.p("Product Type: a single class combining multiple value types"),
       <.br,
       scalaC("""
-        case class PairOfInt(a: Int, b: Int)
+        case class Pair(a: Int, b: String)
       """)
     ),
 
@@ -154,7 +145,7 @@ object FP101Lecture extends JSApp {
         // Person is a sum type
         sealed trait Person
 
-        // each class is a sum type
+        // each class is a product type
         case class Wizard(name: String, power: String) extends Person
         case class Elf(name: String, age: Int)         extends Person
         case class Dwarf(name: String, height: Int)    extends Person
@@ -163,7 +154,7 @@ object FP101Lecture extends JSApp {
 
     slide(
       "ADT",
-      <.p("We already knew these constructs. Now we have a name for them.")
+      <.p("We already know these constructs. Now we have a name for them.")
     )
   )
 
@@ -195,23 +186,6 @@ object FP101Lecture extends JSApp {
 
         // works for every input and always returns the same output
         plus(1, 2) == 3
-      """)
-    ),
-
-    slide(
-      "Pure Functions: replace with value",
-      scalaC("""
-        val plus = Map(
-          ...,
-          1 -> Map(
-            ...
-            2 -> 3
-            ...
-          )
-          ...
-        )
-
-        plus(1)(2) == 3
       """)
     ),
 
@@ -413,6 +387,9 @@ object FP101Lecture extends JSApp {
         // defines a variable - a mutable (imperative) reference
         var a = 1
 
+        a == 1
+      """),
+      scalaCFragment("""
         a = a + 1
         a == 2
       """),
@@ -442,33 +419,6 @@ object FP101Lecture extends JSApp {
       <.p("Solving a problem where the solution depends on solutions to smaller instances of the same problem.")
     ),
 
-    slide(
-      "Recursion: types",
-      Enumeration(
-        Item.stable("single/multi recursion"),
-        Item.fadeIn("direct/indirect recursion"),
-        Item.fadeIn("structural/generative recursion")
-      )
-    ),
-
-    slide(
-      "Recursion: single/multi direct",
-      <.img(
-        ^.alt := "Multi Single Recursion",
-        ^.src := "./img/single_multi_rec.svg",
-        ^.width := "50%"
-      )
-    ),
-
-    slide(
-      "Recursion: indirect",
-      <.img(
-        ^.alt := "Indirect Recursion",
-        ^.src := "./img/indirect_rec.svg",
-        ^.width := "20%"
-      )
-    ),
-
     noHeaderSlide(
       <.h3("Data Types")
     ),
@@ -479,7 +429,7 @@ object FP101Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion: direct single",
+      "Recursion: List",
       scalaC("""
         // linked list of Ints
         sealed trait IntList
@@ -498,15 +448,20 @@ object FP101Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion: direct single",
+      "Recursion: List",
       <.img(
         ^.alt := "Linked List",
         ^.src := "./img/list.svg"
       )
     ),
 
+    slide(
+      "Recursion: direct single",
+      <.h3("Single Direct Recursion")
+    ),
+
     noHeaderSlide(
-      <.h3("We have to write list types for every data type?"),
+      <.h3("Do we have to write list types for every data type?"),
       <.br,
       <.h4(
         ^.cls := "fragment fade-in",
@@ -638,7 +593,7 @@ object FP101Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion: direct multi",
+      "Recursion: Tree",
       scalaC("""
         /* Tree: either a leaf with a value or a node consisting of a
          *        left and right tree
@@ -658,7 +613,7 @@ object FP101Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion: direct multi",
+      "Recursion: Tree",
       scalaC("""
         val tree = Node(Node(Leaf(1), Leaf(2)), Leaf(3))
 
@@ -670,7 +625,12 @@ object FP101Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion: indirect",
+      "Recursion: direct multi",
+      <.h3("Multi Direct Recursion")
+    ),
+
+    slide(
+      "Recursion: even-odd",
       scalaC("""
         def even(n: Int): Boolean =
           if (n == 0) true
@@ -683,7 +643,7 @@ object FP101Lecture extends JSApp {
     ),
 
     slide(
-      "Recursion: indirect",
+      "Recursion: even-odd",
       scalaC("""
         even(5) == odd(4)
                 == even(3)
@@ -692,6 +652,11 @@ object FP101Lecture extends JSApp {
                 == odd(0)
                 == false
       """)
+    ),
+
+    slide(
+      "Recursion: indirect",
+      <.h3("Indirect Recursion")
     ),
 
     noHeaderSlide(
@@ -766,6 +731,38 @@ object FP101Lecture extends JSApp {
     ),
 
     slide(
+      "Recursion: types",
+      <.p("Let's summaries the different recursion types we have seen so far.")
+    ),
+
+    slide(
+      "Recursion: types",
+      Enumeration(
+        Item.stable("single/multi recursion"),
+        Item.fadeIn("direct/indirect recursion"),
+        Item.fadeIn("structural/generative recursion")
+      )
+    ),
+
+    slide(
+      "Recursion: single/multi direct",
+      <.img(
+        ^.alt := "Multi Single Recursion",
+        ^.src := "./img/single_multi_rec.svg",
+        ^.width := "50%"
+      )
+    ),
+
+    slide(
+      "Recursion: indirect",
+      <.img(
+        ^.alt := "Indirect Recursion",
+        ^.src := "./img/indirect_rec.svg",
+        ^.width := "20%"
+      )
+    ),
+
+    slide(
       "What are possible problems",
       Enumeration(
         Item.stable("How to fix types of Generics?"),
@@ -814,7 +811,7 @@ object FP101Lecture extends JSApp {
 
     slide(
       "Recursion: runtime impact",
-      <.p("How do multiple recursive affect the runtime behaviour?")
+      <.p("How do multiple recursive steps affect the runtime behaviour?")
     ),
 
     slide(
@@ -842,7 +839,7 @@ object FP101Lecture extends JSApp {
       <.br,
       <.p(
         ^.cls := "fragment fade-in",
-        "Your programm will run out of memory (stack overflow)"
+        "Your program will run out of memory (stack overflow)"
       )
     ),
 
@@ -1035,18 +1032,16 @@ object FP101Lecture extends JSApp {
     slide(
       "Composition: data structures",
       scalaC("""
-        // consider the following
-        def replicate[A](n: Int, a: A): List[A] =
-          if (n == 0) Nil()
-          else        Cons(a, replicate(n - 1, a))
+        val strs = Cons("Hello", Cons("world", Nil()))
 
+        def strToChars(str: String): List[Char] = ???
 
-        def show[A](a: A): String = a.toString
+        def upperCase(a: Char): Char = ???
       """),
       <.br,
       <.p(
         ^.cls := "fragment fade-in",
-        "How to compose `replicate` and `show`?"
+        "How to compose `strToChars` and `upperCase`?"
       )
     ),
 
@@ -1055,11 +1050,13 @@ object FP101Lecture extends JSApp {
       scalaC("""
         // we already know map (exercises)
         def map[A, B](as: List[A])(f: A => B): List[B]
-
-        map(as)(a => replicate(n, a)) // will not work
       """),
       scalaCFragment("""
-        f: A => B != replicate: A => List[B]
+        val chars = map(strs)(a => strToChars(a))
+      """),
+      scalaCFragment("""
+        // we need to flatten this structure
+        chars: List[List[Char]]
       """)
     ),
 
@@ -1067,7 +1064,7 @@ object FP101Lecture extends JSApp {
       "Composition: data structures",
       scalaC("""
         // list[list[a]] -> list[a]
-        def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] = as match {
+        def flatten[A](as: List[List[A]]): List[A] = as match {
       """),
       scalaCFragment("""
         // empty case
@@ -1076,9 +1073,7 @@ object FP101Lecture extends JSApp {
       scalaCFragment("""
         // recursive step
           case Cons(a, tail) =>
-            val bs = f(a)
-
-            combine(bs, flatMap(tail)(f))
+            append(a, flatten(tail))
         }
       """)
     ),
@@ -1086,15 +1081,35 @@ object FP101Lecture extends JSApp {
     slide(
       "Composition: data structures",
       scalaC("""
-        val n = 2
+        val chars = flatten(map(strs)(a => strToChars(a)))
 
-        val complex: List[A] => List[A] =
-          as => map(flatMap(as)(replicate(n, _)))(show)
+        chars: List[Char]
+      """)
+    ),
+
+    slide(
+      "Composition: data structures",
+      scalaC("""
+        // or we combine them
+        def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] = 
+          flatten(map(as)(f))
+
+        val chars = flatMap(strs)(a => strToChars(a))
+
+        chars: List[Char]
+      """)
+    ),
+
+    slide(
+      "Composition: data structures",
+      scalaC("""
+        val complex: List[String] => List[Char] =
+          strs => map(flatMap(strs)(strToChars))(show)
 
 
-        val list = Cons(0, Nil())
+        val list = Cons("hello", Cons("world", Nil()))
 
-        complex(list) == Cons(Cons("0", Cons("0", Nil())), Nil())
+        complex(list) == Cons('H', Cons('E', ...))
       """)
     ),
 
@@ -1110,11 +1125,11 @@ object FP101Lecture extends JSApp {
       """),
       scalaCFragment("""
         // Scala lets you use for-comprehension
-        val complexFor: List[Int] => List[Int] = as =>
+        val complexFor: List[String] => List[Char] = strs =>
           for {
-            a   <- as
-            rep <- replicate(n, a)
-          } yield show(rep)
+            str   <- strs
+            chars <- strToChars(str)
+          } yield upperCase(chars)
 
         complexFor(list) == complex(list)
       """)
