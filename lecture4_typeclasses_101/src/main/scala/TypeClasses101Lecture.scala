@@ -200,7 +200,7 @@ object TypeClasses101Lecture extends JSApp {
       Enumeration(
         Item.fadeIn("Create trait for the operation"),
         Item.fadeIn("Introduce generic parameter F[_]"),
-        Item.fadeIn("Since F is all quantified it must support all types, including new ones")
+        Item.fadeIn("Since F is universally quantified it must support all types, including new ones")
       )
     ),
 
