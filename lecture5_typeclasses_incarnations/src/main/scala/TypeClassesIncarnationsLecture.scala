@@ -1062,7 +1062,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
     ),
 
     noHeaderSlide(
-      <.h3("You can that and more in Cats"),
+      <.h3("You can do that and more in Cats"),
       <.br,
       <.a(
         ^.href := "https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats/data",
@@ -1074,6 +1074,24 @@ object TypeClassesIncarnationsLecture extends JSApp {
   val summary = chapter(
     chapterSlide(
       <.h2("Summary")
+    ),
+
+    slide(
+      "Kernel, Core and Data",
+      <.p("We saw useful type classes from Cats kernel, core and data package like:"),
+      <.br,
+      Enumeration(
+        Item.stable("Eq, Order, Semigroup"),
+        Item.fadeIn("Functor, Applicative, Monad"),
+        Item.fadeIn("Monad Transformers"),
+        Item.fadeIn("useful Monad incarnations")
+      )
+    ),
+
+    noHeaderSlide(
+      <.h2("Next Topic"),
+      <.br,
+      <.h3("Side Effects and IO")
     )
   )
 
