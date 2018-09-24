@@ -58,7 +58,8 @@ lazy val root = project
     `fp101-lecture`, `fp101-exercises`,
     `std-lib-lecture`, `std-lib-exercises`,
     `typeclasses-101-lecture`, `typeclasses-101-exercises`,
-    `typeclasses-incarnations-lecture`, `typeclasses-incarnations-exercises`
+    `typeclasses-incarnations-lecture`, `typeclasses-incarnations-exercises`,
+    `xtictactoe`
   )
   .settings(
     sourceDirectories in Compile := Nil,
@@ -214,3 +215,11 @@ lazy val `typeclasses-incarnations-exercises` = project
     libraryDependencies += "org.typelevel" %% "cats-core" % "1.4.0" % Compile
   )
   .dependsOn(`exercises-shared` % "compile->compile;test->test")
+
+lazy val `xtictactoe` = project
+  .in(file("xtictactoe"))
+  .settings(common)
+  .settings(
+    name := "xtictactoe",
+    libraryDependencies += "org.typelevel" %% "cats-effect" % "1.0.0"
+  )
