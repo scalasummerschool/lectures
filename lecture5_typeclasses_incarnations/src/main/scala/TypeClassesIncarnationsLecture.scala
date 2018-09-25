@@ -621,13 +621,13 @@ object TypeClassesIncarnationsLecture extends JSApp {
     slide(
       "Cats Core: Monad",
       scalaC("""
-        // expects: "name: <person_name>"
-        def parse[F[_]](raw: String): F[Person] = ???
+        def getLine[F[_]](from: String): F[String] = ???
+
+        def parse[F[_]](line: String): F[Person] = ???
 
 
-        val r = Some("name: Gandalf").fmap(parse)
-
-        r === Some(Some(Person("Gandalf")))
+        def load[F[_]: Functor](from: String): F[Person] = 
+          getLine(from).fmap(a: F[String] => ???)
       """)
     ),
 
@@ -644,15 +644,13 @@ object TypeClassesIncarnationsLecture extends JSApp {
     slide(
       "Cats Core: Monad",
       scalaC("""
-        // expect: "name: <person_name>"
-        def parse[F[_]](raw: String): F[Person]
+        def getLine[F[_]](from: String): F[String] = ???
 
-        val r = Monad[Option]
-          .flatMap(Some("name: Gandalf"))(parse)
-          .fmap(p => Person(p.name.toUpperCase))
+        def parse[F[_]](line: String): F[Person] = ???
 
 
-        r === Some(Person("GANDALF"))
+        def load[F[_]: Monad](from: String): F[Person] = 
+          getLine(from).flatMap(a => parse(a))
       """)
     ),
 
@@ -750,21 +748,6 @@ object TypeClassesIncarnationsLecture extends JSApp {
       <.br,
       scalaC("""
         OptionT[F, ?] ~ ({ type O[A] = OptionT[F, A] })#O
-      """)
-    ),
-
-    slide(
-      "Monad Transformers",
-      scalaC("""
-        // expect: "name: <person_name>"
-        def parse[F[_]](raw: String): F[Person]
-
-        val r = Monad[OptionT[List]]
-          .flatMap(List(Some("name: Gandalf")))(parse)
-          .fmap(p => Person(p.name.toUpperCase))
-
-
-        r === List(Some(Person("GANDALF")))
       """)
     ),
 
