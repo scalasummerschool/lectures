@@ -6,8 +6,8 @@ object SequenceSolution {
 
   @tailrec
   def lastElement[A](seq: Seq[A]): Option[A] = seq match {
-    case last :: Nil => Some(last)
-    case _ :: tail   => lastElement(tail)
+    case last +: Nil => Some(last)
+    case _ +: tail   => lastElement(tail)
     case Nil         => None
   }
 
@@ -35,9 +35,9 @@ object SequenceSolution {
     else                 a +: agg
   })
 
-  def flatMap[A, B](seq: Seq[A])(f: A => Seq[B]): Seq[B] = reverse(seq.foldLeft(Seq.empty[B]) { (agg, a) =>
+  def flatMap[A, B](seq: Seq[A])(f: A => Seq[B]): Seq[B] = seq.foldLeft(Seq.empty[B]) { (agg, a) =>
     val bs = f(a)
 
-    bs ++ agg
-  })
+    agg ++ bs
+  }
 }
