@@ -7,7 +7,7 @@ object StringsSolution {
   def interpolations(name: String, age: Int) = s"Hi my name is $name and I am $age years old."
 
   def computation(a: Int, b: Int): String =
-    """
+    s"""
       |Hi,
       |now follows a quite hard calculation. We try to add:
       |  a := $a

@@ -7,7 +7,7 @@ object MapsSolution {
   def averageAge(users: Seq[User]): Map[String, Int] = 
     users
       .groupBy(_.name)
-      .mapValues(_.map(_.age).sum / users.length)
+      .mapValues(s => s.map(_.age).sum / s.length)
 
   def numberOfFrodos(users: Map[String, User]): Int = users.count(_._1 == "Frodo")
 
