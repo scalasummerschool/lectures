@@ -5,7 +5,7 @@ import scala.util.Try
 object AdtsSolution {
 
   def getNth(list: List[Int], n: Int): Option[Int] = 
-    if (list.length >= n) 
+    if (list.length < n) 
       None
     else
       list.drop(n).headOption
