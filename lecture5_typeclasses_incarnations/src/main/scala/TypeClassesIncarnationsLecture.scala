@@ -21,6 +21,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
         Item.fadeIn("Typelevel Cats"),
         Item.fadeIn("Cats Kernel"),
         Item.fadeIn("Cats Core"),
+        Item.fadeIn("Monad Transformers"),
         Item.fadeIn("Monad Instances")
       )
     ),
@@ -38,16 +39,11 @@ object TypeClassesIncarnationsLecture extends JSApp {
 
     slide(
       "Categorical Programming",
-      <.p("Using concepts from Category Theory to enhance the FP toolbox."),
+      <.p("Using mathematical concepts from Category Theory to enhance our FP toolbox."),
       <.p(
         ^.cls := "fragment fade-in",
         "But what does that mean in practice?"
       )
-    ),
-
-    slide(
-      "Categorical Programming: TL;DR",
-      <.p("We use type classes to encode certain properties to make our code more generic and reusable.")
     ),
 
     noHeaderSlide(
@@ -77,7 +73,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
       <.p("We want an equality proof which is strict in its parameter types and tests value equality."),
       <.br,
       scalaC("""
-        def eq[A](a: A, b: A): Boolean
+        def eqv[A](a: A, b: A): Boolean
       """)
     ),
 
@@ -88,7 +84,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
       scalaC("""
         trait Eq[A] {
 
-          def eq(a: A, b: A): Boolean
+          def eqv(a: A, b: A): Boolean
         }
       """)
     ),
@@ -96,16 +92,27 @@ object TypeClassesIncarnationsLecture extends JSApp {
     slide(
       "Categorical FP: equality",
       scalaC("""
+        implicit val strEq = new Eq[String] {
+          def eqv(a: String, b: String): Boolean = a == b
+        }
+
         // doesn't compile
-        implicitly[Eq[String]].eq("hello", 1)
+        implicitly[Eq[String]].eqv("hello", 1)
       """),
-      scalaCFragment("""
+    ),
+
+    slide(
+      "Categorical FP: equality",
+      scalaC("""
         implicit val personEq = new Eq[Person] {
-          def eq(a: Person, b: Person): Boolean = a.name == b.name
+          def eqv(a: Person, b: Person): Boolean = a.name == b.name
         }
 
         // yields `true`
-        implicitly[Eq[Person]].eq(new Person("Gandalf"), new Person("Gandalf"))
+        implicitly[Eq[Person]].eqv(
+          new Person("Gandalf"), 
+          new Person("Gandalf")
+        )
       """)
     ),
 
@@ -114,7 +121,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
       scalaC("""
         // add properties to type parameter
         def isIdentity[A: Eq](a: A)(f: A => A): Boolean = {
-          implicitly[Eq[A]].eq(a, f(a))
+          implicitly[Eq[A]].eqv(a, f(a))
         }
       """)
     ),
@@ -155,7 +162,6 @@ object TypeClassesIncarnationsLecture extends JSApp {
       Enumeration(
         Item.stable("a set of useful abstractions"),
         Item.fadeIn("syntax to use type classes more conveniently"),
-        Item.fadeIn("additional tooling to scrap boilderplate and scrutinize instances"),
         Item.fadeIn("additional tooling to scrap boilderplate and scrutinize instances")
       )
     ),
@@ -232,9 +238,12 @@ object TypeClassesIncarnationsLecture extends JSApp {
 
     slide(
       "Cats Kernel: Eq",
-      <.p("There are instances for all primitive types and collections like List, Set, etc."),
+      <.p("There are instances for all primitive types and many collections like List, Set, etc."),
       <.br,
-      <.p("But that is true for all Kernel type classes.")
+      <.p(
+        ^.cls := "fragment fade-in",
+        "That is true for all Kernel type classes."
+      )
     ),
 
     noHeaderSlide(
@@ -286,7 +295,9 @@ object TypeClassesIncarnationsLecture extends JSApp {
     ),
 
     noHeaderSlide(
-      <.h3("We compared now we combine with Semigroup")
+      <.h3("We compared - now we combine"),
+      <.br,
+      <.h4("Semigroup")
     ),
 
     slide(
@@ -306,6 +317,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
 
         Semigroup[Int].combine(1, 2) === 3
 
+
         // again we have some convenient syntax
         1 |+| 2 === 3
       """)
@@ -314,8 +326,9 @@ object TypeClassesIncarnationsLecture extends JSApp {
     slide(
       "Cats Kernel: Semigroup",
       scalaC("""
-        def largeEnough[A: Semigroup: Order](limit: A)(x: A, y: A): Boolean =
-          Order[A].gt(Semigroup[A].combine(x, y), limit)
+        def largeEnough[A: Semigroup: Order](threshold: A)
+                                            (x: A, y: A): Boolean =
+          Order[A].gt(Semigroup[A].combine(x, y), threshold)
 
 
         val le = largeEnough(5)
@@ -365,6 +378,14 @@ object TypeClassesIncarnationsLecture extends JSApp {
 
     slide(
       "Cats Core",
+      <.a(
+        ^.href := "https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats",
+        "cats/core"
+      )
+    ),
+
+    slide(
+      "Cats Core",
       <.p("Imagine the following situation:"),
       <.br,
       scalaC("""
@@ -377,12 +398,12 @@ object TypeClassesIncarnationsLecture extends JSApp {
 
     slide(
       "Cats Core",
-      <.p("But what if the context is unknown or you have make this function generic?")
+      <.p("But what if the context is unknown aka you  make this function generic in `F[_]`?")
     ),
 
     slide(
       "Cats Core",
-      <.p("`F[_]` is too generic. No operations are atteched."),
+      <.p("`F[_]` is too generic. No operations are attached."),
       <.br,
       scalaC("""
         def names[F[_]](persons: F[Person]): F[String] = ???
@@ -401,14 +422,6 @@ object TypeClassesIncarnationsLecture extends JSApp {
           def map[A, B](fa: F[A])(f: A => B): F[B]
         }
       """)
-    ),
-
-    slide(
-      "Cats Core",
-      <.a(
-        ^.href := "https://github.com/typelevel/cats/tree/master/core/src/main/scala/cats",
-        "cats/core"
-      )
     ),
 
     slide(
@@ -452,9 +465,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
     slide(
       "Cats Core: Functor laws",
       scalaC("""
-        // F[_]: Functor
-        val f: F[A]
-        val g: F[A]
+        val f: Functor[F]
 
         // composition
         f.map(g).map(h) == f.map(g.compose(h))
@@ -480,7 +491,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
 
     slide(
       "Cats Core: Functor instances",
-      <.p("There are instances for Scala ADTs. That is also true for other core type classes.")
+      <.p("There are instances for many Scala collections like Option, Either, List, etc.")
     ),
 
     exerciseSlide(
@@ -543,7 +554,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
         // only allows functions with arity 1
         Some(1).fmap(combine) === Some(b => 1 + b)
 
-        // but there is a trick
+        // apply remaining parameters
         Some(1).fmap(combine).ap(Some(2)) === Some(3)
       """),
       scalaCFragment("""
@@ -558,8 +569,6 @@ object TypeClassesIncarnationsLecture extends JSApp {
         // homomorphism
         pure(f) <*> pure(x) === pure(f(x))
 
-        pure((a: Int) => a + 1) <*> pure(2) === pure(2 + 1)
-
         // interchange
         ff <*> pure(x) === pure(g => g(x)) <*> ff
 
@@ -573,18 +582,12 @@ object TypeClassesIncarnationsLecture extends JSApp {
       "Cats Core: Applicative laws",
       scalaC("""
         // composition
-        pure(composition) <*> g <*> f <*> x === {
+        pure(compose) <*> g <*> f <*> x === {
           g <*> f <*> x
-        }
-
-        pure(composition) <*> Some((a: Int) => a.toString) <*> Some((a: Int) => a + 1) <*> Some(1) === {
-          Some((a: Int) => a.toString) <*> Some((a: Int) => a + 1) <*> Some(1)
         }
 
         // identity
         pure(identity) <*> x === x
-
-        pure(identity) <*> Some(1) === Some(1)
       """)
     ),
 
@@ -610,7 +613,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
     ),
 
     noHeaderSlide(
-      <.h3("But apply effectfull functions to my values"),
+      <.h3("But I need to apply effectful functions to my values"),
       <.br,
       <.h4("Monad")
     ),
@@ -619,7 +622,8 @@ object TypeClassesIncarnationsLecture extends JSApp {
       "Cats Core: Monad",
       scalaC("""
         // expects: "name: <person_name>"
-        def parse[F[_]](raw: F[String]): F[Person]
+        def parse[F[_]](raw: String): F[Person] = ???
+
 
         val r = Some("name: Gandalf").fmap(parse)
 
@@ -634,18 +638,6 @@ object TypeClassesIncarnationsLecture extends JSApp {
 
           def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
         }
-      """)
-    ),
-
-    slide(
-      "Cats Core: Monad",
-      scalaC("""
-        val r = Monad[Option].flatMap(Some((1.0, 2.0))) { case (a, b) => 
-          if (b > 0.0) Some(a / b)
-          else         None
-        }
-
-        r === Some(0.5)
       """)
     ),
 
@@ -705,7 +697,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
 
     slide(
       "Monad Transformers",
-      <.p("Using Monad Transformers we are able to simulate composition.")
+      <.p("By using Monad Transformers we are able to simulate composition.")
     ),
 
     slide(
@@ -716,11 +708,11 @@ object TypeClassesIncarnationsLecture extends JSApp {
       """),
       scalaCFragment("""
         // but
-        case class ListOption[A](value: List[Option[A]])
+        type ListOpt[A] = List[Option[A]]
 
-        implicit val listOpt = new Monad[List[Option]] {
+        implicit val listOpt = new Monad[ListOpt]] {
 
-          def flatMap[B](f: A => List[Option[B]]): List[Option[B]] = 
+          def flatMap[B](f: A => ListOpt[B]]): ListOpt[B]] = 
             value.flatMap { 
               case Some(v) => f(v)
               case None    => List(None)
@@ -737,18 +729,27 @@ object TypeClassesIncarnationsLecture extends JSApp {
     slide(
       "Monad Transformers",
       scalaC("""
-        case class OptionT[F[_], A](value: F[Option[A]])
+        type OptionT[F[_], A] = F[Option[A]]
 
         implicit def optionT[F[_]: Monad] = 
-          new Monad[({ type O[A] = OptionT[F, A] })#O] {
+          new Monad[OptionT[F, ?]] {
 
-            def flatMap[A, B](fa: F[Option[A]])
-                             (f: A => F[Option[B]]): F[Option[B]] = 
+            def flatMap[A, B](fa: OptionT[F, A])
+                             (f: A => OptionT[F, B]): OptionT[F, B] = 
               Monad[F].flatMap(fa) { 
                 case Some(v) => f(v)
                 case None    => Monad[F].pure(None)
               }
           }
+      """)
+    ),
+
+    slide(
+      "Monad Transformers: kind-projector",
+      <.h3("Kind-Projector"),
+      <.br,
+      scalaC("""
+        OptionT[F, ?] ~ ({ type O[A] = OptionT[F, A] })#O
       """)
     ),
 
@@ -781,7 +782,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
       "Monad Tranformers",
       scalaC("""
         // our code becomes
-        case class OptionT[F, A](value: F[Option[A]] {
+        case class OptionT[F, A](value: F[Option[A]]) {
 
           def flatMap[B](f: A => F[Option[B]])
                         (implicit M: Monad[F]): F[Option[B]] = 

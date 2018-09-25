@@ -212,7 +212,8 @@ lazy val `typeclasses-incarnations-exercises` = project
   .settings(common)
   .settings(
     name := "typeclasses-incarnations-exercises",
-    libraryDependencies += "org.typelevel" %% "cats-core" % "1.4.0" % Compile
+    libraryDependencies += "org.typelevel" %% "cats-core" % "1.4.0" % Compile,
+    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")
   )
   .dependsOn(`exercises-shared` % "compile->compile;test->test")
 

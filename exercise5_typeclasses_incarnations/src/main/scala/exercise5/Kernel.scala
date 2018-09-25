@@ -19,17 +19,17 @@ import Comparison._
   */
 object Kernel {
 
-  // a) Implement implicit Eq[String] instance.
+  // a) Implement an implicit Eq[String] instance.
 
 
   def testEqString(x: String, y: String): Boolean = false
 
-  // b) Implement implicit Order[Int] instance.
+  // b) Implement an implicit Order[Int] instance.
 
 
   def testCompareInt(x: Int, y: Int): Comparison = GreaterThan
 
-  // c) Implement implicit Semigroup[List[Int]] instance.
+  // c) Implement an implicit Semigroup[List[Int]] instance.
 
 
   def testCombineLists(x: List[Int], y: List[Int]): List[Int] = x

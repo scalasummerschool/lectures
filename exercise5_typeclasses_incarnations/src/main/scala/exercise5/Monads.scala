@@ -14,7 +14,7 @@ import cats.Monad
   */
 object Monads {
 
-  // a) Implement implicit Monad[List] instance.
+  // a) Implement an implicit Monad[List] instance.
 
 
   def testListMonad[A, B](fa: List[A], f: A => List[B]): List[B] = Nil

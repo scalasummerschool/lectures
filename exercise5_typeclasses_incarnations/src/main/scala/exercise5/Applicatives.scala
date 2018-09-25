@@ -11,7 +11,7 @@ import cats.Applicative
   */
 object Applicatives {
 
-  // a) Implement implicit Applicative[List] instance.
+  // a) Implement an implicit Applicative[List] instance.
 
 
   def testListApplicative[A, B](ff: List[A => B], fa: List[A]): List[B] = Nil
