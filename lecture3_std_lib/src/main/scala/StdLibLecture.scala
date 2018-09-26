@@ -1037,7 +1037,7 @@ object StdLibLecture extends JSApp {
       "Let's Code",
       bash("""
         sbt> project std-lib-exercises
-        sbt> test:testOnly exercise3.AdtSpec
+        sbt> test:testOnly exercise3.AdtsSpec
       """)
     )
   )
