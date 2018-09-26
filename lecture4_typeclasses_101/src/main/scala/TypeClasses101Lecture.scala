@@ -98,8 +98,8 @@ object TypeClasses101Lecture extends JSApp {
 
               fields.map { field =>
                 resolveSingleField(field) match {
-                  case Broken(value) => wrapResult(value)
-                  case failure       => failure
+                  case NoError(value) => wrapResult(value)
+                  case failure        => failure
                 }
               }
             }
