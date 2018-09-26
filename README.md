@@ -10,8 +10,10 @@ Here you find the lectures and exercises for the [Scala Summer School](http://sc
  4. [Standard Library](https://scalasummerschool.github.io/lectures/lecture3_std_lib)
  5. [Type Classes](https://scalasummerschool.github.io/lectures/lecture4_typeclasses_101)
  6. [Type Class Incarnations](https://scalasummerschool.github.io/lectures/lecture5_typeclasses_incarnations)
+ 7. [Side Effects](https://scalasummerschool.github.io/lectures/lecture6_side_effects)
+ 8. [IO](https://scalasummerschool.github.io/lectures/lecture7_io)
  
-All lectures are based on [reveal.js]. Therefore, to navigate use your arrow keys. Chapters are organized in columns, slides in rows. To get an overview of all slides within a lecture press ESC.
+All lectures are based on [reveal.js](https://github.com/hakimel/reveal.js). Therefore, to navigate use your arrow keys. Chapters are organized in columns, slides in rows. To get an overview of all slides within a lecture press ESC.
 
 ## Preparations
 ### Mandatory
