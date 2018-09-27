@@ -42,10 +42,20 @@ object App {
   sealed trait Error
   case class ParseError(msg: String) extends Error
 
+  /** Opens a file and hands us a reader which acts like a reference to the file.
+    * 
+    * @param path path to the user db file
+    * @return reference to the db file
+    */
   def readDbFile(path: String): BufferedReader = {
     new BufferedReader(Source.fromFile(path).reader)
   }
 
+  /** Transforms a raw line to a [[User]] class.
+    * 
+    * @param line user encoded as [[String]]
+    * @return [[Right]] providing a [[User]] if the [[String]] is valid, else [[Left]] with [[ParseError]]
+    */
   def parse(line: String): Either[Error, User] = {
     line.split(',') match {
       case Array(name, ageStr) => Try(ageStr.toInt).fold[Either[Error, User]](
@@ -57,12 +67,19 @@ object App {
     }
   }
 
+  /** This functions composes [[readDbFile]] and [[parse]] to transform all user entries to a
+    * [[List[User]]].
+    * 
+    * @param path path to the user db file
+    * @return [[Right]] of [[List[User]] if the whole file is valid, else [[Left]] with [[ParseError]]
+    */
   def loadDb(path: String): Either[Error, List[User]] = {
     val buffer = readDbFile(path)
 
     def loop(agg: List[User]): Either[Error, List[User]] = {
       val line = buffer.readLine()
 
+      // buffer.readLine() return `null` if new line is left in the file
       if (line != null) parse(line).flatMap(user => loop(user :: agg))
       else              Right(agg.reverse)
     }
@@ -76,6 +93,7 @@ object App {
 
   def main(args: Array[String]): Unit = {
     if (args.length != 1) {
+      // stop application if do not provide a user db path
       System.exit(1)
     }
     else {
@@ -83,9 +101,11 @@ object App {
 
       loadDb(dbPath) match {
         case Right(users) =>
+          // ask the user for input forever
           while(true) {
             val name   = StdIn.readLine("Search name or exit (q): ")
 
+            // stop application if the user inputs 'q'
             if (name == "q") System.exit(0)
 
             val result = users.filter(_.name.toLowerCase == name.toLowerCase)
