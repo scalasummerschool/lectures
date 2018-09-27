@@ -59,6 +59,8 @@ lazy val root = project
     `std-lib-lecture`, `std-lib-exercises`,
     `typeclasses-101-lecture`, `typeclasses-101-exercises`,
     `typeclasses-incarnations-lecture`, `typeclasses-incarnations-exercises`,
+    `side-effects-lecture`,
+    `io-lecture`, `io-exercises`,
     `xtictactoe`
   )
   .settings(
@@ -216,6 +218,49 @@ lazy val `typeclasses-incarnations-exercises` = project
     addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")
   )
   .dependsOn(`exercises-shared` % "compile->compile;test->test")
+
+lazy val `side-effects-lecture` = project
+  .in(file("lecture6_side_effects"))
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    common,
+    lectureCommon,
+    copyFastImpl("side-effects-lecture"),
+    copyFullImpl("side-effects-lecture"),
+    addCommandAlias("fastCompile", "; fastOptJS; copyFast"),
+    addCommandAlias("fullCompile", "; fullOptJS; copyFull")
+  )
+  .settings(
+    name := "side-effects-lecture",
+  )
+  .dependsOn(`lectures-shared`)
+
+lazy val `io-lecture` = project
+  .in(file("lecture7_io"))
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    common,
+    lectureCommon,
+    copyFastImpl("io-lecture"),
+    copyFullImpl("io-lecture"),
+    addCommandAlias("fastCompile", "; fastOptJS; copyFast"),
+    addCommandAlias("fullCompile", "; fullOptJS; copyFull")
+  )
+  .settings(
+    name := "io-lecture",
+  )
+  .dependsOn(`lectures-shared`)
+
+lazy val `io-exercises` = project
+  .in(file("exercise7_io"))
+  .settings(common)
+  .settings(
+    name := "io-exercises",
+    libraryDependencies ++= Seq(
+      "org.typelevel" %% "cats-core" % "1.4.0" % Compile,
+      "org.typelevel" %% "cats-effect" % "1.0.0" % Compile
+    )
+  )
 
 lazy val `xtictactoe` = project
   .in(file("xtictactoe"))

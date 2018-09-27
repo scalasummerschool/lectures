@@ -98,8 +98,8 @@ object TypeClasses101Lecture extends JSApp {
 
               fields.map { field =>
                 resolveSingleField(field) match {
-                  case Broken(value) => wrapResult(value)
-                  case failure       => failure
+                  case NoError(value) => wrapResult(value)
+                  case failure        => failure
                 }
               }
             }
@@ -159,9 +159,9 @@ object TypeClasses101Lecture extends JSApp {
       <.br,
       scalaC(
         """
-          whenOk(value: Option[Json], f: Json => Json): Option[Json] = ???
-          whenOk(value: Try[Json], f: Json => Json): Try[Json] = ???
-          whenOk(value: ErrorOr[Json], f: Json => Json): ErrorOr[Json] = ???
+          whenOk(value: Option[Json], f: Json => Option[Json]): Option[Json] = ???
+          whenOk(value: Try[Json], f: Json => Try[Json]): Try[Json] = ???
+          whenOk(value: ErrorOr[Json], f: Json => ErrorOr[Json]): ErrorOr[Json] = ???
         """)
     ),
 
@@ -171,24 +171,24 @@ object TypeClasses101Lecture extends JSApp {
       <.br,
       scalaC(
         """
-          whenOk(value: Option[Json], f: Json => Json): Option[Json] = ???
-          whenOk(value: Try[Json], f: Json => Json): Try[Json] = ???
-          whenOk(value: ErrorOr[Json], f: Json => Json): ErrorOr[Json] = ???
+          whenOk(value: Option[Json], f: Json => Option[Json]): Option[Json] = ???
+          whenOk(value: Try[Json], f: Json => Try[Json]): Try[Json] = ???
+          whenOk(value: ErrorOr[Json], f: Json => ErrorOr[Json]): ErrorOr[Json] = ???
         """),
       scalaCFragment(
         """
           // abstract computational context
-          whenOk[F[_]](value: F[Json], f: Json => Json): F[Json]
+          whenOk[F[_]](value: F[Json], f: Json => F[Json]): F[Json]
         """),
       scalaCFragment(
         """
           // abstract over values
-          whenOk[F[_], A](value: F[A], f: A => A): F[A]
+          whenOk[F[_], A](value: F[A], f: A => F[A]): F[A]
         """),
       scalaCFragment(
         """
           // make result type independent
-          whenOk[F[_], A, B](value: F[A], f: A => B): F[B]
+          whenOk[F[_], A, B](value: F[A], f: A => F[B]): F[B]
         """)
     ),
 
@@ -204,7 +204,7 @@ object TypeClasses101Lecture extends JSApp {
                     // ^
                     // '-- any type constructor
           
-            def whenOk[A, B](f: F[A], fn: A => B): F[B]
+            def whenOk[A, B](f: F[A], fn: A => F[B]): F[B]
           }
         """),
     ),
@@ -242,9 +242,9 @@ object TypeClasses101Lecture extends JSApp {
       scalaC(
         """
           val whenOkOption = new WhenOk[Option] {
-            def whenOk[A, B](value: Option[A], f: A => B): Option[B] = {
+            def whenOk[A, B](value: Option[A], f: A => Option[B]): Option[B] = {
               value match {
-                case Some(v) => Some(f(v))
+                case Some(v) => f(v)
                 case None    => None
               }
             }
@@ -291,9 +291,9 @@ object TypeClasses101Lecture extends JSApp {
         """
           object Execution {
             implicit val whenOkOption = new WhenOk[Option] {
-              def whenOk[A, B](value: Option[A], f: A => B): Option[B] = {
+              def whenOk[A, B](value: Option[A], f: A => Option[B]): Option[B] = {
                 value match {
-                  case Some(v) => Some(f(v))
+                  case Some(v) => f(v)
                   case None    => None
                 }
               }
