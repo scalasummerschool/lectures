@@ -13,8 +13,8 @@ object MonadsSolution {
     def flatMap[A, B](fa: List[A])(f: A => List[B]): List[B] = {
       @tailrec
       def loop(rem: List[A], agg: List[B]): List[B] = rem match {
-        case h :: tail => loop(tail, f(h) ++ agg)
-        case Nil       => agg.reverse
+        case h :: tail => loop(tail, agg ++ f(h))
+        case Nil       => agg
       }
 
       loop(fa, Nil)
