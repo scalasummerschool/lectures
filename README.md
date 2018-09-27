@@ -1,6 +1,6 @@
 [![License: CC BY-NC 4.0](https://licensebuttons.net/l/by-nc/4.0/80x15.png)](https://creativecommons.org/licenses/by-nc/4.0/)
 
-# Scala Summer School Content
+# Scala Summer School
 Here you find the lectures and exercises for the [Scala Summer School](http://scalasummerschool.github.io). It is still Work In Progress (WIP) and only a subset of all lectures and exercises are available.
 
 ## Table of Contents
@@ -14,6 +14,9 @@ Here you find the lectures and exercises for the [Scala Summer School](http://sc
  8. [IO](https://scalasummerschool.github.io/lectures/lecture7_io)
  
 All lectures are based on [reveal.js](https://github.com/hakimel/reveal.js). Therefore, to navigate use your arrow keys. Chapters are organized in columns, slides in rows. To get an overview of all slides within a lecture press ESC.
+
+## Follow-Up Materials
+This workshop will give you an first introduction into Scala and the Functional Programming paradigm. If you want to go into greater details you might be interested in the free books provided by [underscore](https://underscore.io/training/).
 
 ## Preparations
 ### Mandatory
