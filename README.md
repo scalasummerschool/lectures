@@ -1,7 +1,9 @@
 [![License: CC BY-NC 4.0](https://licensebuttons.net/l/by-nc/4.0/80x15.png)](https://creativecommons.org/licenses/by-nc/4.0/)
 
 # Scala Summer School
-Here you find the lectures and exercises for the [Scala Summer School](http://scalasummerschool.github.io). It is still Work In Progress (WIP) and only a subset of all lectures and exercises are available.
+This repository contains the course materials we used for a five days workshop on Functional Programming in Scala. You find lecture slides, exercises and projects here. Taking a look at the [Table of Contents](#table-of-contents) shows you the range of topics you will cover. The worksop starts with a basic introduction into [Scala](https://www.scala-lang.org/) and Functional Programming and continues into more advanced concepts like type-classes and how to handle side-effects.
+
+Since all lecture slides are based on [reveal.js](https://github.com/hakimel/reveal.js) you have to use your arrow keys to navigate. And you have to navigate in two dimension. Chapters are organized in columns, slides in rows. To get an overview of all slides within a lecture press ESC.
 
 ## Table of Contents
  1. [Introduction](https://scalasummerschool.github.io/lectures/introduction)
@@ -14,8 +16,6 @@ Here you find the lectures and exercises for the [Scala Summer School](http://sc
  8. [Side Effects](https://scalasummerschool.github.io/lectures/lecture6_side_effects)
  9. [IO](https://scalasummerschool.github.io/lectures/lecture7_io)
  10. [Final Project](https://www.github.com/scalasummerschool/tictactoe)
- 
-All lectures are based on [reveal.js](https://github.com/hakimel/reveal.js). Therefore, to navigate use your arrow keys. Chapters are organized in columns, slides in rows. To get an overview of all slides within a lecture press ESC.
 
 ## Follow-Up Materials
 This workshop will give you an first introduction into Scala and the Functional Programming paradigm. If you want to go into greater details you might be interested in the free books provided by [underscore](https://underscore.io/training/).
