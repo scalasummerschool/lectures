@@ -13,7 +13,7 @@ Here you find the lectures and exercises for the [Scala Summer School](http://sc
  7. [Type Class Incarnations](https://scalasummerschool.github.io/lectures/lecture5_typeclasses_incarnations)
  8. [Side Effects](https://scalasummerschool.github.io/lectures/lecture6_side_effects)
  9. [IO](https://scalasummerschool.github.io/lectures/lecture7_io)
- 10.[Final Project](https://www.github.com/scalasummerschool/tictactoe)
+ 10. [Final Project](https://www.github.com/scalasummerschool/tictactoe)
  
 All lectures are based on [reveal.js](https://github.com/hakimel/reveal.js). Therefore, to navigate use your arrow keys. Chapters are organized in columns, slides in rows. To get an overview of all slides within a lecture press ESC.
 
