@@ -5,8 +5,10 @@ import org.scalacheck.Prop.forAll
 
 object MonadTransformerssSpec extends Properties("Monad Transformer") {
 
-  property("List[Option] Monad") = forAll { fa: List[Option[Int]] =>
-    val f: Int => List[Option[Int]] = a => List(Some(a * 1), None, Some(a + 1))
+  import MonadTransformers.ErrorOrT
+
+  property("Option[ErrorOf] Monad") = forAll { fa: ErrorOrT[Option, Int] =>
+    val f: Int => ErrorOrT[Option, Int] = a => Some(Right(a * 2))
 
     MonadTransformersSolution.optionTransformer(fa, f) == MonadTransformers.testOptionTransformer(fa, f)
   }
