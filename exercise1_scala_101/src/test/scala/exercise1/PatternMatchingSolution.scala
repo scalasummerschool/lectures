@@ -36,8 +36,8 @@ object PatternMatchingSolution {
   }
 
   def updateFood(animal: Animal): Animal = animal match {
-    case Bird(name, _)  => Bird(name, Plants)
-    case f @ Fish(_, _) => f
-    case _              => animal
+    case Bird(name, _) => Bird(name, Plants)
+    case Fish(name, _) => Fish(name, Plants)
+    case _             => animal
   }
 }

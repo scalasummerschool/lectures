@@ -123,9 +123,9 @@ object FP101Lecture extends JSApp {
         // exists a value or not
         sealed trait Animal
 
-        case class Mammal extends Animal
-        case class Bird   extends Animal
-        case class Fish   extends Animal
+        case object Mammal extends Animal
+        case object Bird   extends Animal
+        case object Fish   extends Animal
       """)
     ),
 
@@ -254,11 +254,11 @@ object FP101Lecture extends JSApp {
       """),
       scalaCFragment("""
         // it might return a file handle
-        reaedFile("/usr/people.cvs") == Right(File(...))
+        readFile("/usr/people.cvs") == Right(File(...))
       """),
       scalaCFragment("""
         // or fail, e.g. file is missing, not enough rights, ...
-        reaedFile("/usr/people.cvs") == Left(FileNotFoundException)
+        readFile("/usr/people.cvs") == Left(FileNotFoundException)
       """)
     ),
 
@@ -382,7 +382,7 @@ object FP101Lecture extends JSApp {
     ),
 
     slide(
-      "Reftrencial Opaque: variables and execution order",
+      "Referencial Opaque: variables and execution order",
       scalaC("""
         // defines a variable - a mutable (imperative) reference
         var a = 1
@@ -1122,16 +1122,31 @@ object FP101Lecture extends JSApp {
           def map[B](f: A => B): List[B]
           def flatMap[B](f: A => List[B]): List[B]
         }
+      """)
+    ),
+
+    slide(
+      "Composition: for-comprehension",
+      scalaC("""
+        // instead of
+        val complexFlat =  List[String] => List[Char] = strs => {
+          strs.flatMap { str =>
+            strToChars(str).map { char =>
+              upperCase(char)
+            }
+          }
+        }
       """),
       scalaCFragment("""
         // Scala lets you use for-comprehension
         val complexFor: List[String] => List[Char] = strs =>
           for {
             str   <- strs
-            chars <- strToChars(str)
-          } yield upperCase(chars)
+            char <- strToChars(str)
+          } yield upperCase(char)
 
-        complexFor(list) == complex(list)
+
+        complexFor(list) == complexFlat(list)
       """)
     ),
 

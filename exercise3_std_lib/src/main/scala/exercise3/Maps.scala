@@ -11,7 +11,7 @@ object Maps {
   // a) Given a Seq[User] group the users by name (`groupBy`) and calculate the average age: `name -> averageAge`
   def testGroupUsers(users: Seq[User]): Map[String, Int] = Map.empty
 
-  // b) How many Users with name "Frodos" are in the Map?
+  // b) Given a `Map[String, User]` from user name to `User`, how many Users with the substring "Beutlin" are in the Map?
   def testNumberFrodos(map: Map[String, User]): Int = 0
 
   // c) Remove all users under age 1000 (Wizards only :).

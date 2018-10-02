@@ -12,6 +12,32 @@ package exercise1
   */
 object PatternMatching {
 
+  sealed trait Hand
+  case object Rock    extends Hand
+  case object Paper   extends Hand
+  case object Scissor extends Hand
+
+  sealed trait Result
+  case object Win  extends Result
+  case object Lose extends Result
+  case object Draw extends Result
+
+  sealed trait Food
+  case object Meat       extends Food
+  case object Vegetables extends Food
+  case object Plants     extends Food
+
+  sealed trait Animal {
+
+    val name: String
+    val food: Food
+  }
+  case class Mammal(name: String, food: Food, weight: Int) extends Animal
+  case class Fish(name: String, food: Food)                extends Animal
+  case class Bird(name: String, food: Food)                extends Animal
+
+
+
   /* a) If value is:
    *     1 => "it is one"
    *     2 => "it is two"
@@ -65,31 +91,4 @@ object PatternMatching {
 
   def testUpdateFood(animal: Animal): Animal = animal
 
-
-
-
-
-  sealed trait Hand
-  case object Rock    extends Hand
-  case object Paper   extends Hand
-  case object Scissor extends Hand
-
-  sealed trait Result
-  case object Win  extends Result
-  case object Lose extends Result
-  case object Draw extends Result
-
-  sealed trait Food
-  case object Meat       extends Food
-  case object Vegetables extends Food
-  case object Plants     extends Food
-
-  sealed trait Animal {
-
-    val name: String
-    val food: Food
-  }
-  case class Mammal(name: String, food: Food, weight: Int) extends Animal
-  case class Fish(name: String, food: Food)                extends Animal
-  case class Bird(name: String, food: Food)                extends Animal
 }

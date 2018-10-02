@@ -844,13 +844,36 @@ object Scala101Lecture extends JSApp {
           "The result for " + a + " and " + b + " is " + f(a, b)
         }
 
-        resultMsg(plus)(1, 2) == "The result for 1 and 2 is 3"
+        val plusMsg = resultMsg(plus)
+
+        plusMsg(1, 2) == "The result for 1 and 2 is 3"
       """),
       <.br,
       scalaCFragment("""
         def multiply(a: Int, b: Int): Int = ???
 
-        resultMsg(multiply)(1, 2) == "The result for 1 and 2 is 2"
+        val multMsg = resultMsg(multiply)
+
+        multMsg(1, 2) == "The result for 1 and 2 is 2"
+      """)
+    ),
+
+    slide(
+      "Anonymous Functions",
+      <.p("Sometimes a function parameter in a higher-order function is only used ones. So why providing a whole declaration?")
+    ),
+
+    noHeaderSlide(
+      <.h3("Anonymous Functions")
+    ),
+
+    slide(
+      "Anonymous Functions",
+      scalaC("""
+        // just provide the expression body - no declaration
+        val subMsg = resultMsg((a, b) => a - b)
+
+        subMsg(1 , 2) == "The result of 1 and 2 is -1"
       """)
     ),
 

@@ -767,7 +767,7 @@ object StdLibLecture extends JSApp {
 
   val adts = chapter(
     chapterSlide(
-      <.h2("Build-in ADT")
+      <.h2("Build-in ADTs")
     ),
 
     noHeaderSlide(
