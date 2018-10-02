@@ -261,6 +261,8 @@ object TypeClassesIncarnationsLecture extends JSApp {
             *  - positive iff `x > y`
             */
           def compare(x: A, y: A): Int
+
+          ...
         }
       """)
     ),
@@ -306,6 +308,8 @@ object TypeClassesIncarnationsLecture extends JSApp {
         trait Semigroup[A] {
 
           def combine(x: A, y: A): A
+
+          ...
         }
       """)
     ),
@@ -420,6 +424,8 @@ object TypeClassesIncarnationsLecture extends JSApp {
         trait Functor[F[_]] {
 
           def map[A, B](fa: F[A])(f: A => B): F[B]
+ 
+          ...
         }
       """)
     ),
@@ -465,8 +471,6 @@ object TypeClassesIncarnationsLecture extends JSApp {
     slide(
       "Cats Core: Functor laws",
       scalaC("""
-        val f: Functor[F]
-
         // composition
         f.map(g).map(h) == f.map(g.compose(h))
 
@@ -492,14 +496,6 @@ object TypeClassesIncarnationsLecture extends JSApp {
     slide(
       "Cats Core: Functor instances",
       <.p("There are instances for many Scala collections like Option, Either, List, etc.")
-    ),
-
-    exerciseSlide(
-      "Let's Code: Functors",
-      bash("""
-        sbt> project typeclasses-incarnations-exercises
-        sbt> test:testOnly exercise5.FunctorsSpec
-      """)
     ),
 
     noHeaderSlide(
@@ -529,6 +525,8 @@ object TypeClassesIncarnationsLecture extends JSApp {
           def pure[A](a: A): F[A]
 
           def ap[A, B](ff: F[A => B])(fa: F[A]): F[B]
+
+          ...
         }
       """)
     ),
@@ -571,10 +569,6 @@ object TypeClassesIncarnationsLecture extends JSApp {
 
         // interchange
         ff <*> pure(x) === pure(g => g(x)) <*> ff
-
-        Some((a: Int) => a + 1) <*> pure(2) === {
-          pure((g: Int => Int) => g(2)) <*> Some(_ + 1)
-        }
       """)
     ),
 
@@ -604,14 +598,6 @@ object TypeClassesIncarnationsLecture extends JSApp {
       """)
     ),
 
-    exerciseSlide(
-      "Let's Code: Applicatives",
-      bash("""
-        sbt> project typeclasses-incarnations-exercises
-        sbt> test:testOnly exercise5.ApplicativesSpec
-      """)
-    ),
-
     noHeaderSlide(
       <.h3("But I need to apply effectful functions to my values"),
       <.br,
@@ -637,6 +623,8 @@ object TypeClassesIncarnationsLecture extends JSApp {
         trait Monad[F[_]] extends Applicative[F] {
 
           def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
+
+          ...
         }
       """)
     ),
@@ -671,10 +659,10 @@ object TypeClassesIncarnationsLecture extends JSApp {
     ),
 
     exerciseSlide(
-      "Let's Code: Monads",
+      "Let's Code: Core",
       bash("""
         sbt> project typeclasses-incarnations-exercises
-        sbt> test:testOnly exercise5.MonadsSpec
+        sbt> test:testOnly exercise5.CoreSpec
       """)
     ),
 
@@ -747,6 +735,8 @@ object TypeClassesIncarnationsLecture extends JSApp {
       <.h3("Kind-Projector"),
       <.br,
       scalaC("""
+        // OptionT expects two type parameter (F[_, _]), Monad expects F[_]
+        // using `?` fixes the type constructor shape
         OptionT[F, ?] ~ ({ type O[A] = OptionT[F, A] })#O
       """)
     ),

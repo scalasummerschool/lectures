@@ -22,8 +22,4 @@ object KernelSpec extends Properties("kernel") {
   property("List combination") = forAll { (x: List[Int], y: List[Int]) =>
     KernelSolution.combineLists(x, y) == Kernel.testCombineLists(x, y)
   }
-
-  property("arbitrary List combination") = forAll { (x: List[String], y: List[String]) =>
-    KernelSolution.combineListsArb(x, y) == Kernel.testCombineListsArb(x, y)
-  }
 }
