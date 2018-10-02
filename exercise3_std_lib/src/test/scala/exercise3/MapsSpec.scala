@@ -12,7 +12,7 @@ object MapsSpec extends Properties("Map") {
 
   val userGen = for {
     age  <- Gen.choose(0, 2019)
-    name <- Gen.oneOf("Gandalf", "Frodo Beutlin", "Saroman", "Bilbo Beultin", "Gimli", "Elessar")
+    name <- Gen.oneOf("Gandalf", "Frodo Baggins", "Saroman", "Bilbo Baggins", "Gimli", "Elessar")
   } yield User(name, age)
 
   implicit val userArb = Arbitrary[User](userGen)
