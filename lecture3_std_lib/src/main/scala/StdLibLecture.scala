@@ -221,15 +221,6 @@ object StdLibLecture extends JSApp {
 
         a == 97
       """)
-    ),
-
-    noHeaderSlide(
-      <.h3("String")
-    ),
-
-    slide(
-      "String",
-      <.p("A String is a collection of Chars. But what is a collection?")
     )
   )
 
@@ -364,7 +355,7 @@ object StdLibLecture extends JSApp {
       scalaC("""
         val seq = Seq(1, 2, 3)
 
-        seq.sortBy(_ > _) == Seq(3, 2 1)
+        seq.sortWith(_ > _) == Seq(3, 2 1)
       """)
     ),
 
@@ -445,17 +436,6 @@ object StdLibLecture extends JSApp {
     ),
 
     slide(
-      "Sequence: foreach",
-      scalaC("""
-        val seq = Seq(1, 2, 3)
-
-        // iterates over all element and returns nothing
-        // just for side effects
-        seq.foreach(a => println(a))
-      """)
-    ),
-
-    slide(
       "Sequence: pattern matching",
       scalaC("""
         val seq = Seq(1, 2, 3)
@@ -515,96 +495,6 @@ object StdLibLecture extends JSApp {
       scalaC("""
         0 :: list        == 0 +: seq
         List(0) ::: list == Seq(0) ++ seq
-      """)
-    ),
-
-    noHeaderSlide(
-      <.h3("Back to String")
-    ),
-
-    slide(
-      "String",
-      scalaC("""
-        // not exactly, but you get the idea
-        // you don't have `+:`, `:+`
-        "Hello world" ~= Seq('H', 'e', ...)
-      """)
-    ),
-
-    slide(
-      "String: access",
-      scalaC("""
-        val str = "Hello world"
-
-        str.charAt(0)  == 'H'
-        str.charAt(50) == StringIndexOutOfBoundsException
-
-        str.take(2)    == "He"
-        str.drop(2)    == "llo world"
-        str.split(" ") == Array("Hello", "world")
-      """)
-    ),
-
-    slide(
-      "String: length & contains",
-      scalaC("""
-        val str = "Hello world"
-
-        str.length          == 11
-        str.containts("wo") == true
-      """)
-    ),
-
-    slide(
-      "String: interpolation",
-      scalaC("""
-        // insert values in Strings
-        val a = 42
-
-        s"The answer to everything is $a"
-
-        // is equal to
-
-        "The answer to everything is 42"
-      """)
-    ),
-
-    slide(
-      "String: interpolation",
-      scalaC("""
-        // you can reference any expression
-
-        s"1 + 2 = ${1 + 2}"
-
-        // is equal to
-
-        "1 + 2 = 3"
-      """)
-    ),
-
-    slide(
-      "String: multi-line",
-      scalaC("""
-        // this is annoying
-        "This is a reaaaaaaalllllllyyyy\n" +
-        "looooooooooooooooooooooooooong\n" +
-        "String"
-      """),
-      scalaCFragment(
-        "// just write\n" +
-        "\"\"\"\n" +
-        "this is a reaaaaaaalllllllyyyy\n" +
-        "looooooooooooooooooooooooooong\n" +
-        "String\n" +
-        "\"\"\""
-      )
-    ),
-
-    exerciseSlide(
-      "Let's Code",
-      bash("""
-        sbt> project std-lib-exercises
-        sbt> test:testOnly exercise3.StringsSpec
       """)
     ),
 
@@ -752,6 +642,96 @@ object StdLibLecture extends JSApp {
       bash("""
         sbt> project std-lib-exercises
         sbt> test:testOnly exercise3.MapsSpec
+      """)
+    ),
+
+    noHeaderSlide(
+      <.h3("Back to String")
+    ),
+
+    slide(
+      "String",
+      scalaC("""
+        // not exactly, but you get the idea
+        // you don't have `+:`, `:+`
+        "Hello world" ~= Seq('H', 'e', ...)
+      """)
+    ),
+
+    slide(
+      "String: access",
+      scalaC("""
+        val str = "Hello world"
+
+        str.charAt(0)  == 'H'
+        str.charAt(50) == StringIndexOutOfBoundsException
+
+        str.take(2)    == "He"
+        str.drop(2)    == "llo world"
+        str.split(" ") == Array("Hello", "world")
+      """)
+    ),
+
+    slide(
+      "String: length & contains",
+      scalaC("""
+        val str = "Hello world"
+
+        str.length          == 11
+        str.containts("wo") == true
+      """)
+    ),
+
+    slide(
+      "String: interpolation",
+      scalaC("""
+        // insert values in Strings
+        val a = 42
+
+        s"The answer to everything is $a"
+
+        // is equal to
+
+        "The answer to everything is 42"
+      """)
+    ),
+
+    slide(
+      "String: interpolation",
+      scalaC("""
+        // you can reference any expression
+
+        s"1 + 2 = ${1 + 2}"
+
+        // is equal to
+
+        "1 + 2 = 3"
+      """)
+    ),
+
+    slide(
+      "String: multi-line",
+      scalaC("""
+        // this is annoying
+        "This is a reaaaaaaalllllllyyyy\n" +
+        "looooooooooooooooooooooooooong\n" +
+        "String"
+      """),
+      scalaCFragment(
+        "// just write\n" +
+        "\"\"\"\n" +
+        "this is a reaaaaaaalllllllyyyy\n" +
+        "looooooooooooooooooooooooooong\n" +
+        "String\n" +
+        "\"\"\""
+      )
+    ),
+
+    exerciseSlide(
+      "Let's Code",
+      bash("""
+        sbt> project std-lib-exercises
+        sbt> test:testOnly exercise3.StringsSpec
       """)
     ),
 
