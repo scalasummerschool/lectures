@@ -1,7 +1,14 @@
 | \gStandard Library
 
 
-To move forward type '\bn\s' and '\bENTER\s'. To execute slide code use '\br\s'.
+You can use the following commands:
+  - next slide '\bn\s'.
+  - previous slide '\bp\s'
+  - go-to slide '<slide-numer> go'
+  - execute slide code use '\br\s'
+
+\*Build with\s:
+  \ghttps://github.com/marconilanna/REPLesent
 
 ---
 
@@ -205,6 +212,19 @@ b)
 ```
 13 | 8
 ```
+
+---
+
+| \gChar
+
+
+Encode characters as integer numbers.
+
+```
+Char - 0 to 65.535
+```
+
+All integer operations apply to \yChar\s.
 
 ---
 

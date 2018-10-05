@@ -24,6 +24,23 @@ object StdLibLecture extends JSApp {
       )
     ),
 
+    slide(
+      "Interactive Session",
+      <.p("Let's go through the material in an interactive session. Run the following code in a terminal and get some insides into the Scala standard library. " + 
+          "Or continue with the presentation."),
+      <.br,
+      bash("""
+        cd lecture3_std_lib
+        scala -Dscala.color \
+              -language:_ -nowarn \
+              -i src/main/scala/REPLesent.scala
+
+        scala> val session = StdLib($intp)
+        scala> import session._
+        scala> n
+      """)
+    ),
+
     noHeaderSlide(
       <.h2("You have a question?"),
       <.h3("Ask it right away!")
@@ -62,12 +79,12 @@ object StdLibLecture extends JSApp {
         a | b  // OR, always evaluates b
         a || b // OR, evaluates `b` only if `a` is true
 
-        a > b  // greater than
-        a < b  // smaller than
-        a >= b // greater-equal than
-        a <= b // smaller-equal than
-        a == b // equal
-        a != b // unequal
+        x > y  // greater than
+        x < y  // smaller than
+        x >= y // greater-equal than
+        x <= y // smaller-equal than
+        x == y // equal
+        x != y // unequal
       """)
     ),
 
@@ -94,6 +111,7 @@ object StdLibLecture extends JSApp {
         1 - 2 == -1   // subtraction
         2 % 2 == 0    // modulo
         2 * 2 == 4    // multiplication
+        4 / 2 == 2    // division
       """),
       scalaCFragment("""
         -1.abs == 1   // absolute value
@@ -104,7 +122,7 @@ object StdLibLecture extends JSApp {
     ),
 
     slide(
-      "Primitives: division",
+      "Primitives: number typing",
       scalaC("""
         // when done with Integers
         1 / 2 == (1: Int) / (2: Int)
@@ -112,7 +130,7 @@ object StdLibLecture extends JSApp {
               == 0
       """),
       scalaCFragment("""
-        // at least one element is a Double
+        // at least one element is a floating point number
         1 / 2.0 == (1: Int) / (2.0: Double)
                 == (1.0 / 2.0): Double
                 == 0.5
@@ -125,7 +143,7 @@ object StdLibLecture extends JSApp {
     ),
 
     slide(
-      "Primitives: division",
+      "Primitives: division by zero",
       scalaC("""
         // we already know that this will fail
         1 / 0 == ArithmeticException
@@ -163,21 +181,18 @@ object StdLibLecture extends JSApp {
     slide(
       "Primitives: floating point comparison",
       scalaC("""
-        val a: Double = ???
-        val b: Double = ???
-
-        // is dangerous - at which precision do you define them as equal?
-        a == b
+        // is dangerous - the following is not the same
+        0.1 + 0.2 == 0.3
       """)
     ),
 
     slide(
       "Primitives: floating point comparison",
       scalaC("""
-        def eq(a: Double: b: Double, epsilon: Double): Boolean =
+        def eq(a: Double, b: Double, epsilon: Double): Boolean =
           (a - b).abs < epsilon
 
-        eq(a, b, 0.00000001)
+        eq(0.1 + 0.2, 0.3, 0.000001)
       """)
     ),
 
@@ -185,21 +200,12 @@ object StdLibLecture extends JSApp {
       "Primitives: Integer operators",
       scalaC("""
         // some Integer specific operators
-        2 << 1 == 4 // bit-shift to the left
-        2 >> 1 == 1 // bit-shift to the right
-        2 ^ 3  == 1 // bit-wise XOR
-        2 & 3  == 2 // bit-wise AND
-        2 | 3  == 3 // bit-wise OR
+        (2 << 1) == 4 // bit-shift to the left
+        (2 >> 1) == 1 // bit-shift to the right
+        (2 ^ 3)  == 1 // bit-wise XOR
+        (2 & 3)  == 2 // bit-wise AND
+        (2 | 3)  == 3 // bit-wise OR
       """)
-    ),
-
-    slide(
-      "Primitives: more information",
-      <.h4("Use the search bar to find your type"),
-      <.a(
-        ^.href := "https://www.scala-lang.org/api/2.12.0/",
-        "https://www.scala-lang.org/api/2.12.0/"
-      )
     ),
 
     noHeaderSlide(
@@ -208,6 +214,8 @@ object StdLibLecture extends JSApp {
 
     slide(
       "Primitives: Char",
+      <.p("Encode characters as integer numbers."),
+      <.br,
       scalaC("""
         // all Integer operators apply
         Char - signs encoded with Integers from 0 to 65.535
@@ -221,7 +229,16 @@ object StdLibLecture extends JSApp {
 
         a == 97
       """)
-    )
+    ),
+
+    slide(
+      "Primitives: more information",
+      <.h4("Use the search bar to find your type"),
+      <.a(
+        ^.href := "https://www.scala-lang.org/api/2.12.0/",
+        "https://www.scala-lang.org/api/2.12.0/"
+      )
+    ),
   )
 
   val collections = chapter(
