@@ -13,17 +13,220 @@ You can work through the following chapters:
 
 ---
 
+| \gPrimitives
+
+
+We already saw some primitives over the course of this workshop. But let's take a closer look what Scala actually provides.
+
+---
+
+| \gBoolean
+
+
+```
+Boolean - true false
+```
+
+---
+
+\gBoolean\s has the following operations build in:
+
+```
+!true     // negation
+
+true & false  // AND, always evaluates the right side
+true && false // AND, evaluates the right side only if the left side is true
+
+true | false  // OR, always evaluates the right side
+true || false // OR, evaluates the right side only if the left side is false
+```
+
+And you have the standard comparison operations returning \gBoolean\s:
+
+```
+1 > 2  // greater than
+1 < 2  // smaller than
+1 >= 2 // greater-equal than
+1 <= 2 // smaller-equal than
+1 == 2 // equal
+1 != 2 // unequal
+```
+
+---
+
+| \gNumbers
+
+
+```
+Byte    - -128 to 127
+Short   - -32,768 to 32,767
+Int     - -2147483648 to 2147483647
+Long    - -9223372036854775808 to 9223372036854775807
+Float   - (+-) 1.40129846432481707e-45 to 3.40282346638528860e+38
+Double  - (+-) 4.94065645841246544e-324 to 1.79769313486231570e+308
+```
+
+---
+
+You have the standard number operations:
+
+```
+1 + 2 == 3    // addition
+1 - 2 == -1   // subtraction
+2 % 2 == 0    // modulo
+2 * 2 == 4    // multiplication
+4 / 2 == 2    // division
+```
+
+And some convenient methods:
+
+```
+-1.abs   == 1 // absolute value
+2.max(3) == 3 // find the maximum value
+2.min(3) == 2 // find the minimum value
+3.signum == 1 // signum
+```
+
+---
+
+But what happens if we use number types with different precisions?
+
+```
+1 / 2 == (1: Int) / (2: Int)
+      == (1 / 2): Int
+      == 0
+```
+
+Now let's add a \gDouble\s here:
+
+--
+```
+1 / 2.0 == (1: Int) / (2.0: Double)
+        == (1.0 / 2.0): Double
+        == 0.5
+```
+
+---
+
+Scala selects the number type with the highest precision.
+
+---
+
+| \gYour Task
+
+
+a) divide \r1\s by \r0\s
+b) divide \r1\s by \r0.0\s
+
+--
+a)
+
+```
+1 / 0
+```
+
+--
+b)
+
+```
+1 / 0.0
+```
+
+---
+
+When you divide a number by \r0.0\s the result becomes a \gDouble\s with the value \rInfinity\s.
+But you cannot access an \rInfinity\s value. What you can do is to check if the given precision
+number is infinite.
+
+```
+val infinity = 1 / 0.0
+
+infinity.isInfinity    == true
+infinity.isPosInfinity == true
+infinity.isNegInfinity == false
+```
+
+---
+
+All Boolean comparison operators are available for numbers.
+
+```
+1 == 1
+2 > 2
+```
+
+But be aware when testing to floating point numbers on equality that this might lead to wrong results:
+
+```
+0.1 + 0.2 == 0.3
+```
+
+---
+
+If you need to proof equality of floating point numbers define a tolerance:
+
+```
+def eq(a: Double, b: Double, epsilon: Double): Boolean =
+  (a - b).abs < epsilon
+
+eq(0.1 + 0.2, 0.3, 0.00001)
+```
+
+---
+
+Last but not least Scala provides you with bit level Integer manipulations.
+
+```
+(2 << 1) == 4 // bit-shift to the left
+(2 >> 1) == 1 // bit-shift to the right
+(2 ^ 3)  == 1 // bit-wise XOR
+(2 & 3)  == 2 // bit-wise AND
+(2 | 3)  == 3 // bit-wise OR
+```
+
+---
+
+| \gYour Task
+
+
+a) transform \r2\s to a \r8\s
+b) what is \r13\s and \r8\s combined as bit-wise OR?
+
+--
+a)
+
+```
+2 << 2
+```
+
+--
+b)
+
+```
+13 | 8
+```
+
+---
+
+If you want more information take a look at Scala documentation:
+
+  \ghttps://www.scala-lang.org/api/2.12.6/
+
+Use the search-bar to find the type you are looking for.
+
+---
+
 | \gCollections
 
 
 We will cover the following topics:
 
-| Tuples ()
-| Seq    ()
-| List   ()
-| Vector ()
-| Set    ()
-| Map    ()
+| Tuples
+| Seq 
+| List
+| Vector
+| Set
+| Map
 
 ---
 
@@ -43,9 +246,19 @@ There is also a special operation to create two element tuples (pairs):
 1 -> "hello" == (1, "hello")
 ```
 
-Your task is to:
+---
 
-  a) create a tuple from the numbers 1, 2, 3 with '->'
+| \gYour Task
+
+
+a) create a tuple from the numbers \r1\s, \r2\s, \r3\s with '->'
+
+--
+a)
+
+```
+1 -> 2 -> 3
+```
 
 ---
 
@@ -388,7 +601,7 @@ seq.drop(5)
 c)
 
 ```
-seq.split(5)
+seq.splitAt(5)
 ```
 
 ---
@@ -551,8 +764,7 @@ For more information take a look at:
 If you have to make sure each element only exists ones in your collection you should use Set.
 
 ```
-Set(1, 2, 2) == Set(1, 2) != Seq(1, 2)
-Set(1, 2)                 == Seq(1, 2)
+Set(1, 2, 2) == Set(1, 2)
 ```
 
 ---
