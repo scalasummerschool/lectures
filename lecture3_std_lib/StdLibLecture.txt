@@ -1,0 +1,657 @@
+| \gStandard Library
+
+
+To move forward type '\bn\s' and '\bENTER\s'. To execute slide code use '\br\s'.
+
+---
+
+You can work through the following chapters:
+
+| Primitives           (\b7 go\s)
+| Collections          (\b7 go\s)
+| Algebraic Data Types (\b7 go\s)
+
+---
+
+| \gCollections
+
+
+We will cover the following topics:
+
+| Tuples ()
+| Seq    ()
+| List   ()
+| Vector ()
+| Set    ()
+| Map    ()
+
+---
+
+| \gTuples
+
+
+Tuples are a basic collection type in Scala which can have two or more values of different types.
+
+```
+(1, "hello")
+(true, 1, (5.0, Some(4)))
+```
+
+There is also a special operation to create two element tuples (pairs):
+
+```
+1 -> "hello" == (1, "hello")
+```
+
+Your task is to:
+
+  a) create a tuple from the numbers 1, 2, 3 with '->'
+
+---
+
+From now on we are using (execute '\br\s' now):
+
+```
+val tup = (1, true, ("hello", 3.0))
+```
+
+--
+
+You can access elements by using index specific methods.
+
+```
+tup._1 == 1
+tup._2 == true
+```
+
+If you work with pairs - a tuple with two elements - you can also swap their elements.
+
+```
+(1, true).swap == (true, 1)
+```
+
+---
+
+| \gYour Task
+
+
+a) access \r"hello"\s in tup using the access methods
+b) swap the inner pair using swap and copy
+
+--
+
+Expected:
+
+a)
+
+```
+tup._3._1
+```
+
+--
+b)
+
+```
+tup.copy(_3 = tup._3.swap)
+```
+
+---
+
+And of course you can pattern-match tuples.
+
+```
+tup match {
+  case (a, b, (c, d)) => c
+}
+```
+
+---
+
+| \gSeq
+
+A sequence \ySeq\s is a collection of values with an order and in Scala it is the most basic collection trait you can use.
+When using it it defaults to the List implementation, but more to that in the next session.
+  
+```
+// empty sequence
+Seq[Char]()
+Seq.empty[Char]
+Nil: Seq[Char]
+
+// sequence of n elements
+Seq(1, 2, 3)
+```
+
+---
+
+| \gYour Task
+
+
+Create sequences with:
+  a) 1 as the single element 
+  b) no elements and the type Boolean
+
+--
+a)
+
+```
+Seq(1)
+```
+
+--
+b)
+
+```
+Seq.empty[Boolean]
+```
+
+---
+
+From now on we use (execute '\br\s' now):
+
+```
+val seq = Seq(1, 2, 3, 4)
+```
+
+--
+Let's start with accessing elements by index:
+  
+```
+seq(1)
+```
+
+That is calling `seq.apply(1)` which is returning the second element (we start at zero)
+
+---
+
+| \gYour Task
+
+
+Access the:
+  a) first element
+  b) second element
+  c) 100th element
+
+--
+a)
+
+```
+seq(0)
+```
+
+--
+b)
+
+```
+seq(1)
+```
+
+--
+c)
+
+```
+seq(100)
+```
+
+---
+
+You can also access the head or tail by using the following methods:
+
+```
+seq.head       == 1
+seq.tail       == Seq(2, 3, 4)
+seq.headOption == Some(1)
+seq.last       == 4
+```
+
+---
+
+| \gYour Task
+
+
+Access:
+  a) headOption
+  b) call tail consecutively five times on 'seq'
+  c) get the head from \gSeq()\s
+  d) last from \gSeq()\s
+
+--
+a)
+
+```
+seq.headOption
+```
+
+--
+b)
+
+```
+seq.tail.tail.tail.tail.tail
+```
+
+--
+c)
+
+```
+Seq().head
+```
+
+--
+d)
+
+```
+Seq().last
+```
+
+---
+
+You can also filter elements out of a sequence.
+
+```
+seq.filter(_ > 1)     == Seq(2, 3, 4)
+seq.filterNot(_ <= 1) == Seq(2, 3, 4)
+```
+
+---
+
+| \gYour Task
+
+
+Filter all elements:
+  a) less than \r5\s
+  b) greater than \r2\s
+
+--
+a)
+
+```
+seq.filterNot(_ < 5)
+```
+
+--
+b)
+
+```
+seq.filter(_ <= 2)
+```
+
+---
+
+Find elements which satisfy a condition. Or check conditions on whole sequences.
+
+```
+seq.exists(_ == 2) == true
+seq.forall(_ == 2) == false
+seq.find(_ == 2)   == Some(2)
+seq.contains(2)    == true
+```
+
+---
+
+| \gYour Task
+
+
+Proof the following conditions:
+  a) is every number even in 'seq'
+  b) find first \r3\s
+
+--
+a)
+
+```
+seq.forall(_ % 2 == 0)
+```
+
+--
+b)
+
+```
+seq.find(_ == 3)
+```
+
+---
+
+Apply a new order.
+
+```
+seq.sortWith(_ > _)
+```
+
+---
+
+Of course, you can also add elements as needed.
+
+```
+0 +: seq         == Seq(0, 1, 2, 3, 4)
+seq :+ 5         == Seq(1, 2, 3, 4, 5)
+seq ++ Seq(5, 6) == Seq(1, 2, 3, 4, 5, 6)
+```
+
+---
+
+| \gYour Task
+
+
+Add the following elements to seq:
+  a) \r-1\s at the head and \r42\s at the end
+  b) append a sequence with the number \r3.0\s and \r4.0\s
+
+--
+a)
+
+```
+-1 +: seq :+ 42
+```
+
+--
+b)
+
+```
+seq ++ Seq(3.0, 4.0)    
+```
+
+---
+
+You can create sub-sequences.
+
+```
+seq.take(2)    == Seq(1, 2)
+seq.drop(2)    == Seq(3, 4)
+seq.splitAt(2) == (Seq(1, 2), Seq(3, 4))
+```
+
+---
+
+| \gYour Task
+
+
+Create the following sub-sequences:
+  a) take the five elements
+  b) drop the first five elements
+  c) split 'seq' at position five
+
+--
+a)
+
+```
+seq.take(5)
+```
+
+--
+b)
+
+```
+seq.drop(5)
+```
+
+--
+c)
+
+```
+seq.split(5)
+```
+
+---
+
+Tranform your data.
+
+```
+seq.map(_ + 1)              == Seq(2, 3, 4, 5)
+seq.flatMap(a => Seq(a, a)) == Seq(1, 1, 2, 2, 3, 3, 4, 4)
+```
+
+---
+
+| \gYour Task
+
+
+Your task is to:
+  a) transform every element to the result of the is-even test
+  b) create from every a sequence of \r3\s elements (use \cmap\s and \cflatten\s,
+     and \cflatMap\s)
+
+--
+a)
+
+```
+seq.map(_ % 2 == 0)
+```
+
+--
+b)
+
+```
+seq.map(a => Seq(a, a, a)).flatten
+```
+--
+
+```
+seq.flatMap(a => Seq(a, a, a))
+```
+
+---
+
+Transform the whole sequence to something else. Make it an Int, tuple, or whatever you need.
+
+```
+seq.foldLeft(0)((agg, a) => agg + a)  == 0 + 1 + 2 + 3 + 4 == 10
+seq.foldRight(0)((a, agg) => agg + a) == 0 + 4 + 3 + 2 + 1 == 10
+```
+
+What happens is, you create an aggregator (agg) of your result type with some initial state. Then
+you go through the whole sequence and start to combine the aggregator with each element.
+
+---
+
+| \gYour Task
+
+
+a) create a tuple with all even numbers in _1 and all odd numbers in _2
+b) apply (agg + a) / 2.0 to foldLeft and foldRight and check if the results are the same
+
+--
+a)
+
+```
+seq.foldLeft((Seq.empty[Int], Seq.empty[Int])) { case ((even, odd), a) => 
+  if (a % 2 == 0) (even :+ a, odd) else (even, odd :+ a)
+}
+```
+
+--
+b)
+
+```
+seq.foldLeft(0.0)((agg, a) => (agg + a) / 2.0) == seq.foldRight(0.0)((agg, a) => (agg + a) / 2.0)
+```
+
+---
+
+We talked about pattern-matching a while now and of course you can also use it with sequences.
+
+```
+seq match {
+  case h +: t       => h
+  case Nil          => 0
+  case Seq(a, b, c) => a
+}
+```
+
+---
+
+And we get an extension to the for-comprehension. With sequences we can also add a filter step.
+
+```
+val x = for {
+  a <- seq
+    
+  if a > 1
+} yield a + 1
+
+x == Seq(3, 4, 5)
+```
+
+---
+
+For more information and a complete set of methods take a look at:
+
+  \ghttps://www.scala-lang.org/api/2.12.6/scala/collection/Seq.html\s
+
+The next session is 'commonCollections'.
+
+---
+
+| \gList
+
+
+As mentioned in the sequence-session Scala defaults to the List implementation of the Seq trait. But is there anything special
+to it we have to know? It seems there is.
+
+```
+// create a List
+List(1, 2) == Seq(1, 2)
+
+// adding elements
+0 :: List(1, 2)           == 0 +: Seq(1, 2)
+List(1, 2) ::: List(3, 4) == Seq(1, 2) ++ Seq(3, 4)
+```
+ 
+All Seq operations still apply to List.
+
+---
+
+| \gVector
+
+
+But then you also have more spcecialized implementations like Vector.
+
+```
+Vector(1, 2) == Seq(1, 2)
+```
+
+This data structure gives you constant random access and update times. So if you need to access elements 
+randomly - read not just the head - you probably want to use Vectors.
+
+```
+val vec = Vector(1, 2, 3)
+
+vec(2) == 3
+```
+
+Again all Seq methods apply. You just have to be aware that Nil is not part of Vectors type.
+For more information take a look at:
+
+  \ghttps://www.scala-lang.org/api/2.12.6/scala/collection/immutable/Vector.html\s
+
+---
+
+| \gSet
+
+
+If you have to make sure each element only exists ones in your collection you should use Set.
+
+```
+Set(1, 2, 2) == Set(1, 2) != Seq(1, 2)
+Set(1, 2)                 == Seq(1, 2)
+```
+
+---
+
+From no on we use (execute now \br\s):
+
+```
+val set = Set(1, 2)
+```
+
+--
+But \ySet\s comes with some special methods.
+
+```
+// apply is not getting an element, but proofing its existence
+set(1) == set.contains(1)
+
+// standard set operations
+set.union(Set(2, 3))     == Set(1, 2, 3)
+set.diff(Set(2, 3))      == Set(1)
+set.intersect(Set(2, 3)) == Set(2)
+```
+
+---
+
+| \gYour Task
+
+
+a) symetric difference (all elements which are only in A xor B) between set and Set(\r2\s, \r3\s)
+
+--
+a)
+
+```
+set.diff(Set(2, 3)).union(Set(2, 3).diff(set))
+```
+
+---
+
+But be aware that Set is not implementing \ySeq\s. Many of the methods still exists but some don't. For example append/prepend
+methods boil down to the following:
+
+```
+set + 3       == Set(1, 2, 3)
+Set(0) ++ set == Set(0, 1, 2)
+```
+
+You also lose any guarantees about order. A set does not have an order. But there is \ySortedSet\s if you need it.
+
+---
+
+Again you can find more information when looking into:
+
+  \ghttps://www.scala-lang.org/api/2.12.6/scala/collection/immutable/Set.html\s
+
+---
+
+| \gMap
+
+
+And then, there is a construct called \yMap\s which is a collection of key-value pairs where the keys create a set.
+
+```
+Map(1 -> "hello", 2 -> "world")
+```
+
+We continue to work with (execute now \br\s):
+
+```
+val map = Map(1 -> "hello", 2 -> "world")
+```
+
+--
+You can access pairs by their key:
+
+```
+map(1)                   == "hello"
+map.get(1)               == Some("hello")
+map.getOrElse(1, "boom") == "hello"
+```
+
+---
+
+| \gYour Task
+
+
+a) get the pair with key \r3\s using apply
+b) get the pair with key \r3\s or return \r"boom"\s
+
+--
+a)
+
+```
+map(3)
+```
+
+--
+b)
+
+```
+map.getOrElse(3, "boom")
+```
