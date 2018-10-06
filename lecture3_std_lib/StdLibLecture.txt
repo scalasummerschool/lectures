@@ -1126,3 +1126,324 @@ val a = {
 
 a == "\nmy String\n"
 ```
+
+---
+
+| \gAlgebraic Data Types
+
+---
+
+| \gOption
+
+Does a computation yield a result or not?
+
+```
+// actual implementation differs - simplified code
+sealed trait Option[+A]
+
+case class Some[+A](value: A) extends Option[A]
+case object None extends Option[Nothing]
+```
+
+The '+' operator in front of the type parameter A is indicating its variance. By using these declaration your
+allow all values which are A or subtypes of A to by stored in an \yOption\s.
+
+---
+
+You create an \yOption\s the following way:
+
+```
+Option(1) == Some(1)
+
+// for demonstration purposes we use 'null' here
+// it is an empty object reference - don't use it in your code
+// if not absolutely necessary
+Option(null)      == None
+Option.empty[Int] == None
+```
+
+---
+
+If you want to access a value stored in an \yOption\s you can call:
+
+```
+Some(0).get          == 0
+
+// recover with default value
+Some(0).getOrElse(1) == 0
+
+// recover with computation which yields again an Option
+Some(0).orElse(Some(1)) == Some(1)
+```
+
+---
+
+| \gYour Task
+
+a) repeat the steps you saw before just with:
+
+```
+Option.empty[Int]
+```
+
+--
+a)
+
+```
+val oe = Option.empty[Int]
+
+oe.get
+```
+```
+oe.getOrElse(1)
+```
+```
+or.orElse(Some(1))
+```
+
+---
+
+You can also use \cfold\s to recover or transform an \yOption\s.
+
+```
+Option("hello").fold(
+  "nothing here"
+)(
+  a => a
+)
+```
+
+Pattern-matching does the same:
+
+```
+Option("hello") match {
+  case Some(a) => a
+  case None    => "nothing here"
+}
+```
+
+---
+
+If you just need to know when an \yOption\s empty or not use the following methods:
+
+```
+val o = Option("hello")
+
+o.isEmpty   == false
+o.nonEmpty  == true
+o.isDefined == true
+```
+
+---
+
+All transformation, filter and condition-checking methods you know from \ySeq\s apply
+to \yOption\s.
+
+For more information take a look into the documentation:
+
+  \ghttps://www.scala-lang.org/api/2.12.6/scala/Option.html\s
+
+---
+
+| \gEither
+
+Does a computation produce a left or right value?
+
+```
+// actual implementation differs - simplified code
+sealed trait Either[+A, +B]
+
+case class Right[+A, +B](value: B) extends Either[A, B]
+case class Left[+A, +B](value: A) extends Either[A, B]
+```
+
+---
+
+You can create an \yEither\s the following way:
+
+```
+Either.cond(true, 1, "hello")  == Right(1)
+Either.cond(false, 1, "hello") == Left("hello")
+```
+
+---
+
+If you need access to the stored values you can call:
+
+```
+Right[String, Int](1).value      == 1
+Left[String, Int]("hello").value == "hello"
+
+// since Scala 2.12 Either is right-biased
+Either.cond(true, 1, "hello").getOrElse(0)  == 1
+Either.cond(false, 1, "hello").getOrElse(0) == 0
+```
+
+---
+
+| \yYour Task
+
+
+Given the below \yEither\s (execute now \br\s):
+
+```
+val e = Either.cond(true, 1, "hello")
+```
+
+a) double the right value (transformation):
+b) recover if 'e' should by Left by returning -1
+
+--
+a)
+
+```
+e.map(_ * 2)
+```
+
+--
+b)
+
+```
+e.getOrElse(-1)
+```
+
+---
+
+Again you can fold over an \yEither\s:
+
+```
+e.fold(
+  l => s"left: $l",
+  r => s"right: $r"
+)
+```
+
+or pattern-match:
+
+```
+e match {
+  case Left(l)  => s"left: $l"
+  case Right(r) => s"right: $r"
+}
+```
+
+---
+
+And of course you can just check if an \yEither\s is left or right without actually
+working with its values.
+
+```
+e.isRight == true
+e.isLeft  == false
+```
+
+---
+
+All transformation, filter and condition-checking methods you know from \ySeq\s apply
+to \yEither\s.
+
+For more information take a look into the documentation:
+
+  \ghttps://www.scala-lang.org/api/2.12.6/scala/util/Either.html\s
+
+---
+
+| \gTry
+
+
+You are working with (Java) code throwing exceptions? Wrap it in a \yTry\s to regain safety.
+
+```
+sealed trait Try[+A]
+
+case class Success[+A](a: A) extends Try[A]
+case class Failure[+A](error: Throwable) extends Try[A]
+```
+
+---
+
+How it works:
+
+```
+object Try {
+
+  def apply[A](exp: => A): Try[A] = 
+    try {
+      Success(exp)
+    } catch {
+      case error: Throwable => Failure(error)
+    }
+}
+```
+
+\yTry\s has a construct which defers the evaluation of its parameter 'exp' until first usage (call-by-name). When
+it is called the whole function either returns a value in a \ySuccess\s instance or a \yFailure\s storing the
+error. Btw, try-catch blocking intercepting \yExceptions\s.
+
+To use it you have to import:
+
+```
+import scala.util.{Try, Success, Failure}
+```
+
+Now you can do the following:
+
+```
+val try = Try {
+  1 / 0
+}
+
+// you don't care about the error
+try.toOption
+
+// your code uses Either
+try.toEither
+```
+
+---
+
+As with \yEither\s you can fold over its result:
+
+```
+try.fold(
+  div   => s"division: $div",
+  error => s"we have a problem: $error.getMessage"
+)
+```
+
+Or pattern-match:
+
+```
+try match {
+  case Success(div)   => s"division: $div",
+  case Failure(error) => s"we have a problem: $error.getMessage"
+}
+```
+
+---
+
+There are also dedicated recovery methods:
+
+```
+try.recover {
+  case _: ArithmetikException => -1
+}
+```
+
+or if you need to recover by using a potentially failing computation:
+
+```
+try.recoverWith {
+  case _: ArithmetikException => Try(1 / 2)
+}
+```
+
+---
+
+
+All transformation, filter and condition-checking methods you know from \ySeq\s apply
+to \yTry\s.
+
+For more information take a look into the documentation:
+
+  \ghttps://www.scala-lang.org/api/2.12.6/scala/util/Try.html\s
