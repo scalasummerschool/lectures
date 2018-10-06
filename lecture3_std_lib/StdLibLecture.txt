@@ -5,7 +5,7 @@ You can use the following commands:
   - next slide '\bn\s'.
   - previous slide '\bp\s'
   - go-to slide '<slide-numer> go'
-  - execute slide code use '\br\s'
+  - execute slide code '\br\s'
 
 \*Build with\s:
   \ghttps://github.com/marconilanna/REPLesent
@@ -39,7 +39,7 @@ Boolean - true false
 \gBoolean\s has the following operations build in:
 
 ```
-!true     // negation
+!true         // negation
 
 true & false  // AND, always evaluates the right side
 true && false // AND, evaluates the right side only if the left side is true
@@ -253,7 +253,7 @@ We will cover the following topics:
 | \gTuples
 
 
-Tuples are a basic collection type in Scala which can have two or more values of different types.
+Tuples are a basic collection type in Scala which has two or more values of different types.
 
 ```
 (1, "hello")
@@ -342,8 +342,9 @@ tup match {
 
 | \gSeq
 
+
 A sequence \ySeq\s is a collection of values with an order and in Scala it is the most basic collection trait you can use.
-When using it it defaults to the List implementation, but more to that in the next session.
+When using it it defaults to the List implementation, but more to that in the next chapter.
   
 ```
 // empty sequence
@@ -664,7 +665,7 @@ seq.flatMap(a => Seq(a, a, a))
 
 ---
 
-Transform the whole sequence to something else. Make it an Int, tuple, or whatever you need.
+Transform the whole sequence to something else. Make it an \yInt\s, \yTuple\s, or whatever you need.
 
 ```
 seq.foldLeft(0)((agg, a) => agg + a)  == 0 + 1 + 2 + 3 + 4 == 10
@@ -730,15 +731,13 @@ For more information and a complete set of methods take a look at:
 
   \ghttps://www.scala-lang.org/api/2.12.6/scala/collection/Seq.html\s
 
-The next session is 'commonCollections'.
-
 ---
 
 | \gList
 
 
-As mentioned in the sequence-session Scala defaults to the List implementation of the Seq trait. But is there anything special
-to it we have to know? It seems there is.
+As mentioned in the sequence-chapter Scala defaults to the List implementation of the Seq trait. But is there anything special
+to it? It seems there is.
 
 ```
 // create a List
@@ -763,7 +762,7 @@ Vector(1, 2) == Seq(1, 2)
 ```
 
 This data structure gives you constant random access and update times. So if you need to access elements 
-randomly - read not just the head - you probably want to use Vectors.
+randomly - not just the head - you probably want to use Vectors.
 
 ```
 val vec = Vector(1, 2, 3)
@@ -781,7 +780,7 @@ For more information take a look at:
 | \gSet
 
 
-If you have to make sure each element only exists ones in your collection you should use Set.
+If you have to make sure each element only exists ones in your collection you should use \ySet\s.
 
 ```
 Set(1, 2, 2) == Set(1, 2)
@@ -832,7 +831,8 @@ set + 3       == Set(1, 2, 3)
 Set(0) ++ set == Set(0, 1, 2)
 ```
 
-You also lose any guarantees about order. A set does not have an order. But there is \ySortedSet\s if you need it.
+You also lose any guarantees about order. But there is \ySortedSet\s if you need it.
+
 In contrast, you gain the abaility to remove elements:
 
 ```
@@ -900,7 +900,7 @@ You can also just work with its keys or values.
 
 ```
 /* you don't really get a Seq but an Iterable
- * but it gives you most of the operations from Seq */ 
+ * it gives you many of the operations you know from Seq */ 
 map.values == Seq("hello", "world")
 map.keys   == Seq(1, 2)
 ```
@@ -913,7 +913,7 @@ map.keySet == Set(1, 2)
 
 ---
 
-If you want to add an elements to your \yMap\s you can do they by providing key-value pairs.
+If you want to add an element to your \yMap\s you can do they by providing key-value pairs.
 
 ```
 map + (3 -> "!")     == Map(1 -> "hello", 2 -> "wordl", 3 -> "!")
@@ -1135,6 +1135,7 @@ a == "\nmy String\n"
 
 | \gOption
 
+
 Does a computation yield a result or not?
 
 ```
@@ -1198,7 +1199,7 @@ oe.get
 oe.getOrElse(1)
 ```
 ```
-or.orElse(Some(1))
+oe.orElse(Some(1))
 ```
 
 ---
@@ -1246,6 +1247,7 @@ For more information take a look into the documentation:
 ---
 
 | \gEither
+
 
 Does a computation produce a left or right value?
 
@@ -1354,6 +1356,7 @@ For more information take a look into the documentation:
 You are working with (Java) code throwing exceptions? Wrap it in a \yTry\s to regain safety.
 
 ```
+// actual implementation differs - simplified code
 sealed trait Try[+A]
 
 case class Success[+A](a: A) extends Try[A]
@@ -1378,7 +1381,9 @@ object Try {
 
 \yTry\s has a construct which defers the evaluation of its parameter 'exp' until first usage (call-by-name). When
 it is called the whole function either returns a value in a \ySuccess\s instance or a \yFailure\s storing the
-error. Btw, try-catch blocking intercepting \yExceptions\s.
+error. Btw, try-catch blocks intercept \yExceptions\s.
+
+---
 
 To use it you have to import:
 
@@ -1389,15 +1394,15 @@ import scala.util.{Try, Success, Failure}
 Now you can do the following:
 
 ```
-val try = Try {
+val tr = Try {
   1 / 0
 }
 
 // you don't care about the error
-try.toOption
+tr.toOption
 
 // your code uses Either
-try.toEither
+tr.toEither
 ```
 
 ---
@@ -1405,7 +1410,7 @@ try.toEither
 As with \yEither\s you can fold over its result:
 
 ```
-try.fold(
+tr.fold(
   div   => s"division: $div",
   error => s"we have a problem: $error.getMessage"
 )
@@ -1414,8 +1419,8 @@ try.fold(
 Or pattern-match:
 
 ```
-try match {
-  case Success(div)   => s"division: $div",
+tr match {
+  case Success(div)   => s"division: $div"
   case Failure(error) => s"we have a problem: $error.getMessage"
 }
 ```
@@ -1425,16 +1430,16 @@ try match {
 There are also dedicated recovery methods:
 
 ```
-try.recover {
-  case _: ArithmetikException => -1
+tr.recover {
+  case _: ArithmeticException => -1
 }
 ```
 
 or if you need to recover by using a potentially failing computation:
 
 ```
-try.recoverWith {
-  case _: ArithmetikException => Try(1 / 2)
+tr.recoverWith {
+  case _: ArithmeticException => Try(1 / 2)
 }
 ```
 
@@ -1447,3 +1452,10 @@ to \yTry\s.
 For more information take a look into the documentation:
 
   \ghttps://www.scala-lang.org/api/2.12.6/scala/util/Try.html\s
+
+---
+
+That is the end of our small journey through Scala's standard library. We covered the 
+fundamental types used most of the time in code bases. One larger subject we did not
+address are \yFutures\s to represent parallel/asynchronous computations since we will
+focus on IO later on.
