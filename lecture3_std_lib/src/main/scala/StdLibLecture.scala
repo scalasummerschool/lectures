@@ -694,8 +694,8 @@ object StdLibLecture extends JSApp {
       scalaC("""
         val str = "Hello world"
 
-        str.length          == 11
-        str.containts("wo") == true
+        str.length         == 11
+        str.contains("wo") == true
       """)
     ),
 
@@ -742,6 +742,34 @@ object StdLibLecture extends JSApp {
         "String\n" +
         "\"\"\""
       )
+    ),
+
+    slide(
+      "String: multi-line",
+      <.p("Mulit-line Strings take the indentation into account."),
+      <.br,
+      scalaC(
+        "val a = {\n" +
+        "  \"\"\"\n" +
+        "  my String\n" +
+        "  \"\"\"\n" +
+        "}\n\n" +
+
+        "a == \"\\n    my String\\n  \"")
+    ),
+
+    slide(
+      "String: multi-line",
+      <.p("To ignore these identation whitespaces you have to use margin elimination:"),
+      <.br,
+      scalaC(
+        "val a = {\n" +
+        "  \"\"\"\n" +
+        "  |my String\n" +
+        "  |\"\"\".stripMargin\n" +
+        "}\n\n" +
+
+        "a == \"\\nmy String\\n\"")
     ),
 
     exerciseSlide(
