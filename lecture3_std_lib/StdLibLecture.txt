@@ -833,6 +833,12 @@ Set(0) ++ set == Set(0, 1, 2)
 ```
 
 You also lose any guarantees about order. A set does not have an order. But there is \ySortedSet\s if you need it.
+In contrast, you gain the abaility to remove elements:
+
+```
+set - 1       == Set(2)
+set -- Set(1) == Set(2)
+```
 
 ---
 
@@ -886,4 +892,237 @@ b)
 
 ```
 map.getOrElse(3, "boom")
+```
+
+---
+
+You can also just work with its keys or values.
+
+```
+/* you don't really get a Seq but an Iterable
+ * but it gives you most of the operations from Seq */ 
+map.values == Seq("hello", "world")
+map.keys   == Seq(1, 2)
+```
+
+Furthermore, you can also make the key-set explicit with:
+
+```
+map.keySet == Set(1, 2)
+```
+
+---
+
+If you want to add an elements to your \yMap\s you can do they by providing key-value pairs.
+
+```
+map + (3 -> "!")     == Map(1 -> "hello", 2 -> "wordl", 3 -> "!")
+
+map ++ Map(3 -> "!") == Map(1 -> "hello", 2 -> "wordl", 3 -> "!")
+```
+
+Or you override a given pair:
+
+```
+map + (2 -> "you") == Map(1 -> "hello", 2 -> "you")
+```
+
+And you can remove elements by key:
+
+```
+map - 1       == Map(2 -> "world")
+map -- Set(1) == Map(2 -> "world")
+```
+
+---
+
+| \gYour Task
+
+
+a) add the following pairs: \r3\s -> \r"you"\s, \r1 -> "me"\s
+b) remove the key \r5\s
+
+--
+a)
+
+```
+map ++ Map(3 -> "you", 1 -> "me")
+```
+
+--
+b)
+
+```
+map - 5
+```
+
+---
+
+As with every collection you can transform its data with \cmap\s and \cflatMap\s.
+
+```
+map.map { case (key, value) => key -> value + "!" }
+```
+
+If you only need to map the values you can also use:
+
+```
+map.mapValues(value => value + "!")
+```
+
+---
+
+| \gYour Task
+
+
+a) use \cfoldLeft\s to sum all keys
+b) create a List(1 -> "hello", 2 -> "world") and use \cgroupBy\s to transform it to the \yMap\s
+c) map all values to upper case (\ctoUpperCase\s)
+
+--
+a)
+
+```
+map.foldLeft(0) { case (agg, (key, _)) => agg + key }
+```
+
+--
+b)
+
+```
+List(1 -> "hello", 2 -> "world").groupBy(_._1)
+```
+
+--
+c)
+
+```
+map.mapValues(_.toUpperCase)
+```
+
+---
+
+| \gStrings
+
+
+A \yString\s is a sequence of \yChars\s.
+
+```
+"Hello World" ~ List('H', 'e', ...)
+```
+
+---
+
+You can access \yChars\s or sub-strings by using the following methods:
+
+```
+val str = "hello world"
+
+str.charAt(0)  == 'h'
+str.drop(2)    == "llo world"
+str.take(2)    == "he"
+str.split(" ") == Array("hello", "world")
+```
+
+---
+
+| \gYour Task
+
+
+a) take \yChar\s at position \r50\s
+
+--
+a)
+
+```
+str.charAt(50)
+```
+
+---
+
+\yStrings\s also come with a very convenient way to integrate values into the \yString\s itself
+called String-interpolation.
+
+```
+val a = 42
+
+s"The answer to everything is $a" == "The answer to everything is 42"
+```
+
+That also works with complete expressions.
+
+```
+s"1 + 2 = ${1 + 2}" == "1 + 2 = 3"
+```
+
+---
+
+| \gYour Task
+
+
+a) put List(1, 2) into the \yString\s \r"My list is ..."\s
+b) compute the circle area within the \yString\s \r"The circle with radius 3 has the area ..."\s
+
+```
+// circle area
+Math.PI * r * r
+```
+
+--
+a)
+
+```
+s"My list is ${List(1, 2)}"
+```
+
+--
+b)
+
+
+```
+s"The cirlce with radius 3 has the area ${Math.PI * 3 * 3}"
+```
+
+---
+
+And \yStrings\s ship with another neat feature which improves the way how you work with long, multi-line \yStrings\s.
+
+```
+// this is annoying
+"This is a reaaaaaaalllllllyyyy\n" +
+"looooooooooooooooooooooooooong\n" +
+"String"
+
+// just write
+"""
+this is a reaaaaaaalllllllyyyy
+looooooooooooooooooooooooooong
+String
+"""
+```
+
+---
+
+One problem with multi-line-strings is their property to take code-indentation into account:
+
+```
+val a = {
+  """
+    my String
+  """
+}
+
+a == "\n    my String\n  "
+```
+
+To ignore these identation whitespaces you have to use margin elimination:
+
+```
+val a = {
+  """
+    |my String
+    |""".stripMargin
+}
+
+a == "\nmy String\n"
 ```
