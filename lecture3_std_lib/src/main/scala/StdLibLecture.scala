@@ -792,7 +792,7 @@ object StdLibLecture extends JSApp {
 
   val adts = chapter(
     chapterSlide(
-      <.h2("Build-in ADTs")
+      <.h2("Algebraic Data Types")
     ),
 
     noHeaderSlide(
@@ -801,7 +801,7 @@ object StdLibLecture extends JSApp {
 
     slide(
       "Option",
-      <.p("Does a computation yield a result or not? Think of it as a two element collection."),
+      <.p("Does a computation yield a result or not?"),
       <.br,
       scalaC("""
         // actual implementation differs - simplified code
@@ -818,8 +818,8 @@ object StdLibLecture extends JSApp {
         Option("hello") == Some("hello")
 
         // null is an empty reference - avoid it
-        Option(null)    == None
-        None            == None
+        Option(null)      == None
+        Option.empty[Int] == None
       """)
     ),
 
@@ -847,7 +847,8 @@ object StdLibLecture extends JSApp {
         val opt: Option[Int] = ???
 
         opt.fold(
-          "this thing is empty",
+          "this thing is empty"
+        )(
           a => s"we have a $a"
         )
       """)
@@ -912,7 +913,7 @@ object StdLibLecture extends JSApp {
 
     slide(
       "Either",
-      <.p("Did a computation fail or not? This is again a two element collection."),
+      <.p("Does a computation return a left or right value?"),
       <.br,
       scalaC("""
         // actual implementation differs - simplified code
@@ -1003,11 +1004,30 @@ object StdLibLecture extends JSApp {
 
     slide(
       "Try",
-      <.p("You are working with (Java) code throwing exceptions? Wrap it in a Try to regain purity."),
+      <.p("You are working with (Java) code throwing exceptions? Wrap it in a Try to regain safety."),
       <.br,
       scalaC("""
-        // basic idea ... but has some extra methods
-        type Try[A] = Either[Throwable, A]
+        // actual implementation differs - simplified code
+        sealed trait Try[+A]
+
+        case class Success[+A](a: A) extends Try[A]
+        case class Failure[+A](error: Throwable) extends Try[A]
+      """)
+    ),
+
+    slide(
+      "Try",
+      scalaC("""
+        object Try {
+
+          // '=>' defers computation until first usage (call-by-name)
+          def apply[A](exp: => A): Try[A] =
+            try {
+              Success(exp)
+            } catch {
+              case error: Throwable => Failure(error)
+            }
+        }
       """)
     ),
 
@@ -1018,11 +1038,11 @@ object StdLibLecture extends JSApp {
           // Exception throwing code goes here
         }
 
-        result.toEither
+        // you don't care about the error
         result.toOption
 
-        // or just work with
-        result
+        // your code works with Either
+        result.toEither
       """)
     ),
 
@@ -1033,7 +1053,7 @@ object StdLibLecture extends JSApp {
 
         t match {
           case Success(a)     => s"the number is $a"
-          case Failure(error) => error.printStackTrace()
+          case Failure(error) => s"something went wrong: error.getMessage"
         }
       """)
     ),
