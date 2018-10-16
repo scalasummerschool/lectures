@@ -68,7 +68,7 @@ To build a lecture go through the following steps:
 $> cd /path/to/repo
 $> sbt
 # select one of the shown lecture
-sbt> project
+sbt> projects
 sbt> project scala101-lecture
 
 # minimum JS optimizations
