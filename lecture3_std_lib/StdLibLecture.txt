@@ -1,0 +1,1461 @@
+| \gStandard Library
+
+
+You can use the following commands:
+  - next slide '\bn\s'.
+  - previous slide '\bp\s'
+  - go-to slide '<slide-numer> go'
+  - execute slide code '\br\s'
+
+\*Build with\s:
+  \ghttps://github.com/marconilanna/REPLesent
+
+---
+
+You can work through the following chapters:
+
+| Primitives           (\b7 go\s)
+| Collections          (\b7 go\s)
+| Algebraic Data Types (\b7 go\s)
+
+---
+
+| \gPrimitives
+
+
+We already saw some primitives over the course of this workshop. But let's take a closer look what Scala actually provides.
+
+---
+
+| \gBoolean
+
+
+```
+Boolean - true false
+```
+
+---
+
+\gBoolean\s has the following operations build in:
+
+```
+!true         // negation
+
+true & false  // AND, always evaluates the right side
+true && false // AND, evaluates the right side only if the left side is true
+
+true | false  // OR, always evaluates the right side
+true || false // OR, evaluates the right side only if the left side is false
+```
+
+And you have the standard comparison operations returning \gBoolean\s:
+
+```
+1 > 2  // greater than
+1 < 2  // smaller than
+1 >= 2 // greater-equal than
+1 <= 2 // smaller-equal than
+1 == 2 // equal
+1 != 2 // unequal
+```
+
+---
+
+| \gNumbers
+
+
+```
+Byte    - -128 to 127
+Short   - -32,768 to 32,767
+Int     - -2147483648 to 2147483647
+Long    - -9223372036854775808 to 9223372036854775807
+Float   - (+-) 1.40129846432481707e-45 to 3.40282346638528860e+38
+Double  - (+-) 4.94065645841246544e-324 to 1.79769313486231570e+308
+```
+
+---
+
+You have the standard number operations:
+
+```
+1 + 2 == 3    // addition
+1 - 2 == -1   // subtraction
+2 % 2 == 0    // modulo
+2 * 2 == 4    // multiplication
+4 / 2 == 2    // division
+```
+
+And some convenient methods:
+
+```
+-1.abs   == 1 // absolute value
+2.max(3) == 3 // find the maximum value
+2.min(3) == 2 // find the minimum value
+3.signum == 1 // signum
+```
+
+---
+
+But what happens if we use number types with different precisions?
+
+```
+1 / 2 == (1: Int) / (2: Int)
+      == (1 / 2): Int
+      == 0
+```
+
+Now let's add a \gDouble\s here:
+
+--
+```
+1 / 2.0 == (1: Int) / (2.0: Double)
+        == (1.0 / 2.0): Double
+        == 0.5
+```
+
+---
+
+Scala selects the number type with the highest precision.
+
+---
+
+| \gYour Task
+
+
+a) divide \r1\s by \r0\s
+b) divide \r1\s by \r0.0\s
+
+--
+a)
+
+```
+1 / 0
+```
+
+--
+b)
+
+```
+1 / 0.0
+```
+
+---
+
+When you divide a number by \r0.0\s the result becomes a \gDouble\s with the value \rInfinity\s.
+But you cannot access an \rInfinity\s value. What you can do is to check if the given precision
+number is infinite.
+
+```
+val infinity = 1 / 0.0
+
+infinity.isInfinity    == true
+infinity.isPosInfinity == true
+infinity.isNegInfinity == false
+```
+
+---
+
+All Boolean comparison operators are available for numbers.
+
+```
+1 == 1
+2 > 2
+```
+
+But be aware when testing to floating point numbers on equality that this might lead to wrong results:
+
+```
+0.1 + 0.2 == 0.3
+```
+
+---
+
+If you need to proof equality of floating point numbers define a tolerance:
+
+```
+def eq(a: Double, b: Double, epsilon: Double): Boolean =
+  (a - b).abs < epsilon
+
+eq(0.1 + 0.2, 0.3, 0.00001)
+```
+
+---
+
+Last but not least Scala provides you with bit level Integer manipulations.
+
+```
+(2 << 1) == 4 // bit-shift to the left
+(2 >> 1) == 1 // bit-shift to the right
+(2 ^ 3)  == 1 // bit-wise XOR
+(2 & 3)  == 2 // bit-wise AND
+(2 | 3)  == 3 // bit-wise OR
+```
+
+---
+
+| \gYour Task
+
+
+a) transform \r2\s to a \r8\s
+b) what is \r13\s and \r8\s combined as bit-wise OR?
+
+--
+a)
+
+```
+2 << 2
+```
+
+--
+b)
+
+```
+13 | 8
+```
+
+---
+
+| \gChar
+
+
+Encode characters as integer numbers.
+
+```
+Char - 0 to 65.535
+```
+
+All integer operations apply to \yChar\s.
+
+---
+
+If you want more information take a look at Scala documentation:
+
+  \ghttps://www.scala-lang.org/api/2.12.6/
+
+Use the search-bar to find the type you are looking for.
+
+---
+
+| \gCollections
+
+
+We will cover the following topics:
+
+| Tuples
+| Seq 
+| List
+| Vector
+| Set
+| Map
+
+---
+
+| \gTuples
+
+
+Tuples are a basic collection type in Scala which has two or more values of different types.
+
+```
+(1, "hello")
+(true, 1, (5.0, Some(4)))
+```
+
+There is also a special operation to create two element tuples (pairs):
+
+```
+1 -> "hello" == (1, "hello")
+```
+
+---
+
+| \gYour Task
+
+
+a) create a tuple from the numbers \r1\s, \r2\s, \r3\s with '->'
+
+--
+a)
+
+```
+1 -> 2 -> 3
+```
+
+---
+
+From now on we are using (execute '\br\s' now):
+
+```
+val tup = (1, true, ("hello", 3.0))
+```
+
+--
+
+You can access elements by using index specific methods.
+
+```
+tup._1 == 1
+tup._2 == true
+```
+
+If you work with pairs - a tuple with two elements - you can also swap their elements.
+
+```
+(1, true).swap == (true, 1)
+```
+
+---
+
+| \gYour Task
+
+
+a) access \r"hello"\s in tup using the access methods
+b) swap the inner pair using swap and copy
+
+--
+
+Expected:
+
+a)
+
+```
+tup._3._1
+```
+
+--
+b)
+
+```
+tup.copy(_3 = tup._3.swap)
+```
+
+---
+
+And of course you can pattern-match tuples.
+
+```
+tup match {
+  case (a, b, (c, d)) => c
+}
+```
+
+---
+
+| \gSeq
+
+
+A sequence \ySeq\s is a collection of values with an order and in Scala it is the most basic collection trait you can use.
+When using it it defaults to the List implementation, but more to that in the next chapter.
+  
+```
+// empty sequence
+Seq[Char]()
+Seq.empty[Char]
+Nil: Seq[Char]
+
+// sequence of n elements
+Seq(1, 2, 3)
+```
+
+---
+
+| \gYour Task
+
+
+Create sequences with:
+  a) 1 as the single element 
+  b) no elements and the type Boolean
+
+--
+a)
+
+```
+Seq(1)
+```
+
+--
+b)
+
+```
+Seq.empty[Boolean]
+```
+
+---
+
+From now on we use (execute '\br\s' now):
+
+```
+val seq = Seq(1, 2, 3, 4)
+```
+
+--
+Let's start with accessing elements by index:
+  
+```
+seq(1)
+```
+
+That is calling `seq.apply(1)` which is returning the second element (we start at zero)
+
+---
+
+| \gYour Task
+
+
+Access the:
+  a) first element
+  b) second element
+  c) 100th element
+
+--
+a)
+
+```
+seq(0)
+```
+
+--
+b)
+
+```
+seq(1)
+```
+
+--
+c)
+
+```
+seq(100)
+```
+
+---
+
+You can also access the head or tail by using the following methods:
+
+```
+seq.head       == 1
+seq.tail       == Seq(2, 3, 4)
+seq.headOption == Some(1)
+seq.last       == 4
+```
+
+---
+
+| \gYour Task
+
+
+Access:
+  a) headOption
+  b) call tail consecutively five times on 'seq'
+  c) get the head from \gSeq()\s
+  d) last from \gSeq()\s
+
+--
+a)
+
+```
+seq.headOption
+```
+
+--
+b)
+
+```
+seq.tail.tail.tail.tail.tail
+```
+
+--
+c)
+
+```
+Seq().head
+```
+
+--
+d)
+
+```
+Seq().last
+```
+
+---
+
+You can also filter elements out of a sequence.
+
+```
+seq.filter(_ > 1)     == Seq(2, 3, 4)
+seq.filterNot(_ <= 1) == Seq(2, 3, 4)
+```
+
+---
+
+| \gYour Task
+
+
+Filter all elements:
+  a) less than \r5\s
+  b) greater than \r2\s
+
+--
+a)
+
+```
+seq.filterNot(_ < 5)
+```
+
+--
+b)
+
+```
+seq.filter(_ <= 2)
+```
+
+---
+
+Find elements which satisfy a condition. Or check conditions on whole sequences.
+
+```
+seq.exists(_ == 2) == true
+seq.forall(_ == 2) == false
+seq.find(_ == 2)   == Some(2)
+seq.contains(2)    == true
+```
+
+---
+
+| \gYour Task
+
+
+Proof the following conditions:
+  a) is every number even in 'seq'
+  b) find first \r3\s
+
+--
+a)
+
+```
+seq.forall(_ % 2 == 0)
+```
+
+--
+b)
+
+```
+seq.find(_ == 3)
+```
+
+---
+
+Apply a new order.
+
+```
+seq.sortWith(_ > _)
+```
+
+---
+
+Of course, you can also add elements as needed.
+
+```
+0 +: seq         == Seq(0, 1, 2, 3, 4)
+seq :+ 5         == Seq(1, 2, 3, 4, 5)
+seq ++ Seq(5, 6) == Seq(1, 2, 3, 4, 5, 6)
+```
+
+---
+
+| \gYour Task
+
+
+Add the following elements to seq:
+  a) \r-1\s at the head and \r42\s at the end
+  b) append a sequence with the number \r3.0\s and \r4.0\s
+
+--
+a)
+
+```
+-1 +: seq :+ 42
+```
+
+--
+b)
+
+```
+seq ++ Seq(3.0, 4.0)    
+```
+
+---
+
+You can create sub-sequences.
+
+```
+seq.take(2)    == Seq(1, 2)
+seq.drop(2)    == Seq(3, 4)
+seq.splitAt(2) == (Seq(1, 2), Seq(3, 4))
+```
+
+---
+
+| \gYour Task
+
+
+Create the following sub-sequences:
+  a) take the five elements
+  b) drop the first five elements
+  c) split 'seq' at position five
+
+--
+a)
+
+```
+seq.take(5)
+```
+
+--
+b)
+
+```
+seq.drop(5)
+```
+
+--
+c)
+
+```
+seq.splitAt(5)
+```
+
+---
+
+Tranform your data.
+
+```
+seq.map(_ + 1)              == Seq(2, 3, 4, 5)
+seq.flatMap(a => Seq(a, a)) == Seq(1, 1, 2, 2, 3, 3, 4, 4)
+```
+
+---
+
+| \gYour Task
+
+
+Your task is to:
+  a) transform every element to the result of the is-even test
+  b) create from every a sequence of \r3\s elements (use \cmap\s and \cflatten\s,
+     and \cflatMap\s)
+
+--
+a)
+
+```
+seq.map(_ % 2 == 0)
+```
+
+--
+b)
+
+```
+seq.map(a => Seq(a, a, a)).flatten
+```
+--
+
+```
+seq.flatMap(a => Seq(a, a, a))
+```
+
+---
+
+Transform the whole sequence to something else. Make it an \yInt\s, \yTuple\s, or whatever you need.
+
+```
+seq.foldLeft(0)((agg, a) => agg + a)  == 0 + 1 + 2 + 3 + 4 == 10
+seq.foldRight(0)((a, agg) => agg + a) == 0 + 4 + 3 + 2 + 1 == 10
+```
+
+What happens is, you create an aggregator (agg) of your result type with some initial state. Then
+you go through the whole sequence and start to combine the aggregator with each element.
+
+---
+
+| \gYour Task
+
+
+a) create a tuple with all even numbers in _1 and all odd numbers in _2
+b) apply (agg + a) / 2.0 to foldLeft and foldRight and check if the results are the same
+
+--
+a)
+
+```
+seq.foldLeft((Seq.empty[Int], Seq.empty[Int])) { case ((even, odd), a) => 
+  if (a % 2 == 0) (even :+ a, odd) else (even, odd :+ a)
+}
+```
+
+--
+b)
+
+```
+seq.foldLeft(0.0)((agg, a) => (agg + a) / 2.0) == seq.foldRight(0.0)((agg, a) => (agg + a) / 2.0)
+```
+
+---
+
+We talked about pattern-matching a while now and of course you can also use it with sequences.
+
+```
+seq match {
+  case h +: t       => h
+  case Nil          => 0
+  case Seq(a, b, c) => a
+}
+```
+
+---
+
+And we get an extension to the for-comprehension. With sequences we can also add a filter step.
+
+```
+val x = for {
+  a <- seq
+    
+  if a > 1
+} yield a + 1
+
+x == Seq(3, 4, 5)
+```
+
+---
+
+For more information and a complete set of methods take a look at:
+
+  \ghttps://www.scala-lang.org/api/2.12.6/scala/collection/Seq.html\s
+
+---
+
+| \gList
+
+
+As mentioned in the sequence-chapter Scala defaults to the List implementation of the Seq trait. But is there anything special
+to it? It seems there is.
+
+```
+// create a List
+List(1, 2) == Seq(1, 2)
+
+// adding elements
+0 :: List(1, 2)           == 0 +: Seq(1, 2)
+List(1, 2) ::: List(3, 4) == Seq(1, 2) ++ Seq(3, 4)
+```
+ 
+All Seq operations still apply to List.
+
+---
+
+| \gVector
+
+
+But then you also have more spcecialized implementations like Vector.
+
+```
+Vector(1, 2) == Seq(1, 2)
+```
+
+This data structure gives you constant random access and update times. So if you need to access elements 
+randomly - not just the head - you probably want to use Vectors.
+
+```
+val vec = Vector(1, 2, 3)
+
+vec(2) == 3
+```
+
+Again all Seq methods apply. You just have to be aware that Nil is not part of Vectors type.
+For more information take a look at:
+
+  \ghttps://www.scala-lang.org/api/2.12.6/scala/collection/immutable/Vector.html\s
+
+---
+
+| \gSet
+
+
+If you have to make sure each element only exists ones in your collection you should use \ySet\s.
+
+```
+Set(1, 2, 2) == Set(1, 2)
+```
+
+---
+
+From no on we use (execute now \br\s):
+
+```
+val set = Set(1, 2)
+```
+
+--
+But \ySet\s comes with some special methods.
+
+```
+// apply is not getting an element, but proofing its existence
+set(1) == set.contains(1)
+
+// standard set operations
+set.union(Set(2, 3))     == Set(1, 2, 3)
+set.diff(Set(2, 3))      == Set(1)
+set.intersect(Set(2, 3)) == Set(2)
+```
+
+---
+
+| \gYour Task
+
+
+a) symetric difference (all elements which are only in A xor B) between set and Set(\r2\s, \r3\s)
+
+--
+a)
+
+```
+set.diff(Set(2, 3)).union(Set(2, 3).diff(set))
+```
+
+---
+
+But be aware that Set is not implementing \ySeq\s. Many of the methods still exists but some don't. For example append/prepend
+methods boil down to the following:
+
+```
+set + 3       == Set(1, 2, 3)
+Set(0) ++ set == Set(0, 1, 2)
+```
+
+You also lose any guarantees about order. But there is \ySortedSet\s if you need it.
+
+In contrast, you gain the abaility to remove elements:
+
+```
+set - 1       == Set(2)
+set -- Set(1) == Set(2)
+```
+
+---
+
+Again you can find more information when looking into:
+
+  \ghttps://www.scala-lang.org/api/2.12.6/scala/collection/immutable/Set.html\s
+
+---
+
+| \gMap
+
+
+And then, there is a construct called \yMap\s which is a collection of key-value pairs where the keys create a set.
+
+```
+Map(1 -> "hello", 2 -> "world")
+```
+
+We continue to work with (execute now \br\s):
+
+```
+val map = Map(1 -> "hello", 2 -> "world")
+```
+
+--
+You can access pairs by their key:
+
+```
+map(1)                   == "hello"
+map.get(1)               == Some("hello")
+map.getOrElse(1, "boom") == "hello"
+```
+
+---
+
+| \gYour Task
+
+
+a) get the pair with key \r3\s using apply
+b) get the pair with key \r3\s or return \r"boom"\s
+
+--
+a)
+
+```
+map(3)
+```
+
+--
+b)
+
+```
+map.getOrElse(3, "boom")
+```
+
+---
+
+You can also just work with its keys or values.
+
+```
+/* you don't really get a Seq but an Iterable
+ * it gives you many of the operations you know from Seq */ 
+map.values == Seq("hello", "world")
+map.keys   == Seq(1, 2)
+```
+
+Furthermore, you can also make the key-set explicit with:
+
+```
+map.keySet == Set(1, 2)
+```
+
+---
+
+If you want to add an element to your \yMap\s you can do they by providing key-value pairs.
+
+```
+map + (3 -> "!")     == Map(1 -> "hello", 2 -> "wordl", 3 -> "!")
+
+map ++ Map(3 -> "!") == Map(1 -> "hello", 2 -> "wordl", 3 -> "!")
+```
+
+Or you override a given pair:
+
+```
+map + (2 -> "you") == Map(1 -> "hello", 2 -> "you")
+```
+
+And you can remove elements by key:
+
+```
+map - 1       == Map(2 -> "world")
+map -- Set(1) == Map(2 -> "world")
+```
+
+---
+
+| \gYour Task
+
+
+a) add the following pairs: \r3\s -> \r"you"\s, \r1 -> "me"\s
+b) remove the key \r5\s
+
+--
+a)
+
+```
+map ++ Map(3 -> "you", 1 -> "me")
+```
+
+--
+b)
+
+```
+map - 5
+```
+
+---
+
+As with every collection you can transform its data with \cmap\s and \cflatMap\s.
+
+```
+map.map { case (key, value) => key -> value + "!" }
+```
+
+If you only need to map the values you can also use:
+
+```
+map.mapValues(value => value + "!")
+```
+
+---
+
+| \gYour Task
+
+
+a) use \cfoldLeft\s to sum all keys
+b) create a List(1 -> "hello", 2 -> "world") and use \cgroupBy\s to transform it to the \yMap\s
+c) map all values to upper case (\ctoUpperCase\s)
+
+--
+a)
+
+```
+map.foldLeft(0) { case (agg, (key, _)) => agg + key }
+```
+
+--
+b)
+
+```
+List(1 -> "hello", 2 -> "world").groupBy(_._1)
+```
+
+--
+c)
+
+```
+map.mapValues(_.toUpperCase)
+```
+
+---
+
+| \gStrings
+
+
+A \yString\s is a sequence of \yChars\s.
+
+```
+"Hello World" ~ List('H', 'e', ...)
+```
+
+---
+
+You can access \yChars\s or sub-strings by using the following methods:
+
+```
+val str = "hello world"
+
+str.charAt(0)  == 'h'
+str.drop(2)    == "llo world"
+str.take(2)    == "he"
+str.split(" ") == Array("hello", "world")
+```
+
+---
+
+| \gYour Task
+
+
+a) take \yChar\s at position \r50\s
+
+--
+a)
+
+```
+str.charAt(50)
+```
+
+---
+
+\yStrings\s also come with a very convenient way to integrate values into the \yString\s itself
+called String-interpolation.
+
+```
+val a = 42
+
+s"The answer to everything is $a" == "The answer to everything is 42"
+```
+
+That also works with complete expressions.
+
+```
+s"1 + 2 = ${1 + 2}" == "1 + 2 = 3"
+```
+
+---
+
+| \gYour Task
+
+
+a) put List(1, 2) into the \yString\s \r"My list is ..."\s
+b) compute the circle area within the \yString\s \r"The circle with radius 3 has the area ..."\s
+
+```
+// circle area
+Math.PI * r * r
+```
+
+--
+a)
+
+```
+s"My list is ${List(1, 2)}"
+```
+
+--
+b)
+
+
+```
+s"The cirlce with radius 3 has the area ${Math.PI * 3 * 3}"
+```
+
+---
+
+And \yStrings\s ship with another neat feature which improves the way how you work with long, multi-line \yStrings\s.
+
+```
+// this is annoying
+"This is a reaaaaaaalllllllyyyy\n" +
+"looooooooooooooooooooooooooong\n" +
+"String"
+
+// just write
+"""
+this is a reaaaaaaalllllllyyyy
+looooooooooooooooooooooooooong
+String
+"""
+```
+
+---
+
+One problem with multi-line-strings is their property to take code-indentation into account:
+
+```
+val a = {
+  """
+    my String
+  """
+}
+
+a == "\n    my String\n  "
+```
+
+To ignore these identation whitespaces you have to use margin elimination:
+
+```
+val a = {
+  """
+    |my String
+    |""".stripMargin
+}
+
+a == "\nmy String\n"
+```
+
+---
+
+| \gAlgebraic Data Types
+
+---
+
+| \gOption
+
+
+Does a computation yield a result or not?
+
+```
+// actual implementation differs - simplified code
+sealed trait Option[+A]
+
+case class Some[+A](value: A) extends Option[A]
+case object None extends Option[Nothing]
+```
+
+The '+' operator in front of the type parameter A is indicating its variance. By using these declaration your
+allow all values which are A or subtypes of A to by stored in an \yOption\s.
+
+---
+
+You create an \yOption\s the following way:
+
+```
+Option(1) == Some(1)
+
+// for demonstration purposes we use 'null' here
+// it is an empty object reference - don't use it in your code
+// if not absolutely necessary
+Option(null)      == None
+Option.empty[Int] == None
+```
+
+---
+
+If you want to access a value stored in an \yOption\s you can call:
+
+```
+Some(0).get          == 0
+
+// recover with default value
+Some(0).getOrElse(1) == 0
+
+// recover with computation which yields again an Option
+Some(0).orElse(Some(1)) == Some(1)
+```
+
+---
+
+| \gYour Task
+
+a) repeat the steps you saw before just with:
+
+```
+Option.empty[Int]
+```
+
+--
+a)
+
+```
+val oe = Option.empty[Int]
+
+oe.get
+```
+```
+oe.getOrElse(1)
+```
+```
+oe.orElse(Some(1))
+```
+
+---
+
+You can also use \cfold\s to recover or transform an \yOption\s.
+
+```
+Option("hello").fold(
+  "nothing here"
+)(
+  a => a
+)
+```
+
+Pattern-matching does the same:
+
+```
+Option("hello") match {
+  case Some(a) => a
+  case None    => "nothing here"
+}
+```
+
+---
+
+If you just need to know when an \yOption\s empty or not use the following methods:
+
+```
+val o = Option("hello")
+
+o.isEmpty   == false
+o.nonEmpty  == true
+o.isDefined == true
+```
+
+---
+
+All transformation, filter and condition-checking methods you know from \ySeq\s apply
+to \yOption\s.
+
+For more information take a look into the documentation:
+
+  \ghttps://www.scala-lang.org/api/2.12.6/scala/Option.html\s
+
+---
+
+| \gEither
+
+
+Does a computation produce a left or right value?
+
+```
+// actual implementation differs - simplified code
+sealed trait Either[+A, +B]
+
+case class Right[+A, +B](value: B) extends Either[A, B]
+case class Left[+A, +B](value: A) extends Either[A, B]
+```
+
+---
+
+You can create an \yEither\s the following way:
+
+```
+Either.cond(true, 1, "hello")  == Right(1)
+Either.cond(false, 1, "hello") == Left("hello")
+```
+
+---
+
+If you need access to the stored values you can call:
+
+```
+Right[String, Int](1).value      == 1
+Left[String, Int]("hello").value == "hello"
+
+// since Scala 2.12 Either is right-biased
+Either.cond(true, 1, "hello").getOrElse(0)  == 1
+Either.cond(false, 1, "hello").getOrElse(0) == 0
+```
+
+---
+
+| \yYour Task
+
+
+Given the below \yEither\s (execute now \br\s):
+
+```
+val e = Either.cond(true, 1, "hello")
+```
+
+a) double the right value (transformation):
+b) recover if 'e' should by Left by returning -1
+
+--
+a)
+
+```
+e.map(_ * 2)
+```
+
+--
+b)
+
+```
+e.getOrElse(-1)
+```
+
+---
+
+Again you can fold over an \yEither\s:
+
+```
+e.fold(
+  l => s"left: $l",
+  r => s"right: $r"
+)
+```
+
+or pattern-match:
+
+```
+e match {
+  case Left(l)  => s"left: $l"
+  case Right(r) => s"right: $r"
+}
+```
+
+---
+
+And of course you can just check if an \yEither\s is left or right without actually
+working with its values.
+
+```
+e.isRight == true
+e.isLeft  == false
+```
+
+---
+
+All transformation, filter and condition-checking methods you know from \ySeq\s apply
+to \yEither\s.
+
+For more information take a look into the documentation:
+
+  \ghttps://www.scala-lang.org/api/2.12.6/scala/util/Either.html\s
+
+---
+
+| \gTry
+
+
+You are working with (Java) code throwing exceptions? Wrap it in a \yTry\s to regain safety.
+
+```
+// actual implementation differs - simplified code
+sealed trait Try[+A]
+
+case class Success[+A](a: A) extends Try[A]
+case class Failure[+A](error: Throwable) extends Try[A]
+```
+
+---
+
+How it works:
+
+```
+object Try {
+
+  def apply[A](exp: => A): Try[A] = 
+    try {
+      Success(exp)
+    } catch {
+      case error: Throwable => Failure(error)
+    }
+}
+```
+
+\yTry\s has a construct which defers the evaluation of its parameter 'exp' until first usage (call-by-name). When
+it is called the whole function either returns a value in a \ySuccess\s instance or a \yFailure\s storing the
+error. Btw, try-catch blocks intercept \yExceptions\s.
+
+---
+
+To use it you have to import:
+
+```
+import scala.util.{Try, Success, Failure}
+```
+
+Now you can do the following:
+
+```
+val tr = Try {
+  1 / 0
+}
+
+// you don't care about the error
+tr.toOption
+
+// your code uses Either
+tr.toEither
+```
+
+---
+
+As with \yEither\s you can fold over its result:
+
+```
+tr.fold(
+  div   => s"division: $div",
+  error => s"we have a problem: $error.getMessage"
+)
+```
+
+Or pattern-match:
+
+```
+tr match {
+  case Success(div)   => s"division: $div"
+  case Failure(error) => s"we have a problem: $error.getMessage"
+}
+```
+
+---
+
+There are also dedicated recovery methods:
+
+```
+tr.recover {
+  case _: ArithmeticException => -1
+}
+```
+
+or if you need to recover by using a potentially failing computation:
+
+```
+tr.recoverWith {
+  case _: ArithmeticException => Try(1 / 2)
+}
+```
+
+---
+
+
+All transformation, filter and condition-checking methods you know from \ySeq\s apply
+to \yTry\s.
+
+For more information take a look into the documentation:
+
+  \ghttps://www.scala-lang.org/api/2.12.6/scala/util/Try.html\s
+
+---
+
+That is the end of our small journey through Scala's standard library. We covered the 
+fundamental types used most of the time in code bases. One larger subject we did not
+address are \yFutures\s to represent parallel/asynchronous computations since we will
+focus on IO later on.

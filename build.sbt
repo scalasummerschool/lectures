@@ -159,7 +159,8 @@ lazy val `std-lib-lecture` = project
     addCommandAlias("fullCompile", "; fullOptJS; copyFull")
   )
   .settings(
-    name := "std-lib-lecture"
+    name := "std-lib-lecture",
+    excludeFilter in unmanagedSources := "REPLesent.scala"
   )
   .dependsOn(`lectures-shared`)
 

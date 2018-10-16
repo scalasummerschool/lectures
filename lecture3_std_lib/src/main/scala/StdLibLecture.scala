@@ -24,6 +24,23 @@ object StdLibLecture extends JSApp {
       )
     ),
 
+    slide(
+      "Interactive Session",
+      <.p("Let's go through the material in an interactive session. Run the following code in a terminal and get some insides into the Scala standard library. " + 
+          "Or continue with the presentation."),
+      <.br,
+      bash("""
+        cd lecture3_std_lib
+        scala -Dscala.color \
+              -language:_ -nowarn \
+              -i src/main/scala/REPLesent.scala
+
+        scala> val session = StdLib($intp)
+        scala> import session._
+        scala> n
+      """)
+    ),
+
     noHeaderSlide(
       <.h2("You have a question?"),
       <.h3("Ask it right away!")
@@ -62,12 +79,12 @@ object StdLibLecture extends JSApp {
         a | b  // OR, always evaluates b
         a || b // OR, evaluates `b` only if `a` is true
 
-        a > b  // greater than
-        a < b  // smaller than
-        a >= b // greater-equal than
-        a <= b // smaller-equal than
-        a == b // equal
-        a != b // unequal
+        x > y  // greater than
+        x < y  // smaller than
+        x >= y // greater-equal than
+        x <= y // smaller-equal than
+        x == y // equal
+        x != y // unequal
       """)
     ),
 
@@ -94,6 +111,7 @@ object StdLibLecture extends JSApp {
         1 - 2 == -1   // subtraction
         2 % 2 == 0    // modulo
         2 * 2 == 4    // multiplication
+        4 / 2 == 2    // division
       """),
       scalaCFragment("""
         -1.abs == 1   // absolute value
@@ -104,7 +122,7 @@ object StdLibLecture extends JSApp {
     ),
 
     slide(
-      "Primitives: division",
+      "Primitives: number typing",
       scalaC("""
         // when done with Integers
         1 / 2 == (1: Int) / (2: Int)
@@ -112,7 +130,7 @@ object StdLibLecture extends JSApp {
               == 0
       """),
       scalaCFragment("""
-        // at least one element is a Double
+        // at least one element is a floating point number
         1 / 2.0 == (1: Int) / (2.0: Double)
                 == (1.0 / 2.0): Double
                 == 0.5
@@ -125,7 +143,7 @@ object StdLibLecture extends JSApp {
     ),
 
     slide(
-      "Primitives: division",
+      "Primitives: division by zero",
       scalaC("""
         // we already know that this will fail
         1 / 0 == ArithmeticException
@@ -163,21 +181,18 @@ object StdLibLecture extends JSApp {
     slide(
       "Primitives: floating point comparison",
       scalaC("""
-        val a: Double = ???
-        val b: Double = ???
-
-        // is dangerous - at which precision do you define them as equal?
-        a == b
+        // is dangerous - the following is not the same
+        0.1 + 0.2 == 0.3
       """)
     ),
 
     slide(
       "Primitives: floating point comparison",
       scalaC("""
-        def eq(a: Double: b: Double, epsilon: Double): Boolean =
+        def eq(a: Double, b: Double, epsilon: Double): Boolean =
           (a - b).abs < epsilon
 
-        eq(a, b, 0.00000001)
+        eq(0.1 + 0.2, 0.3, 0.000001)
       """)
     ),
 
@@ -185,21 +200,12 @@ object StdLibLecture extends JSApp {
       "Primitives: Integer operators",
       scalaC("""
         // some Integer specific operators
-        2 << 1 == 4 // bit-shift to the left
-        2 >> 1 == 1 // bit-shift to the right
-        2 ^ 3  == 1 // bit-wise XOR
-        2 & 3  == 2 // bit-wise AND
-        2 | 3  == 3 // bit-wise OR
+        (2 << 1) == 4 // bit-shift to the left
+        (2 >> 1) == 1 // bit-shift to the right
+        (2 ^ 3)  == 1 // bit-wise XOR
+        (2 & 3)  == 2 // bit-wise AND
+        (2 | 3)  == 3 // bit-wise OR
       """)
-    ),
-
-    slide(
-      "Primitives: more information",
-      <.h4("Use the search bar to find your type"),
-      <.a(
-        ^.href := "https://www.scala-lang.org/api/2.12.0/",
-        "https://www.scala-lang.org/api/2.12.0/"
-      )
     ),
 
     noHeaderSlide(
@@ -208,6 +214,8 @@ object StdLibLecture extends JSApp {
 
     slide(
       "Primitives: Char",
+      <.p("Encode characters as integer numbers."),
+      <.br,
       scalaC("""
         // all Integer operators apply
         Char - signs encoded with Integers from 0 to 65.535
@@ -223,14 +231,14 @@ object StdLibLecture extends JSApp {
       """)
     ),
 
-    noHeaderSlide(
-      <.h3("String")
-    ),
-
     slide(
-      "String",
-      <.p("A String is a collection of Chars. But what is a collection?")
-    )
+      "Primitives: more information",
+      <.h4("Use the search bar to find your type"),
+      <.a(
+        ^.href := "https://www.scala-lang.org/api/2.12.0/",
+        "https://www.scala-lang.org/api/2.12.0/"
+      )
+    ),
   )
 
   val collections = chapter(
@@ -364,7 +372,7 @@ object StdLibLecture extends JSApp {
       scalaC("""
         val seq = Seq(1, 2, 3)
 
-        seq.sortBy(_ > _) == Seq(3, 2 1)
+        seq.sortWith(_ > _) == Seq(3, 2 1)
       """)
     ),
 
@@ -445,17 +453,6 @@ object StdLibLecture extends JSApp {
     ),
 
     slide(
-      "Sequence: foreach",
-      scalaC("""
-        val seq = Seq(1, 2, 3)
-
-        // iterates over all element and returns nothing
-        // just for side effects
-        seq.foreach(a => println(a))
-      """)
-    ),
-
-    slide(
       "Sequence: pattern matching",
       scalaC("""
         val seq = Seq(1, 2, 3)
@@ -515,96 +512,6 @@ object StdLibLecture extends JSApp {
       scalaC("""
         0 :: list        == 0 +: seq
         List(0) ::: list == Seq(0) ++ seq
-      """)
-    ),
-
-    noHeaderSlide(
-      <.h3("Back to String")
-    ),
-
-    slide(
-      "String",
-      scalaC("""
-        // not exactly, but you get the idea
-        // you don't have `+:`, `:+`
-        "Hello world" ~= Seq('H', 'e', ...)
-      """)
-    ),
-
-    slide(
-      "String: access",
-      scalaC("""
-        val str = "Hello world"
-
-        str.charAt(0)  == 'H'
-        str.charAt(50) == StringIndexOutOfBoundsException
-
-        str.take(2)    == "He"
-        str.drop(2)    == "llo world"
-        str.split(" ") == Array("Hello", "world")
-      """)
-    ),
-
-    slide(
-      "String: length & contains",
-      scalaC("""
-        val str = "Hello world"
-
-        str.length          == 11
-        str.containts("wo") == true
-      """)
-    ),
-
-    slide(
-      "String: interpolation",
-      scalaC("""
-        // insert values in Strings
-        val a = 42
-
-        s"The answer to everything is $a"
-
-        // is equal to
-
-        "The answer to everything is 42"
-      """)
-    ),
-
-    slide(
-      "String: interpolation",
-      scalaC("""
-        // you can reference any expression
-
-        s"1 + 2 = ${1 + 2}"
-
-        // is equal to
-
-        "1 + 2 = 3"
-      """)
-    ),
-
-    slide(
-      "String: multi-line",
-      scalaC("""
-        // this is annoying
-        "This is a reaaaaaaalllllllyyyy\n" +
-        "looooooooooooooooooooooooooong\n" +
-        "String"
-      """),
-      scalaCFragment(
-        "// just write\n" +
-        "\"\"\"\n" +
-        "this is a reaaaaaaalllllllyyyy\n" +
-        "looooooooooooooooooooooooooong\n" +
-        "String\n" +
-        "\"\"\""
-      )
-    ),
-
-    exerciseSlide(
-      "Let's Code",
-      bash("""
-        sbt> project std-lib-exercises
-        sbt> test:testOnly exercise3.StringsSpec
       """)
     ),
 
@@ -756,6 +663,124 @@ object StdLibLecture extends JSApp {
     ),
 
     noHeaderSlide(
+      <.h3("Back to String")
+    ),
+
+    slide(
+      "String",
+      scalaC("""
+        // not exactly, but you get the idea
+        // you don't have `+:`, `:+`
+        "Hello world" ~= Seq('H', 'e', ...)
+      """)
+    ),
+
+    slide(
+      "String: access",
+      scalaC("""
+        val str = "Hello world"
+
+        str.charAt(0)  == 'H'
+        str.charAt(50) == StringIndexOutOfBoundsException
+
+        str.take(2)    == "He"
+        str.drop(2)    == "llo world"
+        str.split(" ") == Array("Hello", "world")
+      """)
+    ),
+
+    slide(
+      "String: length & contains",
+      scalaC("""
+        val str = "Hello world"
+
+        str.length         == 11
+        str.contains("wo") == true
+      """)
+    ),
+
+    slide(
+      "String: interpolation",
+      scalaC("""
+        // insert values in Strings
+        val a = 42
+
+        s"The answer to everything is $a"
+
+        // is equal to
+
+        "The answer to everything is 42"
+      """)
+    ),
+
+    slide(
+      "String: interpolation",
+      scalaC("""
+        // you can reference any expression
+
+        s"1 + 2 = ${1 + 2}"
+
+        // is equal to
+
+        "1 + 2 = 3"
+      """)
+    ),
+
+    slide(
+      "String: multi-line",
+      scalaC("""
+        // this is annoying
+        "This is a reaaaaaaalllllllyyyy\n" +
+        "looooooooooooooooooooooooooong\n" +
+        "String"
+      """),
+      scalaCFragment(
+        "// just write\n" +
+        "\"\"\"\n" +
+        "this is a reaaaaaaalllllllyyyy\n" +
+        "looooooooooooooooooooooooooong\n" +
+        "String\n" +
+        "\"\"\""
+      )
+    ),
+
+    slide(
+      "String: multi-line",
+      <.p("Mulit-line Strings take the indentation into account."),
+      <.br,
+      scalaC(
+        "val a = {\n" +
+        "  \"\"\"\n" +
+        "  my String\n" +
+        "  \"\"\"\n" +
+        "}\n\n" +
+
+        "a == \"\\n    my String\\n  \"")
+    ),
+
+    slide(
+      "String: multi-line",
+      <.p("To ignore these identation whitespaces you have to use margin elimination:"),
+      <.br,
+      scalaC(
+        "val a = {\n" +
+        "  \"\"\"\n" +
+        "  |my String\n" +
+        "  |\"\"\".stripMargin\n" +
+        "}\n\n" +
+
+        "a == \"\\nmy String\\n\"")
+    ),
+
+    exerciseSlide(
+      "Let's Code",
+      bash("""
+        sbt> project std-lib-exercises
+        sbt> test:testOnly exercise3.StringsSpec
+      """)
+    ),
+
+    noHeaderSlide(
       <.h3("Collections aren't limited to Seq, List or Map"),
       <.br,
       <.h4(
@@ -767,7 +792,7 @@ object StdLibLecture extends JSApp {
 
   val adts = chapter(
     chapterSlide(
-      <.h2("Build-in ADTs")
+      <.h2("Algebraic Data Types")
     ),
 
     noHeaderSlide(
@@ -776,7 +801,7 @@ object StdLibLecture extends JSApp {
 
     slide(
       "Option",
-      <.p("Does a computation yield a result or not? Think of it as a two element collection."),
+      <.p("Does a computation yield a result or not?"),
       <.br,
       scalaC("""
         // actual implementation differs - simplified code
@@ -793,8 +818,8 @@ object StdLibLecture extends JSApp {
         Option("hello") == Some("hello")
 
         // null is an empty reference - avoid it
-        Option(null)    == None
-        None            == None
+        Option(null)      == None
+        Option.empty[Int] == None
       """)
     ),
 
@@ -822,7 +847,8 @@ object StdLibLecture extends JSApp {
         val opt: Option[Int] = ???
 
         opt.fold(
-          "this thing is empty",
+          "this thing is empty"
+        )(
           a => s"we have a $a"
         )
       """)
@@ -887,7 +913,7 @@ object StdLibLecture extends JSApp {
 
     slide(
       "Either",
-      <.p("Did a computation fail or not? This is again a two element collection."),
+      <.p("Does a computation return a left or right value?"),
       <.br,
       scalaC("""
         // actual implementation differs - simplified code
@@ -978,11 +1004,30 @@ object StdLibLecture extends JSApp {
 
     slide(
       "Try",
-      <.p("You are working with (Java) code throwing exceptions? Wrap it in a Try to regain purity."),
+      <.p("You are working with (Java) code throwing exceptions? Wrap it in a Try to regain safety."),
       <.br,
       scalaC("""
-        // basic idea ... but has some extra methods
-        type Try[A] = Either[Throwable, A]
+        // actual implementation differs - simplified code
+        sealed trait Try[+A]
+
+        case class Success[+A](a: A) extends Try[A]
+        case class Failure[+A](error: Throwable) extends Try[A]
+      """)
+    ),
+
+    slide(
+      "Try",
+      scalaC("""
+        object Try {
+
+          // '=>' defers computation until first usage (call-by-name)
+          def apply[A](exp: => A): Try[A] =
+            try {
+              Success(exp)
+            } catch {
+              case error: Throwable => Failure(error)
+            }
+        }
       """)
     ),
 
@@ -993,11 +1038,11 @@ object StdLibLecture extends JSApp {
           // Exception throwing code goes here
         }
 
-        result.toEither
+        // you don't care about the error
         result.toOption
 
-        // or just work with
-        result
+        // your code works with Either
+        result.toEither
       """)
     ),
 
@@ -1008,7 +1053,7 @@ object StdLibLecture extends JSApp {
 
         t match {
           case Success(a)     => s"the number is $a"
-          case Failure(error) => error.printStackTrace()
+          case Failure(error) => s"something went wrong: error.getMessage"
         }
       """)
     ),
