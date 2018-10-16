@@ -17,6 +17,7 @@ object Functions {
 
 
 
+  // apply your solution-function from (a) here, DO NOT change the signature
   def testCircle(r: Double): Double = r
   
   /* b) Write a curried function which calculates the area of a
@@ -25,11 +26,13 @@ object Functions {
 
 
 
+  // apply your solution-function from (b) here, DO NOT change the signature
   def testRectangleCurried(a: Double, b: Double): Double = a
 
   // c) Write a uncurried `rectangle` function.
 
 
 
+  // apply your solution-function from (c) here, DO NOT change the signature
   def testRectangleUc(a: Double, b: Double): Double = a
 }

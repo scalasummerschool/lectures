@@ -9,7 +9,7 @@ object MapsSolution {
       .groupBy(_.name)
       .mapValues(s => s.map(_.age).sum / s.length)
 
-  def numberOfFrodos(users: Map[String, User]): Int = users.count(_._1.contains"Beutlin")
+  def numberOfFrodos(users: Map[String, User]): Int = users.count(_._1.contains("Baggins"))
 
   def underaged(users: Map[String, User]): Map[String, User] = users.filter(_._2.age >= 1000)
 }

@@ -10,5 +10,6 @@ object MonadTransformers {
   type ErrorOr[A]        = Either[String, A]
   type ErrorOrT[F[_], A] = F[ErrorOr[A]]
 
+  // apply your solution-typeclass from (a) here using cats syntax if possible, DO NOT change the signature
   def testOptionTransformer[A, B](fa: ErrorOrT[Option, A], f: A => ErrorOrT[Option, B]): ErrorOrT[Option, B] = None
 }

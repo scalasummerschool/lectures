@@ -27,6 +27,7 @@ object RecursiveFunctions {
 
 
 
+  // apply your solution-function from (a) here, DO NOT change the signature
   def testReverse[A](list: List[A]): List[A] = list
 
   /* b) Write a function that applies a function to every value of a list:
@@ -35,6 +36,7 @@ object RecursiveFunctions {
 
 
 
+  // apply your solution-function from (b) here, DO NOT change the signature
   def testMap[A, B](list: List[A], f: A => B): List[B] = Nil()
   
   /* c) Write a function that appends one list to another:
@@ -43,6 +45,7 @@ object RecursiveFunctions {
 
 
 
+  // apply your solution-function from (c) here, DO NOT change the signature
   def testAppend[A](l: List[A], r: List[A]): List[A] = l
 
   /* d) Write a function that applies a function to every value of a list:
@@ -55,6 +58,7 @@ object RecursiveFunctions {
 
 
 
+  // apply your solution-function from (d) here, DO NOT change the signature
   def testFlatMap[A, B](list: List[A], f: A => List[B]): List[B] = Nil()
 
   /* e) Question: Is it possible to write a tail recursive map function for `Tree`s? If no, why and are you sure :) ? */

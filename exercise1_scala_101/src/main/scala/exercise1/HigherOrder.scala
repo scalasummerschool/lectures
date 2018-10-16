@@ -12,9 +12,10 @@ object HigherOrder {
 
 
 
+  // apply your solution-function from (a) here, DO NOT change the signature
   def testNTimes(f: (Int, Int) => Int, a: Int, b: Int, n: Int): Int = n
 
-  /* b) Write an anonymous function, a function without identifier ((a, b) => ???), `f` applied to `nTimes` which
+  /* b) Write an anonymous function, a function without identifier ((a, b) => ???) for `nTimes` which
    *    does the following:
    *          if (a > b) a else b
    */

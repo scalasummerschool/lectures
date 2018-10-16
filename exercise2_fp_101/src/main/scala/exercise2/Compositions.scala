@@ -27,19 +27,22 @@ case class None[A]()     extends Option[A] {
 /** Implement your solutions within the test functions. */
 object Compositions {
 
-  // a) Compose the given functions.
+  // a) Compose the given functions. You can implement your solution directly in the test-function.
+  //    DO NOT change the signature
 
   def testCompose[A, B, C, D](f: A => B)
                              (g: B => C)
                              (h: C => D): A => D = ???
 
-  // a) Combose the functions using `map` and `flatMap`.
+  // b) Combose the functions using `map` and `flatMap`. You can implement your solution directly in the test-function.
+  //    DO NOT change the signature
 
   def testMapFlatMap[A, B, C, D](f: A => Option[B])
                                 (g: B => Option[C])
                                 (h: C => D): Option[A] => Option[D] = ???
 
-  // a) Combose the functions using for-comprehension.
+  // c) Combose the functions using for-comprehension. You can implement your solution directly in the test-function.
+  //    DO NOT change the signature
 
   def testForComprehension[A, B, C, D](f: A => Option[B])
                                       (g: B => Option[C])

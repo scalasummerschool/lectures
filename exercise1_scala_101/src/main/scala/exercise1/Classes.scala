@@ -28,8 +28,8 @@ package exercise1
  * d) Redefine your class Animal as trait and create case class instances for Mammals, Birds, and Fishs.
  *    do you still need the field `species`?
  * 
- * e) Put the animals from (b) as fields into it and add the following functions to Animals Companion Object:
- *      def knownAnimal(name: String): Boolean  // true if it is the name of one of the three animals we know
+ * e) Add the following functions to Animals Companion Object:
+ *      def knownAnimal(name: String): Boolean  // true if it is the name of one of the three animals we know from (b)
  *      def apply(name: String): Option[Animal] // returns one of the three animals matching the name (Some) or nothing (None), see Option below
  * 
  * f) Create a trait Food with the following case objects:

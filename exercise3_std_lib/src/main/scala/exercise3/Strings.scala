@@ -6,11 +6,14 @@ package exercise3
   */
 object Strings {
 
-  // a) Map all Chars into upper case (don't use capitalize).
+  /* a) Map all Chars into upper case (don't use capitalize).
+   *    You can implement your solution directly in the test-function. DO NOT change the signature.
+   */
   def testUppercase(str: String): String = ""
 
   /* b) Interpolate the following values in the String:
    *       Hi my name is <name> and I am <age> years old.
+   *    You can implement your solution directly in the test-function. DO NOT change the signature.
    */
   def testInterpolations(name: String, age: Int): String = ""
 
@@ -21,9 +24,13 @@ object Strings {
    *         b := <value of b>
    * 
    *         result is <a + b>
+   * 
+   *   You can implement your solution directly in the test-function. DO NOT change the signature.
    */
   def testComputation(a: Int, b: Int): String = ""
 
-  // d) Has the String length two? If so return the first two Chars as String otherwise the whole String.
+  /* d) Has the String length two? If so return the first two Chars as String otherwise the whole String.
+   *    You can implement your solution directly in the test-function. DO NOT change the signature.
+   */
   def testTakeTwo(str: String): String = ""
 }

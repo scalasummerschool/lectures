@@ -18,6 +18,10 @@ implementation. See the comments in that file for details on the functions.
 
 __There are many possible ways to implement the functions.__
 
+We suggest you don't check for diagonals in your initial solution since that can be
+a bit tricky. Try to implement a reduced solution first and then figure out how
+to tackle that problem.
+
 It is an important part of the exercise to examine the provided structure
 and explore possible solutions with the help of the scala documentation.
 

@@ -47,6 +47,7 @@ object PatternMatching {
 
 
 
+  // apply your solution-function from (a) here, DO NOT change the signature
   def testIntToString(value: Int): String = value.toString
 
   /* b) `value` is true if it is:
@@ -56,12 +57,14 @@ object PatternMatching {
 
 
 
+  // apply your solution-function from (b) here, DO NOT change the signature
   def testIsMaxAndMoritz(value: String): Boolean = false
 
   // c) Is `value` even (use guards)
 
 
 
+  // apply your solution-function from (c) here, DO NOT change the signature
   def testIsEven(value: Int): Boolean = false
 
 
@@ -75,6 +78,7 @@ object PatternMatching {
 
 
 
+  // apply your solution-function from (d) here, DO NOT change the signature
   def testWinsA(a: Hand, b: Hand): Result = Draw
 
   // REMARK: Use the definition of Animals below
@@ -83,12 +87,14 @@ object PatternMatching {
 
 
 
+  // apply your solution-function from (e) here, DO NOT change the signature
   def testExtractMammalWeight(animal: Animal): Int = 0
 
   // f) Update the food of Fishes and Birds to Plants, keep Mammels unchanged.
 
 
 
+  // apply your solution-function from (f) here, DO NOT change the signature
   def testUpdateFood(animal: Animal): Animal = animal
 
 }

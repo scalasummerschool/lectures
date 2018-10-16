@@ -33,6 +33,7 @@ object Core {
 
 
 
+  // apply your solution-typeclass from (a) here using cats syntax if possible, DO NOT change the signature
   def testErrorOrFunctor[A, B](fa: ErrorOr[A], f: A => B): ErrorOr[B] = Left("wrong")
 
   // b) Implement an implicit Applicative[ErrorOr] instance.
@@ -40,10 +41,12 @@ object Core {
 
 
 
+  // apply your solution-typeclass from (b) here using cats syntax if possible, DO NOT change the signature
   def testErrorOrApplicative[A, B](ff: ErrorOr[A => B], fa: ErrorOr[A]): ErrorOr[B] = Left("wrong")
 
   // c) Apply all parameters to the function.
 
+  // apply your solution-typeclass from (c) here using cats syntax if possible, DO NOT change the signature
   def testApplyApp(f: Int => Int => String, x: ErrorOr[Int], y: ErrorOr[Int]): ErrorOr[String] = {
     import cats.syntax.all._
 
