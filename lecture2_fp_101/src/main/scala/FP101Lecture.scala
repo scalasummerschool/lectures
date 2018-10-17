@@ -166,8 +166,8 @@ object FP101Lecture extends JSApp {
     slide(
       "Pure Functions: definition",
       <.p(
-        "A function which, for any given input, returns an output and returns the same output for the same input at any time. " +
-        "Furthermore, it doesn't effect the \"real world\"."
+        "A function which, for any given input, returns an output (a total function) and returns the same output for the same input at any time (a deterministic function). " +
+        "Furthermore, it doesn't effect the \"real world\" (a pure function)."
       )
     ),
 
