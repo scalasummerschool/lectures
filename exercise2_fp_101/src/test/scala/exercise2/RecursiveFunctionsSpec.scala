@@ -4,7 +4,7 @@ import org.scalacheck.Properties
 import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Prop.forAll
+import org.scalacheck.Prop._
 
 import scala.annotation.tailrec
 
@@ -31,18 +31,18 @@ object RecursiveFunctionsSpec extends Properties("recursive functions") {
   } yield (n, a)
 
   property("reverse lists") = forAll { list: List[Int] => 
-    RecursiveFunctions.testReverse(list) == RecursiveFunctionsSolution.reverse(list)
+    RecursiveFunctions.testReverse(list) =? RecursiveFunctionsSolution.reverse(list)
   }
 
   property("map values") = forAll { list: List[Int] => 
-    RecursiveFunctions.testMap[Int, String](list, _.toString) == RecursiveFunctionsSolution.map(list)(_.toString)
+    RecursiveFunctions.testMap[Int, String](list, _.toString) =? RecursiveFunctionsSolution.map(list)(_.toString)
   }
 
   property("append lists") = forAll { (l: List[Int], r: List[Int]) =>
-    RecursiveFunctions.testAppend(l, r) == RecursiveFunctionsSolution.append(l, r)
+    RecursiveFunctions.testAppend(l, r) =? RecursiveFunctionsSolution.append(l, r)
   }
 
   property("flatMap values") = forAll { list: List[Int] => 
-    RecursiveFunctions.testFlatMap[Int, String](list, a => Cons(a.toString, Nil())) == RecursiveFunctionsSolution.flatMap(list)(a => Cons(a.toString, Nil()))
+    RecursiveFunctions.testFlatMap[Int, String](list, a => Cons(a.toString, Nil())) =? RecursiveFunctionsSolution.flatMap(list)(a => Cons(a.toString, Nil()))
   }
 }

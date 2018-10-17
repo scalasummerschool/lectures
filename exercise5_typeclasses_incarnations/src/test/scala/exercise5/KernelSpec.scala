@@ -1,25 +1,25 @@
 package exercise5
 
 import org.scalacheck.Properties
-import org.scalacheck.Prop.forAll
+import org.scalacheck.Prop._
 
 object KernelSpec extends Properties("kernel") {
 
   property("String equality") = forAll { (x: String, y: String, eq: Boolean) =>
     if (eq)
-      KernelSolution.eqString(x, x) == Kernel.testEqString(x, x)
+      KernelSolution.eqString(x, x) ?= Kernel.testEqString(x, x)
     else
-      KernelSolution.eqString(x, y) == Kernel.testEqString(x, y)
+      KernelSolution.eqString(x, y) ?= Kernel.testEqString(x, y)
   }
 
   property("Int comparison") = forAll { (x: Int, y: Int, eq: Boolean) =>
     if (eq)
-      KernelSolution.compareInt(x, x) == Kernel.testCompareInt(x, x)
+      KernelSolution.compareInt(x, x) ?= Kernel.testCompareInt(x, x)
     else
-      KernelSolution.compareInt(x, y) == Kernel.testCompareInt(x, y)
+      KernelSolution.compareInt(x, y) ?= Kernel.testCompareInt(x, y)
   }
 
   property("List combination") = forAll { (x: List[Int], y: List[Int]) =>
-    KernelSolution.combineLists(x, y) == Kernel.testCombineLists(x, y)
+    KernelSolution.combineLists(x, y) ?= Kernel.testCombineLists(x, y)
   }
 }

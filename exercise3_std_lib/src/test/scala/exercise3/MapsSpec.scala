@@ -2,7 +2,7 @@ package exercise3
 
 import org.scalacheck.Properties
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalacheck.Prop.forAll
+import org.scalacheck.Prop._
 
 import scala.annotation.tailrec
 
@@ -18,15 +18,15 @@ object MapsSpec extends Properties("Map") {
   implicit val userArb = Arbitrary[User](userGen)
 
   property("groupd users") = forAll { users: Seq[User] =>
-    testGroupUsers(users) == MapsSolution.averageAge(users)
+    testGroupUsers(users) =? MapsSolution.averageAge(users)
   }
 
   property("number of Frodos") = forAll(userMapGen) { users =>
-    testNumberFrodos(users) == MapsSolution.numberOfFrodos(users)
+    testNumberFrodos(users) =? MapsSolution.numberOfFrodos(users)
   }
 
   property("underaged") = forAll(userMapGen) { users =>
-    testUnderaged(users) == MapsSolution.underaged(users)
+    testUnderaged(users) =? MapsSolution.underaged(users)
   }
 
   val userMapGen = for {

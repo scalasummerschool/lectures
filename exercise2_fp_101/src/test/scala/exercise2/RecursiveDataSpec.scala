@@ -2,7 +2,7 @@ package exercise2
 
 import org.scalacheck.Properties
 import org.scalacheck.Gen
-import org.scalacheck.Prop.forAll
+import org.scalacheck.Prop._
 
 object RecursiveDataSpec extends Properties("recursive data") {
 
@@ -20,10 +20,10 @@ object RecursiveDataSpec extends Properties("recursive data") {
   }
 
   property("List[Int] head") = forAll(listGen) { list =>
-    RecursiveData.testListIntHead(list) == RecursiveDataSolution.listHead(list)
+    RecursiveData.testListIntHead(list) =? RecursiveDataSolution.listHead(list)
   }
 
   property("List[Int] is empty") = forAll(listGen) { list =>
-    RecursiveData.testListIntEmpty(list) == RecursiveDataSolution.isListEmpty(list)
+    RecursiveData.testListIntEmpty(list) =? RecursiveDataSolution.isListEmpty(list)
   }
 }
