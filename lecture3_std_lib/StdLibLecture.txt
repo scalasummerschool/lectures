@@ -14,9 +14,9 @@ You can use the following commands:
 
 You can work through the following chapters:
 
-| Primitives           (\b7 go\s)
-| Collections          (\b7 go\s)
-| Algebraic Data Types (\b7 go\s)
+| Primitives           (\b3 go\s)
+| Collections          (\b18 go\s)
+| Algebraic Data Types (\b67 go\s)
 
 ---
 
