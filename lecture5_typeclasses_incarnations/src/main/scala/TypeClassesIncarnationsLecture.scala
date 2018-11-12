@@ -120,7 +120,7 @@ object TypeClassesIncarnationsLecture extends JSApp {
       "Categorical FP: equality",
       scalaC("""
         // add properties to type parameter
-        def isIdentity[A: Eq](a: A)(f: A => A): Boolean = {
+        def isFixedPoint[A: Eq](a: A)(f: A => A): Boolean = {
           implicitly[Eq[A]].eqv(a, f(a))
         }
       """)
