@@ -165,9 +165,11 @@ object FP101Lecture extends JSApp {
 
     slide(
       "Pure Functions: definition",
-      <.p(
-        "A function which, for any given input, returns an output and returns the same output for the same input at any time. " +
-        "Furthermore, it doesn't effect the \"real world\"."
+      <.p("A function is:"),
+      Enumeration(
+        Item.stable("total: returns an output for every input"),
+        Item.stable("deterministic: returns the same output for the same input"),
+        Item.stable("pure: only computes the output, doesn't effect the \"real world\"")
       )
     ),
 
